@@ -2,9 +2,9 @@ import { Redirect } from 'react-router-dom';
 import { Address } from '@elrondnetwork/erdjs';
 import { useContext as useDappContext } from '@elrondnetwork/dapp';
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useContext } from 'context';
 import MultisigListItem from 'pages/Dashboard/MultisigListItem';
-import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import AddMultisigModal from './AddMultisigModal';
 import { useDeployContract } from 'contracts/DeployContract';
 import { useManagerContract } from 'contracts/ManagerContract';
@@ -12,19 +12,21 @@ import { hexToAddress, hexToString } from 'helpers/converters';
 import { tryParseTransactionParameter } from 'helpers/urlparameters';
 import DeployStepsModal from './DeployMultisigModal';
 import { useTranslation } from 'react-i18next';
+import { multisigContractsSelector } from '../../redux/selectors/multisigContractsSelectors';
+import { setMultisigContracts } from '../../redux/slices/multisigContractsSlice';
 
 const Index = () => {
   const { dapp, multisigDeployerContracts, multisigManagerContract } = useContext();
   const { loggedIn, address } = useDappContext();
   const { sendDeployTransaction } = useDeployContract();
+  const multisigContracts = useSelector(multisigContractsSelector);
+  const dispatch = useDispatch();
   const { mutateRegisterMultisigContractName, mutateRegisterMultisigContract, queryContracts } =
     useManagerContract();
   const { t } = useTranslation();
-  const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
-  const [showDeployMultisigModal, setShowDeployMultisigModal] = React.useState(false);
-  const [currentDeploymentStep, setCurrentDeploymentStep] = React.useState(0);
-
-  const [multisigContracts, setMultisigContracts] = useState<MultisigContractInfo[]>([]);
+  const [showAddMultisigModal, setShowAddMultisigModal] = useState(false);
+  const [showDeployMultisigModal, setShowDeployMultisigModal] = useState(false);
+  const [currentDeploymentStep, setCurrentDeploymentStep] = useState(0);
 
   const onDeployClicked = async () => {
     setCurrentDeploymentStep(0);
@@ -65,7 +67,7 @@ const Index = () => {
 
   const readMultisigContracts = async () => {
     let contracts = await queryContracts();
-    setMultisigContracts(contracts);
+    dispatch(setMultisigContracts(contracts));
   };
 
   const tryParseUrlParams = async () => {
@@ -152,13 +154,16 @@ const Index = () => {
               </div>
 
               {multisigContracts.length > 0 ? (
-                multisigContracts.map((contract) => (
-                  <MultisigListItem
-                    key={contract.address.hex()}
-                    address={contract.address}
-                    name={contract.name}
-                  />
-                ))
+                multisigContracts.map((contract) => {
+                  console.log(contract.address, contract.address.hex, contract.address.hex());
+                  return (
+                    <MultisigListItem
+                      key={contract.address.hex()}
+                      address={contract.address}
+                      name={contract.name}
+                    />
+                  );
+                })
               ) : (
                 <div className="m-auto text-center py-spacer">
                   <div className="state m-auto p-spacer text-center">

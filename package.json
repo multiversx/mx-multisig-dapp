@@ -22,6 +22,7 @@
     "bignumber": "^1.1.0",
     "bootstrap": "4.6.0",
     "i18next": "^20.4.0",
+    "lodash": "^4.17.21",
     "moment": "2.29.1",
     "node-sass": "4.14.1",
     "react": "^17.0.2",
@@ -34,6 +35,7 @@
     "react-scripts": "4.0.3",
     "react-select": "^4.3.1",
     "react-stepper-horizontal": "^1.0.11",
+    "reselect": "github:reduxjs/reselect",
     "typescript": "4.1.2",
     "web-vitals": "1.0.1",
     "yup": "^0.32.9"
