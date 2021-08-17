@@ -7,7 +7,6 @@ export async function tryParseTransactionParameter(
 ): Promise<TransactionParameter | null> {
   let searchParams = new URLSearchParams(window.location.search);
   let txHash = searchParams.get('txHash');
-  console.log(searchParams);
   if (!txHash || txHash === '') {
     return null;
   }

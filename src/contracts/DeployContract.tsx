@@ -4,7 +4,9 @@ import { useContext } from 'context';
 import { routeNames } from '../routes';
 import { buildTransaction } from './transactionUtils';
 
-export function useDeployContract(callbackRoute = routeNames.dashboard) {
+export function useDeployContract(
+  callbackRoute = window.location?.pathname ?? routeNames.dashboard
+) {
   const { multisigDeployerContracts } = useContext();
   const sendTransaction = useSendDappTransaction();
 

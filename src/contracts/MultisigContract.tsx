@@ -29,7 +29,9 @@ import { buildTransaction } from './transactionUtils';
 import { useSendTransaction as useSendDappTransaction } from '@elrondnetwork/dapp';
 import { routeNames } from '../routes';
 
-export function useMultisigContract(callbackRoute = routeNames.dashboard) {
+export function useMultisigContract(
+  callbackRoute = window.location?.pathname ?? routeNames.dashboard
+) {
   const { dapp, currentMultisigAddress } = useContext();
   const sendDappTransaction = useSendDappTransaction();
   const smartContract = new SmartContract({ address: currentMultisigAddress });

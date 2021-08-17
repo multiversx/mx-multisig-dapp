@@ -17,7 +17,9 @@ import {
 } from '@elrondnetwork/dapp';
 import { routeNames } from '../routes';
 
-export function useManagerContract(callbackRoute = routeNames.dashboard) {
+export function useManagerContract(
+  callbackRoute = window.location?.pathname ?? routeNames.dashboard
+) {
   const { dapp, multisigManagerContract } = useContext();
   const { address } = useDappContext();
   const sendDappTransaction = useSendDappTransaction();
