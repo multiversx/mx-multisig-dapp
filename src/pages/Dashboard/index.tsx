@@ -14,13 +14,12 @@ import DeployStepsModal from './DeployMultisigModal';
 import { useTranslation } from 'react-i18next';
 
 const Index = () => {
-  const { address, dapp, multisigDeployerContracts, multisigManagerContract } = useContext();
-  const { loggedIn } = useDappContext();
+  const { dapp, address, multisigDeployerContracts, multisigManagerContract } = useContext();
+  const { loggedIn, address: userAddress } = useDappContext();
   const { sendDeployTransaction } = useDeployContract();
   const { mutateRegisterMultisigContractName, mutateRegisterMultisigContract, queryContracts } =
     useManagerContract();
   const { t } = useTranslation();
-
   const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
   const [showDeployMultisigModal, setShowDeployMultisigModal] = React.useState(false);
   const [currentDeploymentStep, setCurrentDeploymentStep] = React.useState(0);
@@ -66,7 +65,6 @@ const Index = () => {
 
   const readMultisigContracts = async () => {
     let contracts = await queryContracts();
-
     setMultisigContracts(contracts);
   };
 
@@ -125,11 +123,10 @@ const Index = () => {
 
   React.useEffect(() => {
     tryParseUrlParams();
-
-    if (address && address !== '') {
+    if (userAddress && userAddress !== '') {
       readMultisigContracts();
     }
-  }, [address]);
+  }, [userAddress]);
   if (!loggedIn) {
     return <Redirect to="/" />;
   }

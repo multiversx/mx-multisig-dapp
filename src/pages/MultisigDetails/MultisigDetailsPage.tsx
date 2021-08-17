@@ -3,10 +3,11 @@ import { useContext, useDispatch } from 'context';
 import { Link, Redirect, useParams } from 'react-router-dom';
 import StatCard from 'components/StatCard';
 import State from 'components/State';
+import { useContext as useDappContext } from '@elrondnetwork/dapp';
+import { Address } from '@elrondnetwork/erdjs/out';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import ProposeAction from './Propose/ProposeAction';
 import MultisigProposalCard from 'pages/MultisigDetails/MultisigProposalCard';
-import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 import { useMultisigContract } from 'contracts/MultisigContract';
 import { useLoading } from 'helpers/loading';
@@ -22,7 +23,6 @@ interface MultisigDetailsPageParams {
 
 const MultisigDetailsPage = () => {
   const {
-    address,
     totalBoardMembers,
     totalProposers,
     quorumSize,
@@ -35,6 +35,7 @@ const MultisigDetailsPage = () => {
     egldLabel,
     multisigName,
   } = useContext();
+  const { address } = useDappContext();
   const {
     queryBoardMembersCount,
     queryProposersCount,

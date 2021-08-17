@@ -11,11 +11,15 @@ import { useContext } from 'context';
 import { parseContractInfo } from 'helpers/converters';
 import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import { buildTransaction } from './transactionUtils';
-import { useSendTransaction as useSendDappTransaction } from '@elrondnetwork/dapp';
+import {
+  useSendTransaction as useSendDappTransaction,
+  useContext as useDappContext,
+} from '@elrondnetwork/dapp';
 import { routeNames } from '../routes';
 
 export function useManagerContract(callbackRoute = routeNames.dashboard) {
-  const { dapp, address, multisigManagerContract } = useContext();
+  const { dapp, multisigManagerContract } = useContext();
+  const { address } = useDappContext();
   const sendDappTransaction = useSendDappTransaction();
 
   const smartContract = new SmartContract({ address: new Address(multisigManagerContract ?? '') });

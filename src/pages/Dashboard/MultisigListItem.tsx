@@ -14,7 +14,6 @@ const MultisigCard = ({ address = Address.Zero(), name = '' }: MultisigCardType)
   const { t } = useTranslation();
   const history = useHistory();
   const { mutateUnregisterMultisigContract } = useManagerContract();
-
   const onEnterClicked = () => {
     history.push('/multisig/' + address.bech32());
   };
