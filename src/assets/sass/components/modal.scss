@@ -1,0 +1,28 @@
+.modal-control-container {
+  display: flex;
+  align-items: center;
+}
+
+.modal-control-container span {
+  margin-right: 1rem;
+  margin-bottom: 0.7rem;
+  min-width: 120px;
+  text-align: right;
+}
+
+.modal-control-container input {
+  margin-bottom: 0.7rem;
+}
+
+.modal-control-container .form-check-label {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.modal-control-container .form-check-input {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 2px;
+  margin-right: 8px;
+}
+

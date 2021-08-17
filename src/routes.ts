@@ -2,9 +2,9 @@ import React from "react";
 import * as Dapp from "@elrondnetwork/dapp";
 import withPageTitle from "./components/PageTitle";
 import Home from "./pages/Home";
-import Transaction from "./pages/Transaction";
-import Dashboard from "./pages/Dashboard";
 import { dAppName } from "config";
+import MultisigDetailsPage from './pages/MultisigDetails/MultisigDetailsPage';
+import Dashboard from './pages/Dashboard';
 
 type RouteType = Dapp.RouteType & { title: string };
 
@@ -15,6 +15,7 @@ export const routeNames = {
   unlock: "/unlock",
   ledger: "/ledger",
   walletconnect: "/walletconnect",
+
 };
 
 const routes: RouteType[] = [
@@ -30,10 +31,16 @@ const routes: RouteType[] = [
     authenticatedRoute: true,
   },
   {
-    path: "/transaction",
-    title: "Transaction",
-    component: Transaction,
+    path: '/multisig/:multisigAddressParam',
+    title: 'Multisig',
+    component: MultisigDetailsPage,
   },
+  {
+    path: '/multisig',
+    title: 'Multisig Details',
+    component: Dashboard,
+  },
+
 ];
 
 const wrappedRoutes = () =>

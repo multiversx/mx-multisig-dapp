@@ -1,8 +1,7 @@
-import * as React from "react";
-import { ActionType, reducer } from "./reducer";
-import initialState, { StateType } from "./state";
+import React from 'react';
+import { StateType, initialState } from './state';
+import { DispatchType, reducer } from './reducer';
 
-type DispatchType = (action: ActionType) => void;
 export interface ContextType {
   children: React.ReactNode;
 }
@@ -22,7 +21,7 @@ function ContextProvider({ children }: ContextType) {
 function useContext() {
   const context = React.useContext(Context);
   if (context === undefined) {
-    throw new Error("useState must be used within a Context.Provider");
+    throw new Error('useState must be used within a Context.Provider');
   }
   return context;
 }
@@ -30,7 +29,7 @@ function useContext() {
 function useDispatch() {
   const context = React.useContext(Dispatch);
   if (context === undefined) {
-    throw new Error("useDispatch must be used within a Dispatch.Provider");
+    throw new Error('useDispatch must be used within a Dispatch.Provider');
   }
   return context;
 }
