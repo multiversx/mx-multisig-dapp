@@ -1,10 +1,9 @@
 import { Redirect } from 'react-router-dom';
 import { Address } from '@elrondnetwork/erdjs';
 import { useContext as useDappContext } from '@elrondnetwork/dapp';
-import React, { useState } from 'react';
-import { useContext } from 'context';
+import React from 'react';
+import { useContext, useDispatch } from 'context';
 import MultisigListItem from 'pages/Dashboard/MultisigListItem';
-import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import AddMultisigModal from './AddMultisigModal';
 import { useDeployContract } from 'contracts/DeployContract';
 import { useManagerContract } from 'contracts/ManagerContract';
@@ -12,10 +11,12 @@ import { hexToAddress, hexToString } from 'helpers/converters';
 import { tryParseTransactionParameter } from 'helpers/urlparameters';
 import DeployStepsModal from './DeployMultisigModal';
 import { useTranslation } from 'react-i18next';
+import { ActionTypes } from '../../context/reducer';
 
 const Index = () => {
-  const { dapp, multisigDeployerContracts, multisigManagerContract } = useContext();
-  const { loggedIn, address } = useDappContext();
+  const { multisigDeployerContracts, multisigContracts, multisigManagerContract } = useContext();
+  const { loggedIn, address, apiAddress } = useDappContext();
+  const dispatch = useDispatch();
   const { sendDeployTransaction } = useDeployContract();
   const { mutateRegisterMultisigContractName, mutateRegisterMultisigContract, queryContracts } =
     useManagerContract();
@@ -23,8 +24,6 @@ const Index = () => {
   const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
   const [showDeployMultisigModal, setShowDeployMultisigModal] = React.useState(false);
   const [currentDeploymentStep, setCurrentDeploymentStep] = React.useState(0);
-
-  const [multisigContracts, setMultisigContracts] = useState<MultisigContractInfo[]>([]);
 
   const onDeployClicked = async () => {
     setCurrentDeploymentStep(0);
@@ -65,11 +64,14 @@ const Index = () => {
 
   const readMultisigContracts = async () => {
     let contracts = await queryContracts();
-    setMultisigContracts(contracts);
+    dispatch({
+      type: ActionTypes.setMultisigContracts,
+      contracts,
+    });
   };
 
   const tryParseUrlParams = async () => {
-    let parameters = await tryParseTransactionParameter(dapp);
+    let parameters = await tryParseTransactionParameter(apiAddress);
     if (parameters === null) {
       return;
     }

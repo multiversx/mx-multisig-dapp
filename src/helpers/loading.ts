@@ -1,5 +1,5 @@
 import { useDispatch } from 'context';
-import { DispatchType } from 'context/reducer';
+import { ActionTypes, DispatchType } from 'context/reducer';
 
 export class Loading {
   private dispatch: DispatchType;
@@ -9,11 +9,11 @@ export class Loading {
   }
 
   public show() {
-    this.dispatch({ type: 'loading', loading: true });
+    this.dispatch({ type: ActionTypes.loading, loading: true });
   }
-  
+
   public hide() {
-    this.dispatch({ type: 'loading', loading: false });
+    this.dispatch({ type: ActionTypes.loading, loading: false });
   }
 }
 
@@ -22,4 +22,3 @@ export function useLoading() {
   const loading = new Loading(dispatch);
   return loading;
 }
-  

@@ -26,13 +26,18 @@ import { useContext } from 'context';
 import BigNumber from 'bignumber.js';
 import { NumericalBinaryCodec } from '@elrondnetwork/erdjs/out/smartcontracts/codec/numerical';
 import { buildTransaction } from './transactionUtils';
-import { useSendTransaction as useSendDappTransaction } from '@elrondnetwork/dapp';
+import {
+  useSendTransaction as useSendDappTransaction,
+  useContext as useDappContext,
+} from '@elrondnetwork/dapp';
 import { routeNames } from '../routes';
 
 export function useMultisigContract(
   callbackRoute = window.location?.pathname ?? routeNames.dashboard
 ) {
-  const { dapp, currentMultisigAddress } = useContext();
+  const { currentMultisigAddress } = useContext();
+  const { dapp } = useDappContext();
+
   const sendDappTransaction = useSendDappTransaction();
   const smartContract = new SmartContract({ address: currentMultisigAddress });
 
@@ -234,7 +239,6 @@ export function useMultisigContract(
     if (result.returnData.length === 0) {
       return null;
     }
-
     let [action] = parseAction(result.outputUntyped()[0]);
     return action;
   }
@@ -252,7 +256,6 @@ export function useMultisigContract(
         actions.push(action);
       }
     }
-
     return actions;
   }
   async function queryAddressArray(
@@ -270,7 +273,6 @@ export function useMultisigContract(
       func: new ContractFunction(functionName),
       args: args,
     });
-
     return await dapp.proxy.queryContract(query);
   }
   return {

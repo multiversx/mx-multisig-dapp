@@ -20,8 +20,8 @@ import { routeNames } from '../routes';
 export function useManagerContract(
   callbackRoute = window.location?.pathname ?? routeNames.dashboard
 ) {
-  const { dapp, multisigManagerContract } = useContext();
-  const { address } = useDappContext();
+  const { multisigManagerContract } = useContext();
+  const { address, dapp } = useDappContext();
   const sendDappTransaction = useSendDappTransaction();
 
   const smartContract = new SmartContract({ address: new Address(multisigManagerContract ?? '') });

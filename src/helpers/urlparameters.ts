@@ -1,17 +1,15 @@
 import { Address } from '@elrondnetwork/erdjs/out';
-import { DappState } from 'context/state';
 import TransactionParameter from 'types/TransactionParameter';
 
 export async function tryParseTransactionParameter(
-  dapp: DappState
+  apiEndpoint: string
 ): Promise<TransactionParameter | null> {
   let searchParams = new URLSearchParams(window.location.search);
   let txHash = searchParams.get('txHash');
   if (!txHash || txHash === '') {
     return null;
   }
-
-  let fetchResult = await fetch(`${dapp.apiUrl}/transactions/${txHash}`);
+  let fetchResult = await fetch(`${apiEndpoint}/transactions/${txHash}`);
   let json = await fetchResult.json();
 
   let inputData = json.data;

@@ -1,11 +1,32 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import * as Dapp from "@elrondnetwork/dapp";
-import * as config from "./config";
-import { ContextProvider } from "./context";
-import Layout from "./components/Layout";
-import routes, { routeNames } from "./routes";
-import PageNotFoud from "./components/PageNotFoud";
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import * as Dapp from '@elrondnetwork/dapp';
+import * as config from './config';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { englishTranslations } from 'i18n/en';
+import { germanTranslations } from 'i18n/de';
+import { ContextProvider } from './context';
+import Layout from './components/Layout';
+import routes, { routeNames } from './routes';
+import PageNotFoud from './components/PageNotFoud';
+
+i18n.use(initReactI18next).init({
+  resources: {
+    en: {
+      translation: englishTranslations,
+    },
+    de: {
+      translation: germanTranslations,
+    },
+  },
+  lng: 'en',
+  fallbackLng: 'en',
+
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export default function App() {
   return (
@@ -28,9 +49,7 @@ export default function App() {
             />
             <Route
               path={routeNames.ledger}
-              component={() => (
-                <Dapp.Pages.Ledger callbackRoute={routeNames.dashboard} />
-              )}
+              component={() => <Dapp.Pages.Ledger callbackRoute={routeNames.dashboard} />}
               exact={true}
             />
             <Route

@@ -1,6 +1,5 @@
 import React from 'react';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { useContext } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useMultisigContract } from 'contracts/MultisigContract';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,6 +12,7 @@ import { ReactComponent as Circle } from '../../assets/img/circle.svg';
 import { ReactComponent as Done } from '../../assets/img/done.svg';
 import { MultisigActionType } from 'types/MultisigActionType';
 import { useTranslation } from 'react-i18next';
+import MultisigDetailsContext from '../../context/MultisigDetailsContext';
 
 export interface MultisigProposalCardType {
   type: number;
@@ -41,7 +41,7 @@ const MultisigProposalCard = ({
 }: MultisigProposalCardType) => {
   const { mutateSign, mutateUnsign, mutatePerformAction, mutateDiscardAction } =
     useMultisigContract();
-  const { quorumSize } = useContext();
+  const { quorumSize } = React.useContext(MultisigDetailsContext);
   const { t } = useTranslation();
 
   let sign = () => {

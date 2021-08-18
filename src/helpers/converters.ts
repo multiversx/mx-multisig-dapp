@@ -22,7 +22,6 @@ const createKeccakHash = require('keccak');
 export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
   let actionTypeByte = buffer.slice(0, 1)[0];
   let remainingBytes = buffer.slice(1);
-
   switch (actionTypeByte) {
     case MultisigActionType.AddBoardMember:
       return parseAddBoardMember(remainingBytes);
