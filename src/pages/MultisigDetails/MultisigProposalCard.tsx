@@ -62,7 +62,7 @@ const MultisigProposalCard = ({
   return (
     <div className="statcard card-bg-grey text-black py-3 px-4 mb-spacer rounded">
       <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
-        <div className="icon my-1 fill-black">
+        <div className="icon my-1 fill-dark">
           {type === MultisigActionType.AddBoardMember || type === MultisigActionType.AddProposer ? (
             <AddUser />
           ) : type === MultisigActionType.RemoveUser ? (
@@ -77,7 +77,11 @@ const MultisigProposalCard = ({
         </div>
         <div>
           {signers.map((_, index) => (
-            <Done key={index} style={{ marginRight: index === signers.length - 1 ? 4 : 8 }} />
+            <Done
+              className={'done-icon'}
+              key={index}
+              style={{ marginRight: index === signers.length - 1 ? 4 : 8 }}
+            />
           ))}
 
           {[...Array(quorumSize - signers.length)].map((index) => (
