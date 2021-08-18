@@ -46,6 +46,11 @@ export function useMultisigContract(
     return sendDappTransaction({ transaction, callbackRoute });
   }
 
+  function deposit(amount: number) {
+    const transaction = buildTransaction(amount, 'deposit', smartContract);
+    return sendDappTransaction({ transaction, callbackRoute });
+  }
+
   function mutateSign(actionId: number) {
     return sendTransaction('sign', new U32Value(actionId));
   }
@@ -294,6 +299,7 @@ export function useMultisigContract(
     queryQuorumCount,
     queryActionLastId,
     queryActionData,
+    deposit,
     queryUserRole,
     queryActionIsSignedByAddress,
     queryActionIsQuorumReached,

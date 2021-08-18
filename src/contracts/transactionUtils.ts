@@ -23,6 +23,7 @@ export function buildTransaction(
   return new Transaction({
     receiver: contract.getAddress(),
     value: Balance.egld(value),
+
     gasLimit: new GasLimit(standardGasLimit),
     data: payload,
   });

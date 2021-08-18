@@ -19,6 +19,7 @@ import { useConfirmModal } from 'components/ConfirmModal/ConfirmModalPayload';
 import { useTranslation } from 'react-i18next';
 import { useManagerContract } from 'contracts/ManagerContract';
 import { ActionTypes } from '../../context/reducer';
+import DepositModal from '../../components/DepositModal/DepositModal';
 
 interface MultisigDetailsPageParams {
   multisigAddressParam: string;
@@ -74,6 +75,7 @@ const MultisigDetailsPage = () => {
   let { multisigAddressParam } = useParams<MultisigDetailsPageParams>();
   const confirmModal = useConfirmModal();
   const { t } = useTranslation();
+  const [showDepositModal, setShowDepositModal] = useState(false);
 
   const isProposer = userRole !== 0;
   const isBoardMember = userRole === 2;
@@ -126,6 +128,14 @@ const MultisigDetailsPage = () => {
     } finally {
       loadingIndicator.hide();
     }
+  };
+
+  const onDepositClicked = () => {
+    setShowDepositModal(true);
+  };
+
+  const onCloseDepositModal = () => {
+    setShowDepositModal(false);
   };
 
   const userRoleAsString = () => {
@@ -275,6 +285,9 @@ const MultisigDetailsPage = () => {
               <span className="text-truncate">{currentMultisigAddress?.bech32()}</span>
             </div>
             <div className="d-flex justify-content-center align-items-center justify-content-between">
+              <button onClick={onDepositClicked} className="btn btn-primary mr-3">
+                {t('Deposit')}
+              </button>
               <Link to="/multisig" className="btn btn-primary btn-sm">
                 {t('Manage Multisigs')}
               </Link>
@@ -353,6 +366,7 @@ const MultisigDetailsPage = () => {
           </div>
         </div>
       </div>
+      {showDepositModal && <DepositModal onClose={onCloseDepositModal} />}
     </MultisigDetailsContext.Provider>
   );
 };
