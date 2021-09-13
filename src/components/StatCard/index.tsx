@@ -1,13 +1,13 @@
-import SVG from 'react-inlinesvg';
-import React from 'react';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { ReactComponent as BoardMember } from '../../assets/img/clipboard-check.svg';
-import { ReactComponent as Proposer } from '../../assets/img/clipboard-list.svg';
-import { ReactComponent as Quorum } from '../../assets/img/quorum.svg';
-import { ReactComponent as User } from '../../assets/img/user.svg';
-import { ReactComponent as Money } from '../../assets/img/money.svg';
+import React from "react";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import SVG from "react-inlinesvg";
+import { ReactComponent as BoardMember } from "../../assets/img/clipboard-check.svg";
+import { ReactComponent as Proposer } from "../../assets/img/clipboard-list.svg";
+import { ReactComponent as Money } from "../../assets/img/money.svg";
+import { ReactComponent as Quorum } from "../../assets/img/quorum.svg";
+import { ReactComponent as User } from "../../assets/img/user.svg";
 
 export interface StatCardType {
   title?: string;
@@ -21,31 +21,37 @@ export interface StatCardType {
 }
 
 const StatCard = ({
-  title = '',
-  value = '0',
-  valueUnit = '',
-  color = '',
-  svg = '',
-  percentage = '',
-  tooltipText = '',
+  title = "",
+  value = "0",
+  valueUnit = "",
+  svg = "",
+  percentage = "",
+  tooltipText = "",
   children = null,
 }: StatCardType) => {
   return (
-    <div className={`statcard card-bg-grey text-black py-3 px-4 mb-spacer ml-spacer rounded`}>
+    <div
+      className={
+        "statcard card-bg-grey text-black py-3 px-4 mb-spacer ml-spacer rounded"
+      }
+    >
       <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
         <div className="icon my-1 statcard-item ">
-          {svg === 'clipboard-check.svg' ? (
+          {svg === "clipboard-check.svg" ? (
             <BoardMember style={{ width: 32, height: 32 }} />
-          ) : svg === 'clipboard-list.svg' ? (
+          ) : svg === "clipboard-list.svg" ? (
             <Proposer style={{ width: 32, height: 32 }} />
-          ) : svg === 'quorum.svg' ? (
+          ) : svg === "quorum.svg" ? (
             <Quorum style={{ width: 32, height: 32 }} />
-          ) : svg === 'user.svg' ? (
+          ) : svg === "user.svg" ? (
             <User style={{ width: 32, height: 32 }} />
-          ) : svg === 'money.svg' ? (
+          ) : svg === "money.svg" ? (
             <Money style={{ width: 32, height: 32 }} />
           ) : (
-            <SVG src={process.env.PUBLIC_URL + '/' + svg} className="text-black"></SVG>
+            <SVG
+              src={process.env.PUBLIC_URL + "/" + svg}
+              className="text-black"
+            ></SVG>
           )}
         </div>
         <div>{children}</div>
@@ -56,7 +62,7 @@ const StatCard = ({
       </p>
       <small className="opacity-5">
         {percentage}
-        {tooltipText !== '' && (
+        {tooltipText !== "" && (
           <OverlayTrigger
             placement="top"
             delay={{ show: 250, hide: 400 }}

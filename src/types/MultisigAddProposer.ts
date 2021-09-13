@@ -1,18 +1,18 @@
-import { Address } from '@elrondnetwork/erdjs/out';
-import { MultisigAction } from './MultisigAction';
-import { MultisigActionType } from './MultisigActionType';
-import i18next from 'i18next';
+import { Address } from "@elrondnetwork/erdjs/out";
+import i18next from "i18next";
+import { MultisigAction } from "./MultisigAction";
+import { MultisigActionType } from "./MultisigActionType";
 
 export class MultisigAddProposer extends MultisigAction {
   address: Address;
 
   constructor(address: Address) {
-      super(MultisigActionType.AddProposer);
-      this.address = address;
+    super(MultisigActionType.AddProposer);
+    this.address = address;
   }
 
   title() {
-    return i18next.t('Add Proposer');
+    return i18next.t("Add Proposer");
   }
 
   description() {
@@ -20,6 +20,6 @@ export class MultisigAddProposer extends MultisigAction {
   }
 
   tooltip() {
-    return '';
+    return "";
   }
 }

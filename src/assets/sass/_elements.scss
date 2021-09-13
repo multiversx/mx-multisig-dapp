@@ -12,7 +12,8 @@ body.modal-open .layout {
 .card {
   .card-header {
     &:first-child {
-      border-radius: calc(#{$card-border-radius} - 1px) calc(#{$card-border-radius} - 1px) 0 0;
+      border-radius: calc(#{$card-border-radius} - 1px)
+        calc(#{$card-border-radius} - 1px) 0 0;
     }
   }
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 0 0.5px inset;
@@ -24,14 +25,14 @@ body.modal-open .layout {
   }
   border: none !important;
   box-shadow: 0 0.6rem 0.6rem 0 rgba(27, 70, 194, 0.1);
-    border: rgba(255, 255, 255, 0.3);
-    &:hover {
-      background: rgba(0, 0, 0, 0.2);
-    }
-    &:not(:disabled):not(.disabled):active,
-    &:not(:disabled):not(.disabled).active {
-      background-color: rgba(0, 0, 0, 0.2);
-    }
+  border: rgba(255, 255, 255, 0.3);
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
 }
 
 .table {
@@ -82,13 +83,11 @@ label {
   animation-duration: 0.5s;
 }
 
-
-.card-bg-grey{
+.card-bg-grey {
   background: #c1bfbf;
   border: 3px solid grey;
   box-shadow: 0 0.6rem 0.6rem 0 rgba(253, 63, 51, 0.06);
 }
-
 
 @media (min-width: 1200px) {
   .container {

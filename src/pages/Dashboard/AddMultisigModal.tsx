@@ -1,8 +1,8 @@
-import React from 'react';
-import { Modal } from 'react-bootstrap';
-import { Address } from '@elrondnetwork/erdjs/out';
-import ProposeInputAddress from '../MultisigDetails/Propose/ProposeInputAddress';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import { Address } from "@elrondnetwork/erdjs/out";
+import { Modal } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import ProposeInputAddress from "../MultisigDetails/Propose/ProposeInputAddress";
 
 interface AddMultisigModalType {
   show: boolean;
@@ -10,13 +10,17 @@ interface AddMultisigModalType {
   handleAdd: (address: Address) => void;
 }
 
-const AddMultisigModal = ({ show, handleClose, handleAdd }: AddMultisigModalType) => {
+const AddMultisigModal = ({
+  show,
+  handleClose,
+  handleAdd,
+}: AddMultisigModalType) => {
   const { t } = useTranslation();
 
   const [address, setAddress] = React.useState(Address.Zero());
 
-  const onAddressParamChange = (address: Address) => {
-    setAddress(address);
+  const onAddressParamChange = (newAddress: Address) => {
+    setAddress(newAddress);
   };
 
   const onAddClicked = () => {
@@ -35,7 +39,7 @@ const AddMultisigModal = ({ show, handleClose, handleAdd }: AddMultisigModalType
       <div className="card">
         <div className="card-body p-spacer text-center">
           <p className="h6 mb-spacer" data-testid="delegateTitle">
-            {t('Add Multisig')}
+            {t("Add Multisig")}
           </p>
 
           <div className="p-spacer">
@@ -44,7 +48,7 @@ const AddMultisigModal = ({ show, handleClose, handleAdd }: AddMultisigModalType
 
           <div>
             <button onClick={onAddClicked} className="btn btn-primary mb-3">
-              {t('Add')}
+              {t("Add")}
             </button>
           </div>
         </div>

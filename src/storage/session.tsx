@@ -1,13 +1,13 @@
-import moment from 'moment';
+import moment from "moment";
 
-export const setItem = (key: string, item: any, ttl: number = 3600) => {
+export const setItem = (key: string, item: any, ttl = 3600) => {
   const expires = moment().unix() + ttl;
   sessionStorage.setItem(
     key,
     JSON.stringify({
       expires,
       data: item,
-    })
+    }),
   );
 };
 
@@ -22,7 +22,10 @@ export const getItem = (key: string): any => {
     return null;
   }
 
-  if (!deserializedItem.hasOwnProperty('expires') || !deserializedItem.hasOwnProperty('data')) {
+  if (
+    !deserializedItem.hasOwnProperty("expires") ||
+    !deserializedItem.hasOwnProperty("data")
+  ) {
     return null;
   }
 

@@ -6,7 +6,7 @@ import {
   GasLimit,
   SmartContract,
   TypedValue,
-} from '@elrondnetwork/erdjs';
+} from "@elrondnetwork/erdjs";
 
 const standardGasLimit = 60000000;
 
@@ -18,7 +18,10 @@ export function buildTransaction(
 ): Transaction {
   const func = new ContractFunction(functionName);
 
-  let payload = TransactionPayload.contractCall().setFunction(func).setArgs(args).build();
+  const payload = TransactionPayload.contractCall()
+    .setFunction(func)
+    .setArgs(args)
+    .build();
 
   return new Transaction({
     receiver: contract.getAddress(),

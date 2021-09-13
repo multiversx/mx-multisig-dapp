@@ -29,11 +29,12 @@
     "react-dom": "17.0.2",
     "react-i18next": "^11.11.4",
     "react-inlinesvg": "^2.3.0",
-    "react-redux": "^7.2.4",
+    "react-redux": "^7.2.5",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
     "react-select": "^4.3.1",
     "react-stepper-horizontal": "^1.0.11",
+    "reselect": "^4.0.0",
     "typescript": "4.1.2",
     "web-vitals": "1.0.1",
     "yup": "^0.32.9"
@@ -63,6 +64,21 @@
     ]
   },
   "devDependencies": {
-    "prettier": "2.3.2"
+    "prettier": "^2.3.2",
+    "@typescript-eslint/eslint-plugin": "4.22.1",
+    "@typescript-eslint/parser": "4.22.1",
+    "eslint": "7.25.0",
+    "eslint-config-standard": "16.0.2",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-react": "7.22.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-config-react": "1.1.7",
+    "eslint-config-react-app": "6.0.0",
+    "eslint-import-resolver-alias": "1.1.2",
+    "eslint-import-resolver-typescript": "2.4.0",
+    "eslint-plugin-prettier": "3.4.0",
+    "eslint-plugin-react-hooks": "4.2.0"
   }
 }

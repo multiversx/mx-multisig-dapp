@@ -1,25 +1,32 @@
-import React, { useState } from 'react';
-import { useContext, useDispatch } from 'context';
-import { Link, Redirect, useParams } from 'react-router-dom';
-import { useContext as useDappContext } from '@elrondnetwork/dapp';
-import { Address, Balance } from '@elrondnetwork/erdjs/out';
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
-import MultisigDetailsContext from 'context/MultisigDetailsContext';
+import React, { useState } from "react";
+import { useContext as useDappContext } from "@elrondnetwork/dapp";
+import { Address, Balance } from "@elrondnetwork/erdjs/out";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
-import StatCard from 'components/StatCard';
-import State from 'components/State';
-import ProposeAction from './Propose/ProposeAction';
-import MultisigProposalCard from 'pages/MultisigDetails/MultisigProposalCard';
-import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
-import { useMultisigContract } from 'contracts/MultisigContract';
-import { useLoading } from 'helpers/loading';
-import { tryParseTransactionParameter } from 'helpers/urlparameters';
-import { hexToNumber, hexToString } from 'helpers/converters';
-import { useConfirmModal } from 'components/ConfirmModal/ConfirmModalPayload';
-import { useTranslation } from 'react-i18next';
-import { useManagerContract } from 'contracts/ManagerContract';
-import { ActionTypes } from '../../context/reducer';
-import DepositModal from '../../components/DepositModal/DepositModal';
+import { useTranslation } from "react-i18next";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, Redirect, useParams } from "react-router-dom";
+import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
+import StatCard from "components/StatCard";
+import State from "components/State";
+import MultisigDetailsContext from "context/MultisigDetailsContext";
+import { useManagerContract } from "contracts/ManagerContract";
+import { useMultisigContract } from "contracts/MultisigContract";
+import { hexToNumber, hexToString } from "helpers/converters";
+import { tryParseTransactionParameter } from "helpers/urlparameters";
+import MultisigProposalCard from "pages/MultisigDetails/MultisigProposalCard";
+import { MultisigActionDetailed } from "types/MultisigActionDetailed";
+import DepositModal from "../../components/DepositModal/DepositModal";
+import {
+  currentMultisigAddressSelector,
+  multisigContractsLoadingSelector,
+} from "../../redux/selectors/multisigContractsSelectors";
+import {
+  setCurrentMultisigAddress,
+  setMultisigContractsLoading,
+} from "../../redux/slices/multisigContractsSlice";
+import { PlainMultisigAddress } from "../../types/address";
+import ProposeAction from "./Propose/ProposeAction";
 
 interface MultisigDetailsPageParams {
   multisigAddressParam: string;
@@ -52,12 +59,14 @@ const MultisigDetailsPage = () => {
     totalProposers: 0,
     quorumSize: 0,
     userRole: 0,
-    multisigBalance: new Balance('0'),
-    multisigName: '',
+    multisigBalance: new Balance("0"),
+    multisigName: "",
     allActions: [],
   });
 
-  const { loading, currentMultisigAddress } = useContext();
+  const loading = useSelector(multisigContractsLoadingSelector);
+  const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
+
   const { address, apiAddress, dapp, egldLabel } = useDappContext();
   const {
     queryBoardMembersCount,
@@ -71,8 +80,7 @@ const MultisigDetailsPage = () => {
   } = useMultisigContract();
   const { queryContractName } = useManagerContract();
   const dispatch = useDispatch();
-  const loadingIndicator = useLoading();
-  let { multisigAddressParam } = useParams<MultisigDetailsPageParams>();
+  const { multisigAddressParam } = useParams<MultisigDetailsPageParams>();
   const confirmModal = useConfirmModal();
   const { t } = useTranslation();
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -93,14 +101,15 @@ const MultisigDetailsPage = () => {
       return;
     }
 
-    loadingIndicator.show();
+    dispatch(setMultisigContractsLoading(true));
+
     try {
       const [
-        totalBoardMembers,
-        totalProposers,
-        quorumSize,
-        userRole,
-        allActions,
+        newTotalBoardMembers,
+        newTotalProposers,
+        newQuorumSize,
+        newUserRole,
+        newAllActions,
         contractName,
         account,
       ] = await Promise.all([
@@ -113,11 +122,11 @@ const MultisigDetailsPage = () => {
         dapp.proxy.getAccount(currentMultisigAddress!),
       ]);
       const contractInfo: ContractInfo = {
-        totalBoardMembers,
-        totalProposers,
-        quorumSize,
-        userRole,
-        allActions,
+        totalBoardMembers: newTotalBoardMembers,
+        totalProposers: newTotalProposers,
+        quorumSize: newQuorumSize,
+        userRole: newUserRole,
+        allActions: newAllActions,
         multisigBalance: account.balance,
         multisigName: contractName,
       };
@@ -126,7 +135,7 @@ const MultisigDetailsPage = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      loadingIndicator.hide();
+      dispatch(setMultisigContractsLoading(false));
     }
   };
 
@@ -141,19 +150,19 @@ const MultisigDetailsPage = () => {
   const userRoleAsString = () => {
     switch (userRole) {
       case 0:
-        return 'No rights';
+        return "No rights";
       case 1:
-        return 'Proposer';
+        return "Proposer";
       case 2:
-        return 'Proposer / Signer';
+        return "Proposer / Signer";
       default:
-        return 'Unknown';
+        return "Unknown";
     }
   };
 
   const alreadySigned = (action: MultisigActionDetailed) => {
-    let typedAddress = new Address(address);
-    for (let signerAddress of action.signers) {
+    const typedAddress = new Address(address);
+    for (const signerAddress of action.signers) {
       if (signerAddress.hex() === typedAddress.hex()) {
         return true;
       }
@@ -171,7 +180,11 @@ const MultisigDetailsPage = () => {
   };
 
   const canPerformAction = (action: MultisigActionDetailed) => {
-    return isBoardMember && alreadySigned(action) && action.signers.length >= quorumSize;
+    return (
+      isBoardMember &&
+      alreadySigned(action) &&
+      action.signers.length >= quorumSize
+    );
   };
 
   const canDiscardAction = (action: MultisigActionDetailed) => {
@@ -179,38 +192,38 @@ const MultisigDetailsPage = () => {
   };
 
   const tryParseUrlParams = async () => {
-    let parameters = await tryParseTransactionParameter(apiAddress);
+    const parameters = await tryParseTransactionParameter(apiAddress);
     if (parameters === null) {
       return;
     }
 
     if (parameters.receiver.bech32() === currentMultisigAddress?.bech32()) {
-      if (parameters.functionName.startsWith('propose')) {
+      if (parameters.functionName.startsWith("propose")) {
         if (
           parameters.outputParameters.length === 2 &&
-          hexToString(parameters.outputParameters[0]) === 'ok'
+          hexToString(parameters.outputParameters[0]) === "ok"
         ) {
-          let actionId = hexToNumber(parameters.outputParameters[1]);
+          const actionId = hexToNumber(parameters.outputParameters[1]);
           if (actionId !== null) {
             onSignOrPropose(actionId);
           }
         }
-      } else if (parameters.functionName === 'sign') {
+      } else if (parameters.functionName === "sign") {
         if (
           parameters.outputParameters.length === 1 &&
-          hexToString(parameters.outputParameters[0]) === 'ok'
+          hexToString(parameters.outputParameters[0]) === "ok"
         ) {
-          let actionId = hexToNumber(parameters.inputParameters[0]);
+          const actionId = hexToNumber(parameters.inputParameters[0]);
           if (actionId !== null) {
             onSignOrPropose(actionId);
           }
         }
-      } else if (parameters.functionName === 'unsign') {
+      } else if (parameters.functionName === "unsign") {
         if (
           parameters.outputParameters.length === 1 &&
-          hexToString(parameters.outputParameters[0]) === 'ok'
+          hexToString(parameters.outputParameters[0]) === "ok"
         ) {
-          let actionId = hexToNumber(parameters.inputParameters[0]);
+          const actionId = hexToNumber(parameters.inputParameters[0]);
           if (actionId !== null) {
             onUnsign(actionId);
           }
@@ -220,12 +233,15 @@ const MultisigDetailsPage = () => {
   };
 
   const onSignOrPropose = async (actionId: number) => {
-    let validSignerCount = await queryActionValidSignerCount(actionId);
-    let realQuorumSize = await queryQuorumCount();
-    let realUserRole = await queryUserRole(new Address(address).hex());
+    const validSignerCount = await queryActionValidSignerCount(actionId);
+    const realQuorumSize = await queryQuorumCount();
+    const realUserRole = await queryUserRole(new Address(address).hex());
 
     if (validSignerCount >= realQuorumSize && realUserRole === 2) {
-      let success = await confirmModal.show(t('Confirm Perform Action'), t('Perform Action'));
+      const success = await confirmModal.show(
+        t("Confirm Perform Action"),
+        t("Perform Action"),
+      );
       if (success) {
         await mutatePerformAction(actionId);
       }
@@ -233,11 +249,14 @@ const MultisigDetailsPage = () => {
   };
 
   const onUnsign = async (actionId: number) => {
-    let validSignerCount = await queryActionValidSignerCount(actionId);
-    let realUserRole = await queryUserRole(new Address(address).hex());
+    const validSignerCount = await queryActionValidSignerCount(actionId);
+    const realUserRole = await queryUserRole(new Address(address).hex());
 
     if (validSignerCount === 0 && realUserRole === 2) {
-      let success = await confirmModal.show(t('Confirm Discard Action'), t('Discard Action'));
+      const success = await confirmModal.show(
+        t("Confirm Discard Action"),
+        t("Discard Action"),
+      );
       if (success) {
         await mutateDiscardAction(actionId);
       }
@@ -247,22 +266,26 @@ const MultisigDetailsPage = () => {
   React.useEffect(() => {
     tryParseUrlParams();
 
-    let multisigAddressParam = parseMultisigAddress();
-    if (multisigAddressParam === null) {
+    const newMultisigAddressParam = parseMultisigAddress();
+    if (newMultisigAddressParam === null) {
       return;
     }
 
-    let isCurrentMultisigAddressNotSet = !currentMultisigAddress;
-    let isCurrentMultisigAddressDiferentThanParam =
+    const isCurrentMultisigAddressNotSet = !currentMultisigAddress;
+    const isCurrentMultisigAddressDiferentThanParam =
       currentMultisigAddress &&
-      multisigAddressParam &&
-      currentMultisigAddress.hex() !== multisigAddressParam.hex();
+      newMultisigAddressParam &&
+      currentMultisigAddress?.hex() !== newMultisigAddressParam.hex();
 
-    if (isCurrentMultisigAddressNotSet || isCurrentMultisigAddressDiferentThanParam) {
-      dispatch({
-        type: ActionTypes.setCurrentMultisigAddress,
-        currentMultisigAddress: multisigAddressParam,
-      });
+    if (
+      isCurrentMultisigAddressNotSet ||
+      isCurrentMultisigAddressDiferentThanParam
+    ) {
+      dispatch(
+        setCurrentMultisigAddress(
+          newMultisigAddressParam?.toJSON() as PlainMultisigAddress,
+        ),
+      );
     } else if (address !== null) {
       getDashboardInfo();
     }
@@ -282,51 +305,59 @@ const MultisigDetailsPage = () => {
           <div className="header card-header d-flex align-items-center border-0 justify-content-between px-spacer">
             <div className="py-spacer text-truncate">
               <p className="opacity-6 mb-0">{multisigName}</p>
-              <span className="text-truncate">{currentMultisigAddress?.bech32()}</span>
+              <span className="text-truncate">
+                {currentMultisigAddress?.bech32()}
+              </span>
             </div>
             <div className="d-flex justify-content-center align-items-center justify-content-between">
-              <button onClick={onDepositClicked} className="btn btn-primary mr-3">
-                {t('Deposit')}
+              <button
+                onClick={onDepositClicked}
+                className="btn btn-primary mr-3"
+              >
+                {t("Deposit")}
               </button>
               <Link to="/multisig" className="btn btn-primary btn-sm">
-                {t('Manage Multisigs')}
+                {t("Manage Multisigs")}
               </Link>
             </div>
           </div>
 
           <div className="cards d-flex flex-wrap mr-spacer">
             <StatCard
-              title={t('Balance')}
+              title={t("Balance")}
               value={multisigBalance
                 .toDenominated()
                 .toString()
-                .slice(0, multisigBalance.toDenominated().toString().length - 16)}
+                .slice(
+                  0,
+                  multisigBalance.toDenominated().toString().length - 16,
+                )}
               valueUnit={egldLabel}
               color="orange"
               svg="money.svg"
             />
             <StatCard
-              title={t('Board Members')}
+              title={t("Board Members")}
               value={totalBoardMembers.toString()}
               color="orange"
               svg="clipboard-check.svg"
             />
             <StatCard
-              title={t('Proposers')}
+              title={t("Proposers")}
               value={totalProposers.toString()}
               valueUnit=""
               color="orange"
               svg="clipboard-list.svg"
             />
             <StatCard
-              title={t('Quorum Size')}
+              title={t("Quorum Size")}
               value={quorumSize.toString()}
               valueUnit=""
               color="orange"
               svg="quorum.svg"
             />
             <StatCard
-              title={t('User Role')}
+              title={t("User Role")}
               value={t(userRoleAsString())}
               valueUnit=""
               color="orange"
@@ -341,8 +372,10 @@ const MultisigDetailsPage = () => {
               <div className="card mt-spacer">
                 <div className="card-body p-spacer">
                   <div className="d-flex flex-wrap align-items-center justify-content-between">
-                    <p className="h6 mb-3">{t('Proposals')}</p>
-                    <div className="d-flex flex-wrap">{isProposer ? <ProposeAction /> : null}</div>
+                    <p className="h6 mb-3">{t("Proposals")}</p>
+                    <div className="d-flex flex-wrap">
+                      {isProposer ? <ProposeAction /> : null}
+                    </div>
                   </div>
 
                   {allActions.map((action) => (

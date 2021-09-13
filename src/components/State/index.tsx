@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const State = ({
   icon,
@@ -15,7 +15,13 @@ const State = ({
   action?: React.ReactNode;
 }) => (
   <div className="state m-auto p-spacer text-center">
-    {icon && <FontAwesomeIcon icon={icon} className={iconClass ? iconClass : ''} size="5x" />}
+    {icon && (
+      <FontAwesomeIcon
+        icon={icon}
+        className={iconClass ? iconClass : ""}
+        size="5x"
+      />
+    )}
     {title && <p className="h4 mt-2 mb-1">{title}</p>}
     {description && <div className="mb-3">{description}</div>}
     {action && <>{action}</>}

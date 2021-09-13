@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useTranslation } from 'react-i18next';
-import MultisigDetailsContext from '../../../context/MultisigDetailsContext';
+import React, { useState, useEffect, useContext } from "react";
+import { useTranslation } from "react-i18next";
+import MultisigDetailsContext from "../../../context/MultisigDetailsContext";
 
 interface ProposeChangeQuorumType {
   handleParamsChange: (params: number) => void;
 }
 
-const ProposeChangeQuorum = ({ handleParamsChange }: ProposeChangeQuorumType) => {
+const ProposeChangeQuorum = ({
+  handleParamsChange,
+}: ProposeChangeQuorumType) => {
   const { quorumSize } = useContext(MultisigDetailsContext);
   const { t } = useTranslation();
 
@@ -24,7 +26,7 @@ const ProposeChangeQuorum = ({ handleParamsChange }: ProposeChangeQuorumType) =>
 
   return (
     <div className="modal-control-container">
-      <span>{t('Quorum Size')}: </span>
+      <span>{t("Quorum Size")}: </span>
       <input
         style={{ width: 250 }}
         type="number"

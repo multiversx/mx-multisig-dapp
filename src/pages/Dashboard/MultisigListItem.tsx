@@ -1,21 +1,24 @@
-import React from 'react';
-import { Address } from '@elrondnetwork/erdjs/out';
-import { useHistory } from 'react-router-dom';
-import { useManagerContract } from 'contracts/ManagerContract';
-import { ReactComponent as Wallet } from '../../assets/img/wallet.svg';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import { Address } from "@elrondnetwork/erdjs/out";
+import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
+import { useManagerContract } from "contracts/ManagerContract";
+import { ReactComponent as Wallet } from "../../assets/img/wallet.svg";
 
 export interface MultisigCardType {
   address: Address;
   name: string;
 }
 
-const MultisigCard = ({ address = Address.Zero(), name = '' }: MultisigCardType) => {
+const MultisigCard = ({
+  address = Address.Zero(),
+  name = "",
+}: MultisigCardType) => {
   const { t } = useTranslation();
   const history = useHistory();
   const { mutateUnregisterMultisigContract } = useManagerContract();
   const onEnterClicked = () => {
-    history.push('/multisig/' + address.bech32());
+    history.push("/multisig/" + address.bech32());
   };
 
   const onUnregisterClicked = async () => {
@@ -35,11 +38,17 @@ const MultisigCard = ({ address = Address.Zero(), name = '' }: MultisigCardType)
           <div className="opacity-6">{address.bech32()}</div>
         </div>
         <div>
-          <button onClick={onEnterClicked} className="btn btn-primary mb-3 mr-2">
-            {t('Enter')}
+          <button
+            onClick={onEnterClicked}
+            className="btn btn-primary mb-3 mr-2"
+          >
+            {t("Enter")}
           </button>
-          <button onClick={onUnregisterClicked} className="btn btn-primary  mb-3 mr-2">
-            {t('Unregister')}
+          <button
+            onClick={onUnregisterClicked}
+            className="btn btn-primary  mb-3 mr-2"
+          >
+            {t("Unregister")}
           </button>
         </div>
       </div>

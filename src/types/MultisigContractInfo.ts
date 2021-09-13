@@ -1,11 +1,12 @@
-import { Address } from '@elrondnetwork/erdjs/out';
+import { Address } from "@elrondnetwork/erdjs";
+import { PlainMultisigAddress } from "./address";
 
 export class MultisigContractInfo {
-    address: Address;
-    name: string;
-  
-    constructor(address: Address, name: string) {
-      this.address = address;
-      this.name = name;
-    }
+  address: PlainMultisigAddress;
+  name: string;
+
+  constructor(address: Address, name: string) {
+    this.address = address.toJSON() as PlainMultisigAddress;
+    this.name = name;
   }
+}

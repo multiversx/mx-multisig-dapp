@@ -1,27 +1,28 @@
-import { Address, Nonce } from '@elrondnetwork/erdjs/out';
-import { NumericalBinaryCodec } from '@elrondnetwork/erdjs/out/smartcontracts/codec/numerical';
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { Address, Nonce } from "@elrondnetwork/erdjs/out";
+import { NumericalBinaryCodec } from "@elrondnetwork/erdjs/out/smartcontracts/codec/numerical";
 import {
   BigUIntType,
   BytesValue,
   U32Value,
   U64Value,
-} from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
-import BigNumber from 'bignumber.js';
-import { MultisigAction } from 'types/MultisigAction';
-import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
-import { MultisigActionType } from 'types/MultisigActionType';
-import { MultisigAddBoardMember } from 'types/MultisigAddBoardMember';
-import { MultisigAddProposer } from 'types/MultisigAddProposer';
-import { MultisigChangeQuorum } from 'types/MultisigChangeQuorum';
-import { MultisigContractInfo } from 'types/MultisigContractInfo';
-import { MultisigRemoveUser } from 'types/MultisigRemoveUser';
-import { MultisigSendEgld } from 'types/MultisigSendEgld';
-import { MultisigSmartContractCall } from 'types/MultisigSmartContractCall';
-const createKeccakHash = require('keccak');
+} from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import BigNumber from "bignumber.js";
+import { MultisigAction } from "types/MultisigAction";
+import { MultisigActionDetailed } from "types/MultisigActionDetailed";
+import { MultisigActionType } from "types/MultisigActionType";
+import { MultisigAddBoardMember } from "types/MultisigAddBoardMember";
+import { MultisigAddProposer } from "types/MultisigAddProposer";
+import { MultisigChangeQuorum } from "types/MultisigChangeQuorum";
+import { MultisigContractInfo } from "types/MultisigContractInfo";
+import { MultisigRemoveUser } from "types/MultisigRemoveUser";
+import { MultisigSendEgld } from "types/MultisigSendEgld";
+import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
+const createKeccakHash = require("keccak");
 
 export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
-  let actionTypeByte = buffer.slice(0, 1)[0];
-  let remainingBytes = buffer.slice(1);
+  const actionTypeByte = buffer.slice(0, 1)[0];
+  const remainingBytes = buffer.slice(1);
   switch (actionTypeByte) {
     case MultisigActionType.AddBoardMember:
       return parseAddBoardMember(remainingBytes);
@@ -41,116 +42,144 @@ export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
   }
 }
 
-function parseAddBoardMember(remainingBytes: Buffer): [MultisigAction | null, Buffer] {
-  let action = new MultisigAddBoardMember(new Address(remainingBytes.slice(0, 32)));
+function parseAddBoardMember(
+  remainingBytes: Buffer,
+): [MultisigAction | null, Buffer] {
+  const action = new MultisigAddBoardMember(
+    new Address(remainingBytes.slice(0, 32)),
+  );
   remainingBytes = remainingBytes.slice(32);
 
   return [action, remainingBytes];
 }
 
-function parseAddProposer(remainingBytes: Buffer): [MultisigAction | null, Buffer] {
-  let action = new MultisigAddProposer(new Address(remainingBytes.slice(0, 32)));
+function parseAddProposer(
+  remainingBytes: Buffer,
+): [MultisigAction | null, Buffer] {
+  const action = new MultisigAddProposer(
+    new Address(remainingBytes.slice(0, 32)),
+  );
   remainingBytes = remainingBytes.slice(32);
 
   return [action, remainingBytes];
 }
 
-function parseRemoveUser(remainingBytes: Buffer): [MultisigAction | null, Buffer] {
-  let action = new MultisigRemoveUser(new Address(remainingBytes.slice(0, 32)));
+function parseRemoveUser(
+  remainingBytes: Buffer,
+): [MultisigAction | null, Buffer] {
+  const action = new MultisigRemoveUser(
+    new Address(remainingBytes.slice(0, 32)),
+  );
   remainingBytes = remainingBytes.slice(32);
 
   return [action, remainingBytes];
 }
 
-function parseChangeQuorum(remainingBytes: Buffer): [MultisigAction | null, Buffer] {
-  let action = new MultisigChangeQuorum(getIntValueFromBytes(remainingBytes.slice(0, 4)));
+function parseChangeQuorum(
+  remainingBytes: Buffer,
+): [MultisigAction | null, Buffer] {
+  const action = new MultisigChangeQuorum(
+    getIntValueFromBytes(remainingBytes.slice(0, 4)),
+  );
   remainingBytes = remainingBytes.slice(4);
 
   return [action, remainingBytes];
 }
 
-function parseSendEgld(remainingBytes: Buffer): [MultisigAction | null, Buffer] {
-  let targetAddress = new Address(remainingBytes.slice(0, 32));
+function parseSendEgld(
+  remainingBytes: Buffer,
+): [MultisigAction | null, Buffer] {
+  const targetAddress = new Address(remainingBytes.slice(0, 32));
   remainingBytes = remainingBytes.slice(32);
 
-  let amountSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  const amountSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
 
-  let amountBytes = remainingBytes.slice(0, amountSize);
+  const amountBytes = remainingBytes.slice(0, amountSize);
   remainingBytes = remainingBytes.slice(amountSize);
 
-  let codec = new NumericalBinaryCodec();
-  let amount = codec.decodeTopLevel(amountBytes, new BigUIntType());
+  const codec = new NumericalBinaryCodec();
+  const amount = codec.decodeTopLevel(amountBytes, new BigUIntType());
 
-  let dataSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  const dataSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
 
-  let dataBytes = remainingBytes.slice(0, dataSize);
+  const dataBytes = remainingBytes.slice(0, dataSize);
   remainingBytes = remainingBytes.slice(dataSize);
 
-  let data = dataBytes.toString();
+  const data = dataBytes.toString();
 
-  let action = new MultisigSendEgld(targetAddress, amount, data);
+  const action = new MultisigSendEgld(targetAddress, amount, data);
 
   return [action, remainingBytes];
 }
 
-function parseSmartContractCall(remainingBytes: Buffer): [MultisigAction | null, Buffer] {
-  let targetAddress = new Address(remainingBytes.slice(0, 32));
+function parseSmartContractCall(
+  remainingBytes: Buffer,
+): [MultisigAction | null, Buffer] {
+  const targetAddress = new Address(remainingBytes.slice(0, 32));
   remainingBytes = remainingBytes.slice(32);
 
-  let amountSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  const amountSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
 
-  let amountBytes = remainingBytes.slice(0, amountSize);
+  const amountBytes = remainingBytes.slice(0, amountSize);
   remainingBytes = remainingBytes.slice(amountSize);
 
-  let codec = new NumericalBinaryCodec();
-  let amount = codec.decodeTopLevel(amountBytes, new BigUIntType());
+  const codec = new NumericalBinaryCodec();
+  const amount = codec.decodeTopLevel(amountBytes, new BigUIntType());
 
-  let endpointNameSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  const endpointNameSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
 
-  let endpointNameBytes = remainingBytes.slice(0, endpointNameSize);
+  const endpointNameBytes = remainingBytes.slice(0, endpointNameSize);
   remainingBytes = remainingBytes.slice(endpointNameSize);
 
-  let endpointName = endpointNameBytes.toString();
+  const endpointName = endpointNameBytes.toString();
 
-  let argsSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  const argsSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
 
-  let args = [];
+  const args = [];
   for (let i = 0; i < argsSize; i++) {
-    let argSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+    const argSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
     remainingBytes = remainingBytes.slice(4);
 
-    let argBytes = remainingBytes.slice(0, argSize);
+    const argBytes = remainingBytes.slice(0, argSize);
     remainingBytes = remainingBytes.slice(argSize);
 
     args.push(new BytesValue(argBytes));
   }
 
-  let action = new MultisigSmartContractCall(targetAddress, amount, endpointName, args);
+  const action = new MultisigSmartContractCall(
+    targetAddress,
+    amount,
+    endpointName,
+    args,
+  );
 
   return [action, remainingBytes];
 }
 
-export function parseActionDetailed(buffer: Buffer): MultisigActionDetailed | null {
-  let actionId = getIntValueFromBytes(buffer.slice(0, 4));
-  let actionBytes = buffer.slice(4);
+export function parseActionDetailed(
+  buffer: Buffer,
+): MultisigActionDetailed | null {
+  const actionId = getIntValueFromBytes(buffer.slice(0, 4));
+  const actionBytes = buffer.slice(4);
 
+  // eslint-disable-next-line prefer-const
   let [action, remainingBytes] = parseAction(actionBytes);
   if (action === null) {
     return null;
   }
 
-  let signerCount = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  const signerCount = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
 
-  let signers = [];
+  const signers = [];
   for (let i = 0; i < signerCount; i++) {
-    let addressBytes = remainingBytes.slice(0, 32);
-    let address = new Address(addressBytes);
+    const addressBytes = remainingBytes.slice(0, 32);
+    const address = new Address(addressBytes);
     remainingBytes = remainingBytes.slice(32);
 
     signers.push(address);
@@ -162,18 +191,18 @@ export function parseActionDetailed(buffer: Buffer): MultisigActionDetailed | nu
 export function parseContractInfo(buffer: Buffer): MultisigContractInfo | null {
   let remainingBytes = buffer;
 
-  let addressBytes = remainingBytes.slice(0, 32);
-  let address = new Address(addressBytes);
+  const addressBytes = remainingBytes.slice(0, 32);
+  const address = new Address(addressBytes);
   remainingBytes = remainingBytes.slice(32);
 
-  let nameSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  const nameSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
 
-  let nameBytes = remainingBytes.slice(0, nameSize);
-  let name = nameBytes.toString();
+  const nameBytes = remainingBytes.slice(0, nameSize);
+  const name = nameBytes.toString();
   remainingBytes = remainingBytes.slice(nameSize);
 
-  let contractInfo = new MultisigContractInfo(address, name);
+  const contractInfo = new MultisigContractInfo(address, name);
   return contractInfo;
 }
 
@@ -187,63 +216,66 @@ export function getIntValueFromBytes(buffer: Buffer) {
 }
 
 export function getBytesFromHexString(hex: string) {
-  for (var bytes = [], c = 0; c < hex.length; c += 2) {
+  const bytes = [];
+  for (let c = 0; c < hex.length; c += 2) {
     bytes.push(parseInt(hex.substr(c, 2), 16));
   }
   return Buffer.from(bytes);
 }
 
 export function get32BitBufferFromNumber(value: number) {
-  let paddedBuffer = Buffer.alloc(4);
-  let encodedValue = new U32Value(value).valueOf();
+  const paddedBuffer = Buffer.alloc(4);
+  const encodedValue = new U32Value(value).valueOf();
 
-  let encodedBuffer = getBytesFromHexString(encodedValue.toString());
-  let concatenatedBuffer = Buffer.concat([paddedBuffer, encodedBuffer]);
-  let result = concatenatedBuffer.slice(-4);
+  const encodedBuffer = getBytesFromHexString(encodedValue.toString());
+  const concatenatedBuffer = Buffer.concat([paddedBuffer, encodedBuffer]);
+  const result = concatenatedBuffer.slice(-4);
   return result;
 }
 
 export function get64BitBufferFromBigIntBE(value: BigInt) {
-  let paddedBuffer = Buffer.alloc(8);
-  let encodedValue = new U64Value(new BigNumber(value.toString())).valueOf();
+  const paddedBuffer = Buffer.alloc(8);
+  const encodedValue = new U64Value(new BigNumber(value.toString())).valueOf();
 
-  let encodedBuffer = getBytesFromHexString(encodedValue.toString());
-  let concatenatedBuffer = Buffer.concat([paddedBuffer, encodedBuffer]);
-  let result = concatenatedBuffer.slice(-8);
+  const encodedBuffer = getBytesFromHexString(encodedValue.toString());
+  const concatenatedBuffer = Buffer.concat([paddedBuffer, encodedBuffer]);
+  const result = concatenatedBuffer.slice(-8);
   return result;
 }
 
 export function get64BitBufferFromBigIntLE(value: BigInt) {
-  let paddedBuffer = Buffer.alloc(8);
-  let encodedValue = new U64Value(new BigNumber(value.toString())).valueOf();
+  const paddedBuffer = Buffer.alloc(8);
+  const encodedValue = new U64Value(new BigNumber(value.toString())).valueOf();
 
-  let encodedBuffer = getBytesFromHexString(encodedValue.toString()).reverse();
-  let concatenatedBuffer = Buffer.concat([encodedBuffer, paddedBuffer]);
-  let result = concatenatedBuffer.slice(0, 8);
+  const encodedBuffer = getBytesFromHexString(
+    encodedValue.toString(),
+  ).reverse();
+  const concatenatedBuffer = Buffer.concat([encodedBuffer, paddedBuffer]);
+  const result = concatenatedBuffer.slice(0, 8);
   return result;
 }
 
 export function computeSmartContractAddress(owner: Address, nonce: Nonce) {
-  let initialPadding = Buffer.alloc(8, 0);
-  let ownerPubkey = owner.pubkey();
-  let shardSelector = ownerPubkey.slice(30);
-  let ownerNonceBytes = get64BitBufferFromBigIntLE(BigInt(nonce.valueOf()));
-  let bytesToHash = Buffer.concat([ownerPubkey, ownerNonceBytes]);
-  let hash = createKeccakHash('keccak256').update(bytesToHash).digest();
-  let vmTypeBytes = Buffer.from('0500', 'hex');
-  let addressBytes = Buffer.concat([
+  const initialPadding = Buffer.alloc(8, 0);
+  const ownerPubkey = owner.pubkey();
+  const shardSelector = ownerPubkey.slice(30);
+  const ownerNonceBytes = get64BitBufferFromBigIntLE(BigInt(nonce.valueOf()));
+  const bytesToHash = Buffer.concat([ownerPubkey, ownerNonceBytes]);
+  const hash = createKeccakHash("keccak256").update(bytesToHash).digest();
+  const vmTypeBytes = Buffer.from("0500", "hex");
+  const addressBytes = Buffer.concat([
     initialPadding,
     vmTypeBytes,
     hash.slice(10, 30),
     shardSelector,
   ]);
-  let address = new Address(addressBytes);
+  const address = new Address(addressBytes);
   return address;
 }
 
 export function hexToString(hex: string): string | null {
   try {
-    let bytes = getBytesFromHexString(hex);
+    const bytes = getBytesFromHexString(hex);
     return bytes.toString();
   } catch {
     console.error(`Could not parse hex '${hex} to string'`);
@@ -253,7 +285,7 @@ export function hexToString(hex: string): string | null {
 
 export function hexToNumber(hex: string): number | null {
   try {
-    let bytes = getBytesFromHexString(hex);
+    const bytes = getBytesFromHexString(hex);
     return getIntValueFromBytes(bytes);
   } catch {
     console.error(`Could not parse hex '${hex} to number'`);
@@ -271,14 +303,22 @@ export function hexToAddress(hex: string): Address | null {
 }
 
 export function hexToBigInt(hex: string): BigInt | null {
-  let bytes = getBytesFromHexString(hex);
+  const bytes = getBytesFromHexString(hex);
 
   try {
-    let codec = new NumericalBinaryCodec();
-    let value = codec.decodeTopLevel(bytes, new BigUIntType()).valueOf();
+    const codec = new NumericalBinaryCodec();
+    const value = codec.decodeTopLevel(bytes, new BigUIntType()).valueOf();
     return BigInt(value.toString());
   } catch {
     console.error(`Could not parse hex '${hex}' to BigInt`);
     return null;
   }
+}
+
+export function addressToPlainAddress(address: Address) {
+  return {
+    hex: address.hex(),
+    bech32: address.bech32(),
+    pubKey: address.pubkey(),
+  };
 }

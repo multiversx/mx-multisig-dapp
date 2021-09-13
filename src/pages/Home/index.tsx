@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { routeNames } from 'routes';
-import { dAppName } from 'config';
+import * as React from "react";
+import { Link } from "react-router-dom";
+import { dAppName } from "config";
+import { routeNames } from "routes";
 
 const Home = () => {
   return (
@@ -19,7 +19,11 @@ const Home = () => {
                 <br /> Login using your Elrond wallet.
               </p>
 
-              <Link to={routeNames.unlock} className="btn  mt-3" data-testid="loginBtn">
+              <Link
+                to={routeNames.unlock}
+                className="btn  mt-3"
+                data-testid="loginBtn"
+              >
                 Login
               </Link>
             </div>

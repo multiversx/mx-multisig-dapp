@@ -1,5 +1,5 @@
-import React from 'react';
-import { Modal } from 'react-bootstrap';
+import React from "react";
+import { Modal } from "react-bootstrap";
 
 interface ConfirmModalType {
   title: string;
@@ -21,7 +21,13 @@ const ConfirmModal = ({
   };
 
   return (
-    <Modal show={show} onHide={handleClose} className="modal-container" animation={false} centered>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      className="modal-container"
+      animation={false}
+      centered
+    >
       <div className="card">
         <div className="card-body p-spacer text-center">
           <p className="h6 mb-spacer" data-testid="delegateTitle">

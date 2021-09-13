@@ -1,15 +1,17 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import * as Dapp from '@elrondnetwork/dapp';
-import * as config from './config';
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import { englishTranslations } from 'i18n/en';
-import { germanTranslations } from 'i18n/de';
-import { ContextProvider } from './context';
-import Layout from './components/Layout';
-import routes, { routeNames } from './routes';
-import PageNotFoud from './components/PageNotFoud';
+import React from "react";
+import * as Dapp from "@elrondnetwork/dapp";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import { Route, Switch } from "react-router-dom";
+import { germanTranslations } from "i18n/de";
+import { englishTranslations } from "i18n/en";
+import { Provider as ReduxProvider } from "react-redux";
+
+import { store } from "redux/store";
+import Layout from "./components/Layout";
+import PageNotFound from "./components/PageNotFound";
+import * as config from "./config";
+import routes, { routeNames } from "./routes";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -20,8 +22,8 @@ i18n.use(initReactI18next).init({
       translation: germanTranslations,
     },
   },
-  lng: 'en',
-  fallbackLng: 'en',
+  lng: "en",
+  fallbackLng: "en",
 
   interpolation: {
     escapeValue: false,
@@ -30,7 +32,7 @@ i18n.use(initReactI18next).init({
 
 export default function App() {
   return (
-    <ContextProvider>
+    <ReduxProvider store={store}>
       <Dapp.Context config={config}>
         <Layout>
           <Switch>
@@ -49,7 +51,9 @@ export default function App() {
             />
             <Route
               path={routeNames.ledger}
-              component={() => <Dapp.Pages.Ledger callbackRoute={routeNames.dashboard} />}
+              component={() => (
+                <Dapp.Pages.Ledger callbackRoute={routeNames.dashboard} />
+              )}
               exact={true}
             />
             <Route
@@ -73,10 +77,10 @@ export default function App() {
                 exact={true}
               />
             ))}
-            <Route component={PageNotFoud} />
+            <Route component={PageNotFound} />
           </Switch>
         </Layout>
       </Dapp.Context>
-    </ContextProvider>
+    </ReduxProvider>
   );
 }

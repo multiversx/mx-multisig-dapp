@@ -1,4 +1,4 @@
-import { Address } from '@elrondnetwork/erdjs/out';
+import { Address } from "@elrondnetwork/erdjs/out";
 
 export default class TransactionParameter {
   sender: Address;
@@ -7,7 +7,13 @@ export default class TransactionParameter {
   inputParameters: string[];
   outputParameters: string[];
 
-  constructor(sender: Address, receiver: Address, functionName: string, inputParameters: string[], outputParameters: string[]) {
+  constructor(
+    sender: Address,
+    receiver: Address,
+    functionName: string,
+    inputParameters: string[],
+    outputParameters: string[],
+  ) {
     this.sender = sender;
     this.receiver = receiver;
     this.functionName = functionName;

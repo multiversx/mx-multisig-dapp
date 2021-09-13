@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
-import { Address, Balance } from '@elrondnetwork/erdjs/out';
-import { MultisigSendEgld } from 'types/MultisigSendEgld';
-import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
-import { useTranslation } from 'react-i18next';
+import React, { useState } from "react";
+import { Address, Balance } from "@elrondnetwork/erdjs/out";
+import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import { useTranslation } from "react-i18next";
+import { MultisigSendEgld } from "types/MultisigSendEgld";
 
 interface ProposeSendEgldType {
   handleChange: (proposal: MultisigSendEgld) => void;
 }
 
 const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
-  const [address, setAddress] = useState('');
-  const [amount, setAmount] = useState('');
-  const [data, setData] = useState('');
+  const [address, setAddress] = useState("");
+  const [amount, setAmount] = useState("");
+  const [data, setData] = useState("");
   const { t } = useTranslation();
 
   const getProposal = (): MultisigSendEgld | null => {
-    let addressParam = new Address(address);
+    const addressParam = new Address(address);
 
-    let amountNumeric = Number(amount);
+    const amountNumeric = Number(amount);
     if (isNaN(amountNumeric)) {
       return null;
     }
 
-    let amountParam = new BigUIntValue(Balance.egld(amountNumeric).valueOf());
+    const amountParam = new BigUIntValue(Balance.egld(amountNumeric).valueOf());
 
     return new MultisigSendEgld(addressParam, amountParam, data);
   };
 
   const refreshProposal = () => {
-    let proposal = getProposal();
+    const proposal = getProposal();
     if (proposal !== null) {
       handleChange(proposal);
     }
@@ -53,7 +53,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
   return (
     <div>
       <div className="modal-control-container">
-        <span>{t('Address')}: </span>
+        <span>{t("Address")}: </span>
         <input
           type="text"
           className="form-control"
@@ -63,7 +63,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>{t('Amount')}: </span>
+        <span>{t("Amount")}: </span>
         <input
           type="text"
           className="form-control"
@@ -73,7 +73,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>{t('Data')}: </span>
+        <span>{t("Data")}: </span>
         <input
           type="text"
           className="form-control"

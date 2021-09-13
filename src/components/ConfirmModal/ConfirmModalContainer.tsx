@@ -1,13 +1,13 @@
-import React from 'react';
-import ConfirmModal from './ConfirmModal';
-import { useConfirmModal } from './ConfirmModalPayload';
+import React from "react";
+import ConfirmModal from "./ConfirmModal";
+import { useConfirmModal } from "./ConfirmModalPayload";
 
 const ConfirmModalContainer = () => {
   const useModal = useConfirmModal();
 
-  const [ title, setTitle ] = React.useState('');
-  const [ confirmButtonTitle, setConfirmButtonTitle ] = React.useState('');
-  const [ show, setShow ] = React.useState(false);
+  const [title, setTitle] = React.useState("");
+  const [confirmButtonTitle, setConfirmButtonTitle] = React.useState("");
+  const [show, setShow] = React.useState(false);
 
   const onConfirmClicked = () => {
     useModal.handleModalConfirm();
@@ -20,15 +20,21 @@ const ConfirmModalContainer = () => {
   };
 
   React.useEffect(() => {
-    useModal.handleModalShow = (title, confirmButtonTitle) => {
-      setTitle(title);
-      setConfirmButtonTitle(confirmButtonTitle);
+    useModal.handleModalShow = (newTitle, newConfirmButtonTitle) => {
+      setTitle(newTitle);
+      setConfirmButtonTitle(newConfirmButtonTitle);
       setShow(true);
     };
   }, [useModal]);
 
   return (
-    <ConfirmModal show={show} title={title} confirmButtonTitle={confirmButtonTitle} handleClose={onCloseClicked} handleConfirm={onConfirmClicked} />
+    <ConfirmModal
+      show={show}
+      title={title}
+      confirmButtonTitle={confirmButtonTitle}
+      handleClose={onCloseClicked}
+      handleConfirm={onConfirmClicked}
+    />
   );
 };
 

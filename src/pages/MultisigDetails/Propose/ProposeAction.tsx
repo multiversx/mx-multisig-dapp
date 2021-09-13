@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import ProposeModal from './ProposeModal';
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import ProposeModal from "./ProposeModal";
 
 const ProposeAction = () => {
   const [showProposeModal, setShowProposeModal] = useState(false);
@@ -14,7 +14,7 @@ const ProposeAction = () => {
         }}
         className="btn btn-primary mb-3"
       >
-        {t('Propose')}
+        {t("Propose")}
       </button>
       <ProposeModal
         show={showProposeModal}
