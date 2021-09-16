@@ -73,7 +73,6 @@ const Index = () => {
 
   const readMultisigContracts = async () => {
     const contracts = await queryContracts();
-    console.log(contracts);
     dispatch(setMultisigContracts(contracts));
   };
 

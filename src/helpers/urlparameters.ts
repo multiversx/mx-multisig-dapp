@@ -25,7 +25,7 @@ export async function tryParseTransactionParameter(
 
   const functionName = inputParameters[0];
 
-  const scResults = json.scResults;
+  const scResults = json.results;
   if (scResults == null || scResults.length === 0) {
     return null;
   }

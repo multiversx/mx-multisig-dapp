@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import multisigContracts from "./slices/multisigContractsSlice";
+import signTransactions from "./slices/signTransactionsSlice";
 
 export const store = configureStore({
   reducer: {
     multisigContracts,
+    signTransactions,
   },
 });
 

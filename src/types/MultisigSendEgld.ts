@@ -21,7 +21,7 @@ export class MultisigSendEgld extends MultisigAction {
   }
 
   description() {
-    let description = `${new Balance(
+    let description = `${Balance.fromString(
       this.amount.valueOf().toString(),
     ).toCurrencyString()} to ${this.address.bech32()}`;
 

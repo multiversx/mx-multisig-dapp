@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { MultisigContractInfo } from "types/MultisigContractInfo";
-import { PlainMultisigAddress } from "types/PlainMultisigAddress";
+import {
+  MultisigContractInfoType,
+  PlainMultisigAddressType,
+} from "types/multisigContracts";
 import { logoutAction } from "../commonActions";
 
 interface StateType {
   loading: boolean;
-  multisigContracts: MultisigContractInfo[];
-  currentMultisigAddress?: PlainMultisigAddress;
+  multisigContracts: MultisigContractInfoType[];
+  currentMultisigAddress?: PlainMultisigAddressType;
 }
 
 const initialState: StateType = {
@@ -27,16 +29,15 @@ export const multisigContractsSlice = createSlice({
     },
     setMultisigContracts: (
       state: StateType,
-      action: PayloadAction<MultisigContractInfo[]>,
+      action: PayloadAction<MultisigContractInfoType[]>,
     ) => {
       console.log(action.payload);
       state.multisigContracts = action.payload;
     },
     setCurrentMultisigAddress: (
       state: StateType,
-      action: PayloadAction<PlainMultisigAddress>,
+      action: PayloadAction<PlainMultisigAddressType>,
     ) => {
-      console.log(action.payload);
       state.currentMultisigAddress = action.payload;
     },
   },

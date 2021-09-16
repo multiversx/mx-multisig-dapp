@@ -48,7 +48,7 @@ export class MultisigSmartContractCall extends MultisigAction {
         return this.getSendTokenDescription();
     }
 
-    return `${this.endpointName}: ${new Balance(
+    return `${this.endpointName}: ${Balance.fromString(
       this.amount.valueOf().toString(),
     ).toCurrencyString()} to ${this.address.bech32()}`;
   }

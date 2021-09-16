@@ -13,7 +13,7 @@ import {
 import { Query } from "@elrondnetwork/erdjs/out/smartcontracts/query";
 import { multisigManagerContract } from "helpers/constants";
 import { parseContractInfo } from "helpers/converters";
-import { MultisigContractInfo } from "types/MultisigContractInfo";
+import { MultisigContractInfoType } from "types/multisigContracts";
 import { routeNames } from "../routes";
 import { buildTransaction } from "./transactionUtils";
 
@@ -66,7 +66,7 @@ export function useManagerContract(
   async function queryMultisigContractInfoArray(
     functionName: string,
     ...args: TypedValue[]
-  ): Promise<MultisigContractInfo[]> {
+  ): Promise<MultisigContractInfoType[]> {
     const result = await query(functionName, ...args);
 
     const contractInfos = [];

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
-import { Address, Balance } from "@elrondnetwork/erdjs/out";
+import { Address, Balance } from "@elrondnetwork/erdjs";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,7 @@ import { tryParseTransactionParameter } from "helpers/urlparameters";
 import MultisigProposalCard from "pages/MultisigDetails/MultisigProposalCard";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import DepositModal from "../../components/DepositModal/DepositModal";
+import { PlainAddress } from "../../helpers/plainObjects";
 import {
   currentMultisigAddressSelector,
   multisigContractsLoadingSelector,
@@ -25,7 +26,6 @@ import {
   setCurrentMultisigAddress,
   setMultisigContractsLoading,
 } from "../../redux/slices/multisigContractsSlice";
-import { PlainMultisigAddress } from "../../types/address";
 import ProposeAction from "./Propose/ProposeAction";
 
 interface MultisigDetailsPageParams {
@@ -59,7 +59,7 @@ const MultisigDetailsPage = () => {
     totalProposers: 0,
     quorumSize: 0,
     userRole: 0,
-    multisigBalance: new Balance("0"),
+    multisigBalance: Balance.fromString("0"),
     multisigName: "",
     allActions: [],
   });
@@ -84,7 +84,6 @@ const MultisigDetailsPage = () => {
   const confirmModal = useConfirmModal();
   const { t } = useTranslation();
   const [showDepositModal, setShowDepositModal] = useState(false);
-
   const isProposer = userRole !== 0;
   const isBoardMember = userRole === 2;
 
@@ -278,18 +277,17 @@ const MultisigDetailsPage = () => {
       currentMultisigAddress?.hex() !== newMultisigAddressParam.hex();
 
     if (
-      isCurrentMultisigAddressNotSet ||
-      isCurrentMultisigAddressDiferentThanParam
+      (isCurrentMultisigAddressNotSet ||
+        isCurrentMultisigAddressDiferentThanParam) &&
+      newMultisigAddressParam != null
     ) {
       dispatch(
-        setCurrentMultisigAddress(
-          newMultisigAddressParam?.toJSON() as PlainMultisigAddress,
-        ),
+        setCurrentMultisigAddress(PlainAddress(newMultisigAddressParam)),
       );
     } else if (address !== null) {
       getDashboardInfo();
     }
-  }, [currentMultisigAddress, address]);
+  }, [currentMultisigAddress?.hex(), address]);
 
   if (address === null) {
     return <Redirect to="/" />;

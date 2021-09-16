@@ -14,10 +14,12 @@ import { MultisigActionType } from "types/MultisigActionType";
 import { MultisigAddBoardMember } from "types/MultisigAddBoardMember";
 import { MultisigAddProposer } from "types/MultisigAddProposer";
 import { MultisigChangeQuorum } from "types/MultisigChangeQuorum";
-import { MultisigContractInfo } from "types/MultisigContractInfo";
+import { MultisigContractInfoType } from "types/multisigContracts";
 import { MultisigRemoveUser } from "types/MultisigRemoveUser";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
 import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
+import { PlainAddress } from "./plainObjects";
+
 const createKeccakHash = require("keccak");
 
 export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
@@ -188,7 +190,9 @@ export function parseActionDetailed(
   return new MultisigActionDetailed(action, actionId, signers);
 }
 
-export function parseContractInfo(buffer: Buffer): MultisigContractInfo | null {
+export function parseContractInfo(
+  buffer: Buffer,
+): MultisigContractInfoType | null {
   let remainingBytes = buffer;
 
   const addressBytes = remainingBytes.slice(0, 32);
@@ -200,10 +204,8 @@ export function parseContractInfo(buffer: Buffer): MultisigContractInfo | null {
 
   const nameBytes = remainingBytes.slice(0, nameSize);
   const name = nameBytes.toString();
-  remainingBytes = remainingBytes.slice(nameSize);
 
-  const contractInfo = new MultisigContractInfo(address, name);
-  return contractInfo;
+  return { address: PlainAddress(address), name };
 }
 
 export function getIntValueFromBytes(buffer: Buffer) {
@@ -229,8 +231,7 @@ export function get32BitBufferFromNumber(value: number) {
 
   const encodedBuffer = getBytesFromHexString(encodedValue.toString());
   const concatenatedBuffer = Buffer.concat([paddedBuffer, encodedBuffer]);
-  const result = concatenatedBuffer.slice(-4);
-  return result;
+  return concatenatedBuffer.slice(-4);
 }
 
 export function get64BitBufferFromBigIntBE(value: BigInt) {
@@ -239,8 +240,7 @@ export function get64BitBufferFromBigIntBE(value: BigInt) {
 
   const encodedBuffer = getBytesFromHexString(encodedValue.toString());
   const concatenatedBuffer = Buffer.concat([paddedBuffer, encodedBuffer]);
-  const result = concatenatedBuffer.slice(-8);
-  return result;
+  return concatenatedBuffer.slice(-8);
 }
 
 export function get64BitBufferFromBigIntLE(value: BigInt) {
@@ -251,8 +251,7 @@ export function get64BitBufferFromBigIntLE(value: BigInt) {
     encodedValue.toString(),
   ).reverse();
   const concatenatedBuffer = Buffer.concat([encodedBuffer, paddedBuffer]);
-  const result = concatenatedBuffer.slice(0, 8);
-  return result;
+  return concatenatedBuffer.slice(0, 8);
 }
 
 export function computeSmartContractAddress(owner: Address, nonce: Nonce) {
@@ -269,8 +268,7 @@ export function computeSmartContractAddress(owner: Address, nonce: Nonce) {
     hash.slice(10, 30),
     shardSelector,
   ]);
-  const address = new Address(addressBytes);
-  return address;
+  return new Address(addressBytes);
 }
 
 export function hexToString(hex: string): string | null {
