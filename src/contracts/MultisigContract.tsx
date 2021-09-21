@@ -1,7 +1,4 @@
-import {
-  useSendTransaction as useSendDappTransaction,
-  useContext as useDappContext,
-} from "@elrondnetwork/dapp";
+import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import {
   ContractFunction,
   Balance,
@@ -25,21 +22,19 @@ import {
 import BigNumber from "bignumber.js";
 import { useSelector } from "react-redux";
 import { parseAction, parseActionDetailed } from "helpers/converters";
+import useSendTransactions from "hooks/useSendTransactions";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
 import { MultisigAction } from "types/MultisigAction";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendToken } from "types/MultisigSendToken";
-import { routeNames } from "../routes";
 import { buildTransaction } from "./transactionUtils";
 
-export function useMultisigContract(
-  callbackRoute = window.location?.pathname ?? routeNames.dashboard,
-) {
+export function useMultisigContract() {
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
   const { dapp } = useDappContext();
+  const sendTransactionsToBeSigned = useSendTransactions();
 
-  const sendDappTransaction = useSendDappTransaction();
   const smartContract = new SmartContract({ address: currentMultisigAddress });
 
   function sendTransaction(functionName: string, ...args: TypedValue[]) {
@@ -49,12 +44,12 @@ export function useMultisigContract(
       smartContract,
       ...args,
     );
-    return sendDappTransaction({ transaction, callbackRoute });
+    return sendTransactionsToBeSigned({ transactions: [transaction] });
   }
 
   function deposit(amount: number) {
     const transaction = buildTransaction(amount, "deposit", smartContract);
-    return sendDappTransaction({ transaction, callbackRoute });
+    return sendTransactionsToBeSigned({ transactions: [transaction] });
   }
 
   function mutateSign(actionId: number) {

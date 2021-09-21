@@ -16,7 +16,7 @@ import { buildTransaction } from "./transactionUtils";
 
 export function useManagerContract() {
   const { address, dapp } = useDappContext();
-  const sendTransactionToSign = useSendTransactions();
+  const sendTransactionsToBeSigned = useSendTransactions();
 
   const smartContract = new SmartContract({
     address: new Address(multisigManagerContract ?? ""),
@@ -30,7 +30,7 @@ export function useManagerContract() {
       smartContract,
       ...args,
     );
-    return sendTransactionToSign({ transactions: [transaction] });
+    return sendTransactionsToBeSigned({ transactions: [transaction] });
   }
 
   function mutateRegisterMultisigContract(multisigAddress: Address) {
