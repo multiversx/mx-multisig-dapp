@@ -1,14 +1,15 @@
 import * as React from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
-import newTransaction from "@elrondnetwork/dapp/dist/components/SignTransactions/helpers/newTransaction";
-import getProviderType from "@elrondnetwork/dapp/dist/helpers/getProviderType";
 import { Transaction, Address, Nonce } from "@elrondnetwork/erdjs";
 import { useDispatch, useSelector } from "react-redux";
-import { transactionsToSignSelector } from "redux/selectors/signTransactionsSelector";
-import { updateSignStatus } from "redux/slices/signTransactionsSlice";
+import { transactionStatuses } from "helpers/constants";
+import newTransaction from "helpers/newTransaction";
+import { transactionsToSignSelector } from "redux/selectors/transactionsSelector";
+import { updateSignStatus } from "redux/slices/transactionsSlice";
 import { replyUrl, useSearchTransactions, HandleCloseType } from "./helpers";
 import { walletSignSession } from "./helpers/constants";
 
+import getProviderType from "./helpers/getProviderType";
 import SignWithExtensionModal from "./SignWithExtensionModal";
 import SignWithLedgerModal from "./SignWithLedgerModal";
 import SignWithWalletConnectModal from "./SignWithWalletConnectModal";
@@ -38,20 +39,17 @@ export default function SignTransactions() {
   const providerType = getProviderType(provider);
 
   const handleClose = (props?: HandleCloseType) => {
-    const updateBatchStatus = props ? props.updateBatchStatus : true;
     setNewTransactions(undefined);
     setNewCallbackRoute("");
     setError("");
     setShowSignModal(false);
-    if (updateBatchStatus) {
-      dispatch(
-        updateSignStatus({
-          [newSessionId]: {
-            status: "cancelled",
-          },
-        }),
-      );
-    }
+    dispatch(
+      updateSignStatus({
+        [newSessionId]: {
+          status: transactionStatuses.cancelled,
+        },
+      }),
+    );
   };
 
   const signTransactions = ({
@@ -98,10 +96,11 @@ export default function SignTransactions() {
           }
         })
         .catch((e) => {
+          console.error("error when signing", e);
           dispatch(
             updateSignStatus({
               [sessionId]: {
-                status: "cancelled",
+                status: transactionStatuses.cancelled,
               },
             }),
           );

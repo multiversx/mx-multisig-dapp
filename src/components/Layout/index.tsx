@@ -1,6 +1,9 @@
 import React from "react";
 import * as Dapp from "@elrondnetwork/dapp";
+import SignTransactions from "components/SignTransactions";
 import routes, { routeNames } from "routes";
+import ToastMessages from "../ToastMessages";
+import TransactionSender from "../TransactionSender";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 
@@ -21,6 +24,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <main className="d-flex flex-column flex-grow-1">
         <Dapp.Authenticate routes={routes} unlockRoute={routeNames.unlock}>
           {children}
+          <SignTransactions />
+          <TransactionSender />
+          <ToastMessages />
         </Dapp.Authenticate>
       </main>
       <Footer />

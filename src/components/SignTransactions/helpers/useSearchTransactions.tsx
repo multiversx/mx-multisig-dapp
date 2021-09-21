@@ -8,7 +8,8 @@ import {
 import qs from "qs";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { updateSignStatus } from "redux/slices/signTransactionsSlice";
+import { transactionStatuses } from "helpers/constants";
+import { updateSignStatus } from "redux/slices/transactionsSlice";
 import { dappInitRoute, walletSignSession } from "./constants";
 
 export default function useSearchTransactions() {
@@ -31,7 +32,7 @@ export default function useSearchTransactions() {
           dispatch(
             updateSignStatus({
               [signSessionId.toString()]: {
-                status: "signed",
+                status: transactionStatuses.signed,
                 transactions: signedTransactions.map((tx) => {
                   // TODO: REMOVE
                   //#region REMOVE when options is available in erdjs getTransactionsFromWalletUrl

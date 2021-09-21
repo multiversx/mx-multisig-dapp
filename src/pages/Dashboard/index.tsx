@@ -14,6 +14,7 @@ import { hexToAddress, hexToString } from "helpers/converters";
 import { tryParseTransactionParameter } from "helpers/urlparameters";
 import MultisigListItem from "pages/Dashboard/MultisigListItem";
 import { multisigContractsSelector } from "redux/selectors/multisigContractsSelectors";
+import useSendTransactions from "../../hooks/useSendTransactions";
 import { setMultisigContracts } from "../../redux/slices/multisigContractsSlice";
 import AddMultisigModal from "./AddMultisigModal";
 import DeployStepsModal from "./DeployMultisigModal";
@@ -23,6 +24,7 @@ const Index = () => {
   const { loggedIn, address, apiAddress } = useDappContext();
   const dispatch = useDispatch();
   const { sendDeployTransaction } = useDeployContract();
+  const sendTransactions = useSendTransactions();
   const {
     mutateRegisterMultisigContractName,
     mutateRegisterMultisigContract,
@@ -47,17 +49,20 @@ const Index = () => {
       if (!multisigAddressHex) {
         return;
       }
-
       const multisigAddress = new Address(multisigAddressHex);
-      await mutateRegisterMultisigContractName(multisigAddress, name);
-    } else if (currentDeploymentStep === 2) {
-      const multisigAddressHex = sessionStorage.getItem("multisigAddressHex");
-      if (!multisigAddressHex) {
-        return;
-      }
-
-      const multisigAddress = new Address(multisigAddressHex);
-      await mutateRegisterMultisigContract(multisigAddress);
+      const registerNameTransaction = mutateRegisterMultisigContractName(
+        multisigAddress,
+        name,
+      );
+      const registerMultisigContractTransaction =
+        mutateRegisterMultisigContract(multisigAddress);
+      const transactions = [
+        registerNameTransaction,
+        registerMultisigContractTransaction,
+      ];
+      sendTransactions({
+        transactions,
+      });
     }
   };
 

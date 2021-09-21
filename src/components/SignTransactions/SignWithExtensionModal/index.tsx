@@ -6,7 +6,8 @@ import { Modal } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import PageState from "components/PageState";
-import { updateSignStatus } from "redux/slices/signTransactionsSlice";
+import { transactionStatuses } from "helpers/constants";
+import { updateSignStatus } from "redux/slices/transactionsSlice";
 import { HandleCloseType } from "../helpers";
 
 export interface SignModalType {
@@ -71,7 +72,7 @@ const SignWithExtensionModal = ({
       dispatch(
         updateSignStatus({
           [sessionId]: {
-            status: "signed",
+            status: transactionStatuses.signed,
             transactions: signedTransactions.map((tx) => tx.toPlainObject()),
           },
         }),

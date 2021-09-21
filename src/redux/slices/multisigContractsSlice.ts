@@ -31,7 +31,6 @@ export const multisigContractsSlice = createSlice({
       state: StateType,
       action: PayloadAction<MultisigContractInfoType[]>,
     ) => {
-      console.log(action.payload);
       state.multisigContracts = action.payload;
     },
     setCurrentMultisigAddress: (

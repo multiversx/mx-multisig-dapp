@@ -38,9 +38,11 @@ export function useManagerContract(
     return sendDappTransaction({ transaction, callbackRoute });
   }
 
-  async function mutateRegisterMultisigContract(multisigAddress: Address) {
-    return sendTransaction(
+  function mutateRegisterMultisigContract(multisigAddress: Address) {
+    return buildTransaction(
+      0,
       "registerMultisigContract",
+      smartContract,
       new AddressValue(multisigAddress),
     );
   }
@@ -52,12 +54,14 @@ export function useManagerContract(
     );
   }
 
-  async function mutateRegisterMultisigContractName(
+  function mutateRegisterMultisigContractName(
     multisigAddress: Address,
     name: string,
   ) {
-    return sendTransaction(
+    return buildTransaction(
+      0,
       "registerMultisigName",
+      smartContract,
       new AddressValue(multisigAddress),
       BytesValue.fromUTF8(name),
     );

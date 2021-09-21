@@ -6,7 +6,9 @@ import {
   GasLimit,
   SmartContract,
   TypedValue,
+  ChainID,
 } from "@elrondnetwork/erdjs";
+import { chainID } from "config";
 
 const standardGasLimit = 60000000;
 
@@ -24,9 +26,9 @@ export function buildTransaction(
     .build();
 
   return new Transaction({
+    chainID: new ChainID(chainID),
     receiver: contract.getAddress(),
     value: Balance.egld(value),
-
     gasLimit: new GasLimit(standardGasLimit),
     data: payload,
   });

@@ -1,5 +1,8 @@
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
+export enum CustomToastDisplayType {
+  TransactionToast,
+}
 export interface PlainTransactionStatus {
   isPending: boolean;
   isSuccessful: boolean;
@@ -17,6 +20,7 @@ export interface ToastType {
   isUpdate?: boolean;
   hasCloseButton?: boolean;
   description?: React.ReactNode | string;
+  descriptionProps?: CustomToastType;
   onClick?: () => void | null;
   icon?: typeof faInfoCircle;
   progress?: {
@@ -41,3 +45,14 @@ export interface TransactionToastType {
   startTime: number;
   endTime: number;
 }
+
+export interface TransactionToastDescriptionType {
+  type: CustomToastDisplayType.TransactionToast;
+  props: {
+    pending: boolean;
+    transactions: any;
+    toastSignSession: string;
+  };
+}
+
+export type CustomToastType = TransactionToastDescriptionType;

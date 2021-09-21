@@ -17,3 +17,10 @@ const sessionNetwork = network || defaultNetwork;
 export const multisigDeployerContracts =
   sessionNetwork.multisigDeployerContracts;
 export const multisigManagerContract = sessionNetwork.multisigManagerContract;
+
+export enum transactionStatuses {
+  "pending" = "pending",
+  "signed" = "signed",
+  "failed" = "failed",
+  "cancelled" = "cancelled",
+}
