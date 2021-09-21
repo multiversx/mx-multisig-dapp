@@ -4,7 +4,7 @@ import { Transaction } from "@elrondnetwork/erdjs";
 import { faExclamationTriangle } from "@fortawesome/pro-regular-svg-icons/faExclamationTriangle";
 import BigNumber from "bignumber.js";
 import { useDispatch } from "react-redux";
-import { gasLimit, gasPerDataByte, gasPriceModifier, network } from "config";
+import { gasLimit, gasPerDataByte, gasPriceModifier } from "config";
 import { setNotificationModal } from "redux/slices/modalsSlice";
 import { setTransactionsToSign } from "redux/slices/transactionsSlice";
 

@@ -1,7 +1,4 @@
-import {
-  useSendTransaction as useSendDappTransaction,
-  useContext as useDappContext,
-} from "@elrondnetwork/dapp";
+import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import {
   ContractFunction,
   Address,
@@ -13,15 +10,13 @@ import {
 import { Query } from "@elrondnetwork/erdjs/out/smartcontracts/query";
 import { multisigManagerContract } from "helpers/constants";
 import { parseContractInfo } from "helpers/converters";
+import useSendTransactions from "hooks/useSendTransactions";
 import { MultisigContractInfoType } from "types/multisigContracts";
-import { routeNames } from "../routes";
 import { buildTransaction } from "./transactionUtils";
 
-export function useManagerContract(
-  callbackRoute = window.location?.pathname ?? routeNames.dashboard,
-) {
+export function useManagerContract() {
   const { address, dapp } = useDappContext();
-  const sendDappTransaction = useSendDappTransaction();
+  const sendTransactionToSign = useSendTransactions();
 
   const smartContract = new SmartContract({
     address: new Address(multisigManagerContract ?? ""),
@@ -35,7 +30,7 @@ export function useManagerContract(
       smartContract,
       ...args,
     );
-    return sendDappTransaction({ transaction, callbackRoute });
+    return sendTransactionToSign({ transactions: [transaction] });
   }
 
   function mutateRegisterMultisigContract(multisigAddress: Address) {

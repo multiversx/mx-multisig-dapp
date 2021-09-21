@@ -6,7 +6,7 @@ import { transactionStatuses } from "helpers/constants";
 import newTransaction from "helpers/newTransaction";
 import { transactionsToSignSelector } from "redux/selectors/transactionsSelector";
 import { updateSignStatus } from "redux/slices/transactionsSlice";
-import { replyUrl, useSearchTransactions, HandleCloseType } from "./helpers";
+import { replyUrl, useSearchTransactions } from "./helpers";
 import { walletSignSession } from "./helpers/constants";
 
 import getProviderType from "./helpers/getProviderType";
@@ -38,7 +38,7 @@ export default function SignTransactions() {
 
   const providerType = getProviderType(provider);
 
-  const handleClose = (props?: HandleCloseType) => {
+  const handleClose = () => {
     setNewTransactions(undefined);
     setNewCallbackRoute("");
     setError("");
