@@ -112,7 +112,7 @@ const TransactionSender = () => {
               submittedMessageShown: true,
               transactions: newTransactions,
               startTime: moment().unix(),
-              endTime: moment().add(30, "seconds").unix(),
+              endTime: moment().add(10, "seconds").unix(),
             };
             const newToasts = [...withoutCurrent, newToast];
             dispatch(

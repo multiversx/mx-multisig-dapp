@@ -50,9 +50,14 @@ export interface TransactionToastDescriptionType {
   type: CustomToastDisplayType.TransactionToast;
   props: {
     pending: boolean;
-    transactions: any;
+    transactions: TransactionToastTransactionsType[];
     toastSignSession: string;
   };
+}
+
+export interface TransactionToastTransactionsType {
+  hash: string;
+  status: PlainTransactionStatus;
 }
 
 export type CustomToastType = TransactionToastDescriptionType;

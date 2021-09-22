@@ -6,13 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CopyButton from "components/CopyButton";
 import ExplorerLink from "components/ExplorerLink";
 import Trim from "components/Trim";
+import {
+  PlainTransactionStatus,
+  TransactionToastTransactionsType,
+} from "types/toasts";
 
-interface Status {
-  isPending: boolean;
-  isSuccessful: boolean;
-}
-
-const Icon = ({ status }: { status: Status }) => {
+const Icon = ({ status }: { status: PlainTransactionStatus }) => {
   switch (true) {
     case status.isPending:
       return (
@@ -33,7 +32,7 @@ const TxDetails = ({
   title,
 }: {
   title?: React.ReactNode;
-  transactions: { hash: string; status: Status }[];
+  transactions: TransactionToastTransactionsType[];
 }) => {
   return (
     <>
