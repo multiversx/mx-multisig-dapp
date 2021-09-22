@@ -14,6 +14,7 @@ import { hexToAddress, hexToString } from "helpers/converters";
 import { tryParseTransactionParameter } from "helpers/urlparameters";
 import MultisigListItem from "pages/Dashboard/MultisigListItem";
 import { multisigContractsSelector } from "redux/selectors/multisigContractsSelectors";
+import { refetchSelector } from "redux/selectors/toastSelector";
 import useSendTransactions from "../../hooks/useSendTransactions";
 import { setMultisigContracts } from "../../redux/slices/multisigContractsSlice";
 import AddMultisigModal from "./AddMultisigModal";
@@ -25,6 +26,7 @@ const Index = () => {
   const dispatch = useDispatch();
   const { sendDeployTransaction } = useDeployContract();
   const sendTransactions = useSendTransactions();
+  const refetch = useSelector(refetchSelector);
   const {
     mutateRegisterMultisigContractName,
     mutateRegisterMultisigContract,
@@ -139,7 +141,7 @@ const Index = () => {
     if (address && address !== "") {
       readMultisigContracts();
     }
-  }, [address]);
+  }, [address, refetch]);
   if (!loggedIn) {
     return <Redirect to="/" />;
   }

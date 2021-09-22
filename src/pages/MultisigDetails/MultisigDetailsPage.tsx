@@ -7,25 +7,26 @@ import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Redirect, useParams } from "react-router-dom";
 import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
+import DepositModal from "components/DepositModal/DepositModal";
 import StatCard from "components/StatCard";
 import State from "components/State";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { useManagerContract } from "contracts/ManagerContract";
 import { useMultisigContract } from "contracts/MultisigContract";
 import { hexToNumber, hexToString } from "helpers/converters";
+import { PlainAddress } from "helpers/plainObjects";
 import { tryParseTransactionParameter } from "helpers/urlparameters";
 import MultisigProposalCard from "pages/MultisigDetails/MultisigProposalCard";
-import { MultisigActionDetailed } from "types/MultisigActionDetailed";
-import DepositModal from "../../components/DepositModal/DepositModal";
-import { PlainAddress } from "../../helpers/plainObjects";
 import {
   currentMultisigAddressSelector,
   multisigContractsLoadingSelector,
-} from "../../redux/selectors/multisigContractsSelectors";
+} from "redux/selectors/multisigContractsSelectors";
+import { refetchSelector } from "redux/selectors/toastSelector";
 import {
   setCurrentMultisigAddress,
   setMultisigContractsLoading,
-} from "../../redux/slices/multisigContractsSlice";
+} from "redux/slices/multisigContractsSlice";
+import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import ProposeAction from "./Propose/ProposeAction";
 
 interface MultisigDetailsPageParams {
@@ -82,6 +83,7 @@ const MultisigDetailsPage = () => {
   const dispatch = useDispatch();
   const { multisigAddressParam } = useParams<MultisigDetailsPageParams>();
   const confirmModal = useConfirmModal();
+  const refetch = useSelector(refetchSelector);
   const { t } = useTranslation();
   const [showDepositModal, setShowDepositModal] = useState(false);
   const isProposer = userRole !== 0;
@@ -287,7 +289,7 @@ const MultisigDetailsPage = () => {
     } else if (address !== null) {
       getDashboardInfo();
     }
-  }, [currentMultisigAddress?.hex(), address]);
+  }, [currentMultisigAddress?.hex(), refetch, address]);
 
   if (address === null) {
     return <Redirect to="/" />;

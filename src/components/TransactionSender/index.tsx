@@ -89,7 +89,6 @@ const TransactionSender = () => {
               return proxy.sendTransaction(transactionObject);
             });
             const responseHashes = await Promise.all(transactionsPromises);
-            console.log(responseHashes);
 
             const withoutCurrent = transactionToasts.filter(
               ({ toastSignSession }) => String(toastSignSession) !== sessionId,
@@ -105,10 +104,10 @@ const TransactionSender = () => {
             setNonce(account.nonce.valueOf() + transactions.length);
             const newToast = {
               toastSignSession: sessionId,
-              processingMessage: "Deploying",
-              successMessage: "Deployed",
-              errorMessage: "deploy failed",
-              submittedMessage: "submitted",
+              processingMessage: "Processing transaction",
+              successMessage: "Transaction successful",
+              errorMessage: "Transaction failed",
+              submittedMessage: "Transaction submitted",
               submittedMessageShown: true,
               transactions: newTransactions,
               startTime: moment().unix(),
@@ -124,6 +123,7 @@ const TransactionSender = () => {
 
             dispatch(setTransactionToasts(newToasts));
             clearSignInfo(sessionId);
+            history.pushState({}, document.title, "?");
           }
         }
       } else {

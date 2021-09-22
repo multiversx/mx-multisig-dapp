@@ -1,15 +1,14 @@
 import { useRef, useState, useEffect } from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { TransactionHash } from "@elrondnetwork/erdjs/out";
-import cloneDeep from "lodash/cloneDeep";
 import { useDispatch, useSelector } from "react-redux";
 import getPlainTransactionStatus from "helpers/plainObjects";
 import { transactionToastsSelector } from "redux/selectors/toastSelector";
-import { setTransactionToasts } from "redux/slices/toastsSlice";
 import {
-  TransactionToastTransactionsType,
-  TransactionToastType,
-} from "types/toasts";
+  updateTransactionToastErrorMessage,
+  updateTransactionToastTransactionStatus,
+} from "redux/slices/toastsSlice";
+import { TransactionToastTransactionsType } from "types/toasts";
 
 interface TransactionToastStatusUpdatePropsType {
   transactions: TransactionToastTransactionsType[];
@@ -36,35 +35,14 @@ export default function TransactionToastStatusUpdate({
     dapp: { apiProvider },
   } = useDappContext();
 
-  const updateToasts = (updatedToast: TransactionToastType) => {
-    if (updatedToast == null) {
-      return;
-    }
-    const newToasts = transactionToasts.map((toast) => {
-      if (toast.toastSignSession === toastSignSession) {
-        for (const hash of Object.keys(updatedToast.transactions)) {
-          if (updatedToast.transactions[hash].isPending) {
-            updatedToast.transactions[hash] = toast.transactions[hash];
-          }
-        }
-        return updatedToast;
-      }
-      return toast;
-    });
-
-    dispatch(setTransactionToasts(newToasts));
-    isFetchingStatusRef.current = false;
-  };
-
   const checkTransactionStatus = async () => {
     if (transactions == null) {
       return;
     }
-    const activeToast = cloneDeep(
-      transactionToasts.find(
-        (toast) => toast.toastSignSession === toastSignSession,
-      ),
+    const activeToast = transactionToasts.find(
+      (toast) => toast.toastSignSession === toastSignSession,
     );
+
     if (activeToast == null) {
       return;
     }
@@ -75,8 +53,13 @@ export default function TransactionToastStatusUpdate({
       );
       if (txOnNetwork != null) {
         if (!txOnNetwork.status.isPending()) {
-          activeToast.transactions[hash] = getPlainTransactionStatus(
-            txOnNetwork.status,
+          const status = getPlainTransactionStatus(txOnNetwork.status);
+          dispatch(
+            updateTransactionToastTransactionStatus({
+              toastSignSession,
+              transactionHash: hash,
+              status,
+            }),
           );
 
           if (txOnNetwork.status.isFailed()) {
@@ -86,9 +69,12 @@ export default function TransactionToastStatusUpdate({
             const resultWithError = scResults.find(
               (scResult) => scResult.getReturnMessage() !== "",
             );
-
-            activeToast.errorMessage =
-              resultWithError?.getReturnMessage() ?? "";
+            dispatch(
+              updateTransactionToastErrorMessage({
+                toastSignSession,
+                errorMessage: resultWithError?.getReturnMessage(),
+              }),
+            );
           }
         } else {
           setRefetchHashes((existing) => {
@@ -114,7 +100,6 @@ export default function TransactionToastStatusUpdate({
           });
         }
       }
-      updateToasts(activeToast);
     }
   };
 

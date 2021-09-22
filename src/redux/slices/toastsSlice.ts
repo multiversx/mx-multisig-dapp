@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TransactionToastType, ToastType } from "types/toasts";
+import { REHYDRATE } from "redux-persist";
+import {
+  TransactionToastType,
+  ToastType,
+  PlainTransactionStatus,
+} from "types/toasts";
 import { logoutAction } from "../commonActions";
 
 export interface ToastsState {
@@ -7,6 +12,17 @@ export interface ToastsState {
   toastSignSessions: string[];
   transactionToasts: TransactionToastType[];
   refetch: number;
+}
+
+export interface UpdateTransactionToastStatusPayload {
+  status: PlainTransactionStatus;
+  transactionHash: string;
+  toastSignSession: string;
+}
+
+export interface UpdateTransactionToastErrorPayload {
+  errorMessage?: string;
+  toastSignSession: string;
 }
 
 const initialState: ToastsState = {
@@ -66,6 +82,32 @@ export const toastsSlice = createSlice({
     ) => {
       state.transactionToasts = action.payload;
     },
+    updateTransactionToastTransactionStatus: (
+      state: ToastsState,
+      action: PayloadAction<UpdateTransactionToastStatusPayload>,
+    ) => {
+      const { toastSignSession, transactionHash, status } = action.payload;
+
+      const transactionToast = state.transactionToasts.find(
+        (txToast) => txToast.toastSignSession === toastSignSession,
+      );
+      if (transactionToast?.transactions != null) {
+        transactionToast.transactions[transactionHash] = status;
+      }
+    },
+    updateTransactionToastErrorMessage: (
+      state: ToastsState,
+      action: PayloadAction<UpdateTransactionToastErrorPayload>,
+    ) => {
+      const { toastSignSession, errorMessage } = action.payload;
+
+      const transactionToast = state.transactionToasts.find(
+        (txToast) => txToast.toastSignSession === toastSignSession,
+      );
+      if (transactionToast != null) {
+        transactionToast.errorMessage = errorMessage;
+      }
+    },
     addToastSignSession: (
       state: ToastsState,
       action: PayloadAction<string>,
@@ -83,6 +125,21 @@ export const toastsSlice = createSlice({
     builder.addCase(logoutAction, () => {
       return initialState;
     });
+    builder.addCase(REHYDRATE, (state: ToastsState, action: any) => {
+      const persistedState = action?.payload?.toasts;
+      if (persistedState == null) {
+        return state;
+      }
+      return {
+        ...persistedState,
+        toasts:
+          persistedState?.toasts?.filter((toast: ToastType) => {
+            const isTransactionPending =
+              toast?.descriptionProps?.props?.pending;
+            return isTransactionPending === null || isTransactionPending;
+          }) ?? [],
+      };
+    });
   },
 });
 
@@ -93,6 +150,8 @@ export const {
   setTransactionToasts,
   addToastSignSession,
   updateToastsRefetch,
+  updateTransactionToastTransactionStatus,
+  updateTransactionToastErrorMessage,
 } = toastsSlice.actions;
 
 export default toastsSlice.reducer;
