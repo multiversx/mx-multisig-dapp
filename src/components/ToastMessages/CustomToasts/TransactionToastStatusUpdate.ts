@@ -1,10 +1,14 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { TransactionHash } from "@elrondnetwork/erdjs/out";
+import { faExclamationTriangle } from "@fortawesome/pro-solid-svg-icons/faExclamationTriangle";
 import { useDispatch, useSelector } from "react-redux";
 import getPlainTransactionStatus from "helpers/plainObjects";
 import { transactionToastsSelector } from "redux/selectors/toastSelector";
 import {
+  addToast,
+  removeToast,
+  removeTransactionToast,
   updateTransactionToastErrorMessage,
   updateTransactionToastTransactionStatus,
 } from "redux/slices/toastsSlice";
@@ -16,9 +20,8 @@ interface TransactionToastStatusUpdatePropsType {
   toastSignSession: string;
 }
 
-interface RefetchHashesType {
-  hash: string;
-  retries: number;
+interface RetriesType {
+  [hash: string]: number;
 }
 
 export default function TransactionToastStatusUpdate({
@@ -30,10 +33,26 @@ export default function TransactionToastStatusUpdate({
   const isFetchingStatusRef = useRef(false);
   const dispatch = useDispatch();
   const transactionToasts = useSelector(transactionToastsSelector);
-  const [refetchHashes, setRefetchHashes] = useState<RefetchHashesType[]>([]);
+  const retriesRef = useRef<RetriesType>({});
   const {
     dapp: { apiProvider },
   } = useDappContext();
+
+  const manageStuckToasts = () => {
+    dispatch(removeTransactionToast(toastSignSession));
+    dispatch(removeToast(toastSignSession));
+
+    const txStuckToast = {
+      id: "batch-stuck",
+      title: "Pending transactions",
+      description:
+        "Fetching the transactions status took too long. Please refresh the page.",
+      icon: faExclamationTriangle,
+      iconClassName: "bg-warning",
+      expires: false,
+    };
+    dispatch(addToast(txStuckToast));
+  };
 
   const checkTransactionStatus = async () => {
     if (transactions == null) {
@@ -48,6 +67,12 @@ export default function TransactionToastStatusUpdate({
     }
     isFetchingStatusRef.current = true;
     for (const { hash } of transactions) {
+      const retriesForThisHash = retriesRef.current[hash];
+      if (retriesForThisHash > 20) {
+        //consider toast as stuck after 10 seconds
+        manageStuckToasts();
+        return;
+      }
       const txOnNetwork = await apiProvider.getTransaction(
         new TransactionHash(hash),
       );
@@ -77,28 +102,10 @@ export default function TransactionToastStatusUpdate({
             );
           }
         } else {
-          setRefetchHashes((existing) => {
-            return [
-              ...existing.filter((t) => t.hash !== hash),
-              {
-                hash,
-                retries: 0,
-              },
-            ];
-          });
+          retriesRef.current[hash] = retriesRef.current[hash] + 1;
         }
       } else {
-        if (activeToast?.transactions != null) {
-          setRefetchHashes((existing) => {
-            return [
-              ...existing.filter((t) => t.hash !== hash),
-              {
-                hash,
-                retries: 0,
-              },
-            ];
-          });
-        }
+        retriesRef.current[hash] = retriesRef.current[hash] + 1;
       }
     }
   };

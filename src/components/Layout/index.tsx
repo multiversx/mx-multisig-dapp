@@ -2,8 +2,10 @@ import React from "react";
 import * as Dapp from "@elrondnetwork/dapp";
 import SignTransactions from "components/SignTransactions";
 import routes, { routeNames } from "routes";
+import NotificationModal from "../NotificationModal";
 import ToastMessages from "../ToastMessages";
 import TransactionSender from "../TransactionSender";
+import TxSubmittedModal from "../TxSubmittedModal";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 
@@ -26,6 +28,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           {children}
           <SignTransactions />
           <TransactionSender />
+          <NotificationModal />
+          <TxSubmittedModal />
           <ToastMessages />
         </Dapp.Authenticate>
       </main>

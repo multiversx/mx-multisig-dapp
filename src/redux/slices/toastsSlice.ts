@@ -82,6 +82,14 @@ export const toastsSlice = createSlice({
     ) => {
       state.transactionToasts = action.payload;
     },
+    removeTransactionToast: (
+      state: ToastsState,
+      action: PayloadAction<string>,
+    ) => {
+      state.transactionToasts = state.transactionToasts.filter(
+        (tx) => tx.toastSignSession !== action.payload,
+      );
+    },
     updateTransactionToastTransactionStatus: (
       state: ToastsState,
       action: PayloadAction<UpdateTransactionToastStatusPayload>,
@@ -148,6 +156,7 @@ export const {
   updateToast,
   removeToast,
   setTransactionToasts,
+  removeTransactionToast,
   addToastSignSession,
   updateToastsRefetch,
   updateTransactionToastTransactionStatus,
