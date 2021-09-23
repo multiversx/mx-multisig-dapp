@@ -17,22 +17,22 @@ export const walletConnectDeepLink =
 export const contractAddress =
   "erd1qqqqqqqqqqqqqpgqp699jngundfqw07d8jzkepucvpzush6k3wvqyc44rx";
 
-export const networks: NetworkType[] = [
-  {
-    id: "mainnet",
-    name: "Mainnet",
-    egldLabel: "EGLD",
-    walletAddress: "https://wallet.elrond.com/dapp/init",
-    apiAddress: "https://api.elrond.com",
-    gatewayAddress: "https://gateway.elrond.com",
-    explorerAddress: "http://explorer.elrond.com/",
-    multisigDeployerContracts: [
-      "erd1qqqqqqqqqqqqqpgqh7hl7t5cy0g4td0mv8hp950qtumnagamermsx0aep5",
-    ],
-    multisigManagerContract:
-      "erd1qqqqqqqqqqqqqpgqh7hl7t5cy0g4td0mv8hp950qtumnagamermsx0aep5",
-  },
-];
+export const network: NetworkType = {
+  id: "mainnet",
+  name: "Mainnet",
+  egldLabel: "EGLD",
+  walletAddress: "https://wallet.elrond.com/dapp/init",
+  apiAddress: "https://api.elrond.com",
+  gatewayAddress: "https://gateway.elrond.com",
+  explorerAddress: "http://explorer.elrond.com/",
+  multisigDeployerContracts: [
+    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
+    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
+    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
+  ],
+  multisigManagerContract:
+    "erd1qqqqqqqqqqqqqpgq4wxs8k5060eph7ehdkx4wmm9s4qgdj70ermspyr7pq",
+};
 
 const networkSchema = object({
   id: string().defined().required(),
@@ -51,8 +51,6 @@ const networkSchema = object({
 
 export type NetworkType = InferType<typeof networkSchema>;
 
-networks.forEach((network) => {
-  networkSchema.validate(network, { strict: true }).catch(({ errors }) => {
-    console.error(`Config invalid format for ${network.id}`, errors);
-  });
+networkSchema.validate(network, { strict: true }).catch(({ errors }) => {
+  console.error(`Config invalid format for ${network.id}`, errors);
 });

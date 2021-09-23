@@ -26,12 +26,12 @@ export const network: NetworkType = {
   gatewayAddress: "https://testnet-gateway.elrond.com",
   explorerAddress: "http://testnet-explorer.elrond.com/",
   multisigDeployerContracts: [
-    "erd1qqqqqqqqqqqqqpgqmmk8v6kxe80f7mjv02fpezaaqlwtjx4termsxp2pdl",
-    "erd1qqqqqqqqqqqqqpgqs4sw57gwv8amf7a97rqrttlqt9xzccewermscrrj5w",
-    "erd1qqqqqqqqqqqqqpgqjjag9ddyc36l865h9mp3a9smfcg8gky5ermscml6w4",
+    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
+    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
+    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
   ],
   multisigManagerContract:
-    "erd1qqqqqqqqqqqqqpgq6a2m7q30hfnqgkjpx6ufax47nruq4msuerms632ys9",
+    "erd1qqqqqqqqqqqqqpgq4wxs8k5060eph7ehdkx4wmm9s4qgdj70ermspyr7pq",
 };
 
 const networkSchema = object({

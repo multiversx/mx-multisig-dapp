@@ -21,17 +21,17 @@ export const network: NetworkType = {
   id: "devnet",
   name: "Devnet",
   egldLabel: "xEGLD",
-  walletAddress: "https://devnet-wallet.elrond.com/dapp/init",
+  walletAddress: "https://devnet-wallet.elrond.com",
   apiAddress: "https://devnet-api.elrond.com",
   gatewayAddress: "https://devnet-gateway.elrond.com",
   explorerAddress: "http://devnet-explorer.elrond.com/",
   multisigDeployerContracts: [
-    "erd1qqqqqqqqqqqqqpgqmv4ywkst377ngwh0yyaj3kdufwwl04sherms282gz6",
-    "erd1qqqqqqqqqqqqqpgqcm2ns0994y9qsuzchl33hu78eklu93syermstt4g4d",
-    "erd1qqqqqqqqqqqqqpgq2c6z26r5q046w9jkzrvjxc9fgjwh54zcermsxtn8u5",
+    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
+    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
+    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
   ],
   multisigManagerContract:
-    "erd1qqqqqqqqqqqqqpgqc3342h2wsjh7xmvxm6ka99peplvclj2serms5at6s2",
+    "erd1qqqqqqqqqqqqqpgq4wxs8k5060eph7ehdkx4wmm9s4qgdj70ermspyr7pq",
 };
 
 const networkSchema = object({
