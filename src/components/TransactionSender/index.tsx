@@ -19,21 +19,8 @@ import { signStatusSelector } from "redux/selectors/transactionsSelector";
 import { setTxSubmittedModal } from "redux/slices/modalsSlice";
 import { addToast, setTransactionToasts } from "redux/slices/toastsSlice";
 import { clearSignTransactions } from "redux/slices/transactionsSlice";
-import storage from "storage";
 import { PlainTransactionStatus } from "types/toasts";
 import Toast from "./Toast";
-
-const removeSessionFromStorage = (sessionId: string) => {
-  const multisigSessions = storage.local.getItem("multisigSessions");
-  if (multisigSessions && sessionId in multisigSessions) {
-    delete multisigSessions[sessionId];
-    storage.local.setItem({
-      key: "multisigSessions",
-      data: multisigSessions,
-      expires: moment().add(10, "minutes").unix(),
-    });
-  }
-};
 
 const failedToast = {
   id: "batch-failed",
@@ -58,9 +45,8 @@ const TransactionSender = () => {
 
   const dispatch = useDispatch();
 
-  const clearSignInfo = (sessionId: string) => {
+  const clearSignInfo = () => {
     dispatch(clearSignTransactions());
-    removeSessionFromStorage(sessionId);
     setSending(false);
   };
 
@@ -122,7 +108,7 @@ const TransactionSender = () => {
             );
 
             dispatch(setTransactionToasts(newToasts));
-            clearSignInfo(sessionId);
+            clearSignInfo();
             history.pushState({}, document.title, "?");
           }
         }
@@ -139,7 +125,7 @@ const TransactionSender = () => {
     } catch (err: any) {
       console.error("Unable to send transactions", err);
       dispatch(addToast(failedToast));
-      clearSignInfo(sessionId);
+      clearSignInfo();
     } finally {
       setSending(false);
     }

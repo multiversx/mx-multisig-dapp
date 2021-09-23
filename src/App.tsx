@@ -39,11 +39,11 @@ i18n.use(initReactI18next).init({
 export default function App() {
   return (
     <ReduxProvider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Dapp.Context
-          config={{ network, walletConnectBridge, walletConnectDeepLink }}
-        >
-          <Layout>
+      <Dapp.Context
+        config={{ network, walletConnectBridge, walletConnectDeepLink }}
+      >
+        <Layout>
+          <PersistGate loading={null} persistor={persistor}>
             <Switch>
               <Route
                 path={routeNames.unlock}
@@ -88,9 +88,9 @@ export default function App() {
               ))}
               <Route component={PageNotFound} />
             </Switch>
-          </Layout>
-        </Dapp.Context>
-      </PersistGate>
+          </PersistGate>
+        </Layout>
+      </Dapp.Context>
     </ReduxProvider>
   );
 }

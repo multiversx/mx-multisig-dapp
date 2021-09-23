@@ -81,16 +81,19 @@ const MultisigProposalCard = ({
             <Done
               className={"done-icon"}
               key={index}
-              style={{ marginRight: index === signers.length - 1 ? 4 : 8 }}
+              style={{
+                marginRight: index === signers.length - 1 ? 4 : 8,
+              }}
             />
           ))}
 
-          {[...Array(quorumSize - signers.length)].map((index) => (
-            <Circle
-              key={index + signers.length}
-              style={{ width: 30, height: 30 }}
-            />
-          ))}
+          {quorumSize > 0 &&
+            [...Array(quorumSize - signers.length)].map((index) => (
+              <Circle
+                key={index + signers.length}
+                style={{ width: 30, height: 30 }}
+              />
+            ))}
         </div>
       </div>
       <div className="d-flex align-items-center justify-content-between">
