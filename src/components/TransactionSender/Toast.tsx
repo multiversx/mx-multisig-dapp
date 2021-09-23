@@ -175,20 +175,6 @@ const Toast = ({
         ),
       ),
     );
-
-    const sessionToasts = storage.session.getItem("toasts");
-    if (sessionToasts) {
-      const remaining = sessionToasts.filter(
-        (session: TransactionToastType) =>
-          session.toastSignSession !== toastSignSession,
-      );
-
-      storage.session.setItem({
-        key: "toasts",
-        data: remaining,
-        expires: moment().add(10, "minutes").unix(),
-      });
-    }
   };
 
   return null;

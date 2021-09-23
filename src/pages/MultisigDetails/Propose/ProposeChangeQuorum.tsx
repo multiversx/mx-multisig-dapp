@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import MultisigDetailsContext from "../../../context/MultisigDetailsContext";
+import MultisigDetailsContext from "context/MultisigDetailsContext";
 
 interface ProposeChangeQuorumType {
   handleParamsChange: (params: number) => void;

@@ -35,12 +35,11 @@ const TransactionSender = () => {
   const toastSignSessions = useSelector(toastSignSessionsSelector);
   const transactionToasts = useSelector(transactionToastsSelector);
   const {
-    address,
     account,
     dapp: { proxy },
   } = useDappContext();
   const setNonce = useSetNonce();
-  const signedTransactions = useSelector(signStatusSelector);
+  const signStatus = useSelector(signStatusSelector);
   const [sending, setSending] = React.useState<boolean>();
 
   const dispatch = useDispatch();
@@ -51,14 +50,14 @@ const TransactionSender = () => {
   };
 
   async function handleSendTransactions() {
-    const [sessionId] = Object.keys(signedTransactions);
+    const [sessionId] = Object.keys(signStatus);
     try {
       if (
         sessionId != null &&
-        signedTransactions[sessionId].status === transactionStatuses.signed &&
+        signStatus[sessionId].status === transactionStatuses.signed &&
         !sending
       ) {
-        const { transactions } = signedTransactions[sessionId];
+        const { transactions } = signStatus[sessionId];
 
         const batchNotSent = transactionToasts.every(
           ({ toastSignSession }) => String(toastSignSession) !== sessionId,
@@ -115,9 +114,8 @@ const TransactionSender = () => {
       } else {
         if (
           sessionId &&
-          (signedTransactions[sessionId].status ===
-            transactionStatuses.cancelled ||
-            signedTransactions[sessionId].status === transactionStatuses.failed)
+          (signStatus[sessionId].status === transactionStatuses.cancelled ||
+            signStatus[sessionId].status === transactionStatuses.failed)
         ) {
           dispatch(clearSignTransactions());
         }
@@ -131,18 +129,14 @@ const TransactionSender = () => {
     }
   }
 
-  React.useEffect(
-    () => {
-      handleSendTransactions();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signedTransactions, address],
-  );
+  React.useEffect(() => {
+    handleSendTransactions();
+  }, [signStatus, account]);
 
   const addCancelToast = () => {
-    if (signedTransactions) {
-      const [sessionId] = Object.keys(signedTransactions);
-      if (signedTransactions.status === transactionStatuses.failed) {
+    if (signStatus) {
+      const [sessionId] = Object.keys(signStatus);
+      if (signStatus.status === transactionStatuses.failed) {
         dispatch(
           addToast({
             id: sessionId,
@@ -158,7 +152,7 @@ const TransactionSender = () => {
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(addCancelToast, [signedTransactions, toastSignSessions]);
+  React.useEffect(addCancelToast, [signStatus, toastSignSessions]);
   return (
     <>
       {sending === false
