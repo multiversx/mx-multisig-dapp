@@ -1,7 +1,6 @@
 import React from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { Address } from "@elrondnetwork/erdjs";
-import { SmartContract } from "@elrondnetwork/erdjs/out";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -15,7 +14,7 @@ import DeployStepsModal from "./DeployMultisigModal";
 
 const Index = () => {
   const multisigContracts = useSelector(multisigContractsSelector);
-  const { loggedIn, address, account } = useDappContext();
+  const { loggedIn, address } = useDappContext();
   const dispatch = useDispatch();
   const refetch = useSelector(refetchSelector);
   const {
@@ -33,22 +32,7 @@ const Index = () => {
   };
 
   const onDeploy = async (name: string) => {
-    const multisigAddressHex = SmartContract.computeAddress(
-      new Address(address),
-      account.nonce,
-    );
-
-    const multisigAddress = new Address(multisigAddressHex);
-
-    const boardMembers = [new Address(address)];
-    const quorum = 1;
-
-    deployMultisigContract({
-      quorum,
-      boardMembers,
-      multisigAddress,
-      contractName: name,
-    });
+    deployMultisigContract(name);
   };
   const onAddMultisigClicked = async () => {
     setShowAddMultisigModal(true);

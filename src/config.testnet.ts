@@ -16,6 +16,10 @@ export const walletConnectDeepLink =
 
 export const contractAddress =
   "erd1qqqqqqqqqqqqqpgqp699jngundfqw07d8jzkepucvpzush6k3wvqyc44rx";
+export const multisigDeployerContract =
+  "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd";
+export const multisigManagerContract =
+  "erd1qqqqqqqqqqqqqpgq4wxs8k5060eph7ehdkx4wmm9s4qgdj70ermspyr7pq";
 
 export const network: NetworkType = {
   id: "testnet",
@@ -25,14 +29,11 @@ export const network: NetworkType = {
   apiAddress: "https://testnet-api.elrond.com",
   gatewayAddress: "https://testnet-gateway.elrond.com",
   explorerAddress: "http://testnet-explorer.elrond.com/",
-  multisigDeployerContracts: [
-    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
-    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
-    "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd",
-  ],
-  multisigManagerContract:
-    "erd1qqqqqqqqqqqqqpgq4wxs8k5060eph7ehdkx4wmm9s4qgdj70ermspyr7pq",
 };
+
+export const verifiedContractsHashes = [
+  "jzvVnfYqwzgh8J6ea0HxUJ0v0FfPY9GgCHBndGypH1A=",
+];
 
 const networkSchema = object({
   id: string().defined().required(),
@@ -41,12 +42,7 @@ const networkSchema = object({
   walletAddress: string(),
   apiAddress: string(),
   gatewayAddress: string(),
-  explorerAddress: string(),
-  multisigDeployerContracts: array()
-    .of(string().defined().required())
-    .defined()
-    .required(),
-  multisigManagerContract: string(),
+  explorerAddress: string().required(),
 }).required();
 
 export type NetworkType = InferType<typeof networkSchema>;

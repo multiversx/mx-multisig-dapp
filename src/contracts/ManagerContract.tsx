@@ -8,22 +8,18 @@ import {
   TypedValue,
   U8Value,
 } from "@elrondnetwork/erdjs";
+import { Account, ProxyProvider } from "@elrondnetwork/erdjs/out";
 import { Query } from "@elrondnetwork/erdjs/out/smartcontracts/query";
-import {
-  multisigDeployerContracts,
-  multisigManagerContract,
-} from "helpers/constants";
+
 import { parseContractInfo } from "helpers/converters";
 import useSendTransactions from "hooks/useSendTransactions";
 import { MultisigContractInfoType } from "types/multisigContracts";
+import {
+  multisigDeployerContract,
+  multisigManagerContract,
+  network,
+} from "../config";
 import { buildTransaction } from "./transactionUtils";
-
-interface DeployMultisigContractType {
-  quorum: number;
-  boardMembers: Address[];
-  multisigAddress: Address;
-  contractName: string;
-}
 
 export function useManagerContract() {
   const { address, dapp } = useDappContext();
@@ -34,12 +30,18 @@ export function useManagerContract() {
   });
   const transactionAddress = new Address(address);
 
-  function deployMultisigContract({
-    quorum,
-    boardMembers,
-    multisigAddress,
-    contractName,
-  }: DeployMultisigContractType) {
+  async function deployMultisigContract(contractName: string) {
+    const deployedAccount = new Account(new Address(multisigDeployerContract));
+    const provider = new ProxyProvider(network.gatewayAddress!);
+    await deployedAccount.sync(provider);
+    const multisigAddressHex = SmartContract.computeAddress(
+      new Address(deployedAccount.address),
+      deployedAccount.nonce,
+    );
+    const multisigAddress = new Address(multisigAddressHex);
+
+    const boardMembers = [new Address(address)];
+    const quorum = 1;
     const deployTransaction = getDeployContractTransaction(
       quorum,
       boardMembers,
@@ -62,10 +64,6 @@ export function useManagerContract() {
     quorum: number,
     boardMembers: Address[],
   ) {
-    const randomInt = Math.floor(
-      Math.random() * multisigDeployerContracts.length,
-    );
-    const multisigDeployerContract = multisigDeployerContracts[randomInt];
     const contract = new SmartContract({
       address: new Address(multisigDeployerContract ?? ""),
     });
