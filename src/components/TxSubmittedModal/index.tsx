@@ -1,32 +1,35 @@
 import React from "react";
 import { faCheck } from "@fortawesome/pro-regular-svg-icons/faCheck";
 import { Modal } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PageState from "components/PageState";
 import { txSubmittedModalSelector } from "redux/selectors/modalsSelector";
+import { clearTxSubmittedModal } from "../../redux/slices/modalsSlice";
 
 const TxSubmittedModal = () => {
   const txSubmittedModal = useSelector(txSubmittedModalSelector);
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = React.useState(false);
 
   React.useEffect(() => {
-    if (txSubmittedModal.sessionId !== "") {
+    if (txSubmittedModal?.sessionId !== "") {
       setShowModal(true);
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [txSubmittedModal]);
+  }, []);
 
-  const toggleModal = (show: boolean) => () => {
-    setShowModal(show);
+  const hideModal = () => {
+    dispatch(clearTxSubmittedModal());
+    setShowModal(false);
   };
 
   return (
     <>
-      {showModal && (
+      {txSubmittedModal != null && showModal && (
         <Modal
           show={showModal}
           backdrop={true}
-          onHide={toggleModal(false)}
+          onHide={hideModal}
           className="modal-container"
           animation={false}
           centered

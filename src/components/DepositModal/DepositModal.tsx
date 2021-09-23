@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useMultisigContract } from "../../contracts/MultisigContract";
+import { useMultisigContract } from "contracts/MultisigContract";
 
 interface DepositModalType {
   onClose: () => void;

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RawTransactionType } from "helpers/types";
+import { logoutAction } from "../commonActions";
 
 export interface SignTransactionsType {
   transactions: RawTransactionType[];
@@ -42,6 +43,11 @@ export const signTransactionsSlice = createSlice({
       state.transactionsToSign = action.payload;
     },
     clearSignTransactions: () => initialState,
+  },
+  extraReducers: (builder) => {
+    builder.addCase(logoutAction, () => {
+      return initialState;
+    });
   },
 });
 

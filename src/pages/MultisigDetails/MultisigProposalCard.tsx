@@ -3,16 +3,16 @@ import { Address } from "@elrondnetwork/erdjs/out";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "react-i18next";
+import { ReactComponent as AddUser } from "assets/img/add-user.svg";
+import { ReactComponent as Circle } from "assets/img/circle.svg";
+import { ReactComponent as DeleteUser } from "assets/img/delete-user.svg";
+import { ReactComponent as Done } from "assets/img/done.svg";
+import { ReactComponent as Logo } from "assets/img/logo.svg";
+import { ReactComponent as Quorum } from "assets/img/quorum.svg";
+import { ReactComponent as Token } from "assets/img/token.svg";
+import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { useMultisigContract } from "contracts/MultisigContract";
 import { MultisigActionType } from "types/MultisigActionType";
-import { ReactComponent as AddUser } from "../../assets/img/add-user.svg";
-import { ReactComponent as Circle } from "../../assets/img/circle.svg";
-import { ReactComponent as DeleteUser } from "../../assets/img/delete-user.svg";
-import { ReactComponent as Done } from "../../assets/img/done.svg";
-import { ReactComponent as Logo } from "../../assets/img/logo.svg";
-import { ReactComponent as Quorum } from "../../assets/img/quorum.svg";
-import { ReactComponent as Token } from "../../assets/img/token.svg";
-import MultisigDetailsContext from "../../context/MultisigDetailsContext";
 
 export interface MultisigProposalCardType {
   type: number;

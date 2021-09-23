@@ -9,8 +9,7 @@ import { useManagerContract } from "contracts/ManagerContract";
 import MultisigListItem from "pages/Dashboard/MultisigListItem";
 import { multisigContractsSelector } from "redux/selectors/multisigContractsSelectors";
 import { refetchSelector } from "redux/selectors/toastSelector";
-import useSendTransactions from "../../hooks/useSendTransactions";
-import { setMultisigContracts } from "../../redux/slices/multisigContractsSlice";
+import { setMultisigContracts } from "redux/slices/multisigContractsSlice";
 import AddMultisigModal from "./AddMultisigModal";
 import DeployStepsModal from "./DeployMultisigModal";
 
@@ -18,13 +17,11 @@ const Index = () => {
   const multisigContracts = useSelector(multisigContractsSelector);
   const { loggedIn, address, account } = useDappContext();
   const dispatch = useDispatch();
-  const sendTransactions = useSendTransactions();
   const refetch = useSelector(refetchSelector);
   const {
-    mutateRegisterMultisigContractName,
-    mutateRegisterMultisigContract,
-    queryContracts,
     deployMultisigContract,
+    queryContracts,
+    mutateRegisterMultisigContract,
   } = useManagerContract();
   const { t } = useTranslation();
   const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
@@ -42,29 +39,23 @@ const Index = () => {
     );
 
     const multisigAddress = new Address(multisigAddressHex);
-    const deployTransaction = deployMultisigContract(1, [new Address(address)]);
-    const registerNameTransaction = mutateRegisterMultisigContractName(
+
+    const boardMembers = [new Address(address)];
+    const quorum = 1;
+
+    deployMultisigContract({
+      quorum,
+      boardMembers,
       multisigAddress,
-      name,
-    );
-    const registerMultisigContractTransaction =
-      mutateRegisterMultisigContract(multisigAddress);
-    const transactions = [
-      deployTransaction,
-      registerNameTransaction,
-      registerMultisigContractTransaction,
-    ];
-    sendTransactions({
-      transactions,
+      contractName: name,
     });
   };
-
   const onAddMultisigClicked = async () => {
     setShowAddMultisigModal(true);
   };
 
   const onAddMultisigFinished = async (newAddress: Address) => {
-    await mutateRegisterMultisigContract(newAddress);
+    mutateRegisterMultisigContract(newAddress);
 
     setShowAddMultisigModal(false);
   };
@@ -115,9 +106,8 @@ const Index = () => {
               {multisigContracts.length > 0 ? (
                 multisigContracts.map((contract) => (
                   <MultisigListItem
-                    key={contract.address.hex()}
-                    address={contract.address}
-                    name={contract.name}
+                    key={contract.address.hex}
+                    contract={contract}
                   />
                 ))
               ) : (

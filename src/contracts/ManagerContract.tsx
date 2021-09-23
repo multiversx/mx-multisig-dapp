@@ -18,26 +18,50 @@ import useSendTransactions from "hooks/useSendTransactions";
 import { MultisigContractInfoType } from "types/multisigContracts";
 import { buildTransaction } from "./transactionUtils";
 
+interface DeployMultisigContractType {
+  quorum: number;
+  boardMembers: Address[];
+  multisigAddress: Address;
+  contractName: string;
+}
+
 export function useManagerContract() {
   const { address, dapp } = useDappContext();
-  const sendTransactionsToBeSigned = useSendTransactions();
+  const sendTransactions = useSendTransactions();
 
   const smartContract = new SmartContract({
     address: new Address(multisigManagerContract ?? ""),
   });
   const transactionAddress = new Address(address);
 
-  function sendTransaction(functionName: string, ...args: TypedValue[]) {
-    const transaction = buildTransaction(
-      0,
-      functionName,
-      smartContract,
-      ...args,
+  function deployMultisigContract({
+    quorum,
+    boardMembers,
+    multisigAddress,
+    contractName,
+  }: DeployMultisigContractType) {
+    const deployTransaction = getDeployContractTransaction(
+      quorum,
+      boardMembers,
     );
-    return sendTransactionsToBeSigned({ transactions: [transaction] });
+    const registerMultisigNameTransaction = getRegisterContractNameTransaction(
+      multisigAddress,
+      contractName,
+    );
+    const attachMultisigTransaction =
+      getRegisterMultisigContractTransaction(multisigAddress);
+    const transactions = [
+      deployTransaction,
+      registerMultisigNameTransaction,
+      attachMultisigTransaction,
+    ];
+    sendTransactions(transactions);
   }
 
-  function deployMultisigContract(quorum: number, boardMembers: Address[]) {
+  function getDeployContractTransaction(
+    quorum: number,
+    boardMembers: Address[],
+  ) {
     const randomInt = Math.floor(
       Math.random() * multisigDeployerContracts.length,
     );
@@ -55,6 +79,11 @@ export function useManagerContract() {
   }
 
   function mutateRegisterMultisigContract(multisigAddress: Address) {
+    const transaction = getRegisterMultisigContractTransaction(multisigAddress);
+    sendTransactions(transaction);
+  }
+
+  function getRegisterMultisigContractTransaction(multisigAddress: Address) {
     return buildTransaction(
       0,
       "registerMultisigContract",
@@ -62,15 +91,7 @@ export function useManagerContract() {
       new AddressValue(multisigAddress),
     );
   }
-
-  async function mutateUnregisterMultisigContract(multisigAddress: Address) {
-    return sendTransaction(
-      "unregisterMultisigContract",
-      new AddressValue(multisigAddress),
-    );
-  }
-
-  function mutateRegisterMultisigContractName(
+  function getRegisterContractNameTransaction(
     multisigAddress: Address,
     name: string,
   ) {
@@ -83,6 +104,16 @@ export function useManagerContract() {
     );
   }
 
+  async function mutateUnregisterMultisigContract(multisigAddress: Address) {
+    const transaction = buildTransaction(
+      0,
+      "unregisterMultisigContract",
+      smartContract,
+      new AddressValue(multisigAddress),
+    );
+    sendTransactions(transaction);
+  }
+
   async function queryMultisigContractInfoArray(
     functionName: string,
     ...args: TypedValue[]
@@ -92,7 +123,6 @@ export function useManagerContract() {
     if (result.returnData.length === 0) {
       return [];
     }
-
     const contractInfos = [];
     for (const buffer of result.outputUntyped()) {
       const contractInfo = parseContractInfo(buffer);
@@ -132,15 +162,13 @@ export function useManagerContract() {
       func: new ContractFunction(functionName),
       args: args,
     });
-
     return await dapp.proxy.queryContract(newQuery);
   }
 
   return {
     deployMultisigContract,
-    mutateRegisterMultisigContract,
     mutateUnregisterMultisigContract,
-    mutateRegisterMultisigContractName,
+    mutateRegisterMultisigContract,
     queryContracts,
     queryContractName,
     queryMultisigContractInfoArray,

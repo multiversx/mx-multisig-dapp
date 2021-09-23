@@ -15,6 +15,13 @@
       color: black;
     }
   }
+  .trusted-badge{
+    position: absolute;
+    top:0.5rem;
+    right:0.5rem;
+    background-color: green;
+    padding: 0.5rem;
+  }
 }
 
 .done-icon {

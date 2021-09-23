@@ -4,9 +4,9 @@ import { Address } from "@elrondnetwork/erdjs";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
 import { faHourglass } from "@fortawesome/free-solid-svg-icons/faHourglass";
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
-import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 
+import switchTrue from "helpers/switchTrue";
 import {
   toastSignSessionsSelector,
   transactionToastsSelector,
@@ -18,13 +18,11 @@ import {
   updateToast,
   updateToastsRefetch,
 } from "redux/slices/toastsSlice";
-import storage from "storage";
 import {
   TransactionToastType,
   TransactionToastDescriptionType,
 } from "types/toasts";
 import { CustomToastDisplayType } from "types/toasts";
-import switchTrue from "../../helpers/switchTrue";
 
 const Toast = ({
   toastSignSession,

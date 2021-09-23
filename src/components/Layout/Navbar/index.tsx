@@ -1,19 +1,23 @@
 import React from "react";
-import * as Dapp from "@elrondnetwork/dapp";
+import { useContext as useDappContext, useLogout } from "@elrondnetwork/dapp";
 import { Navbar as BsNavbar, NavItem, Nav } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { ReactComponent as ElrondLogo } from "assets/img/elrond.svg";
 import { dAppName } from "config";
+import { logoutAction } from "redux/commonActions";
 
 const Navbar = () => {
-  const { loggedIn } = Dapp.useContext();
-  const dappDispatch = Dapp.useDispatch();
-  const history = useHistory();
+  const { loggedIn } = useDappContext();
+  const dappLogout = useLogout();
+  const dispatch = useDispatch();
 
   const logOut = (e: React.MouseEvent) => {
     e.preventDefault();
-    dappDispatch({ type: "logout" });
-    history.push("/");
+    dappLogout({ callbackUrl: `${window.location.origin}/` });
+    localStorage.clear();
+    sessionStorage.clear();
+    document.cookie = "";
+    dispatch(logoutAction);
   };
 
   return (
@@ -27,9 +31,9 @@ const Navbar = () => {
         <Nav className="ml-auto">
           {loggedIn && (
             <NavItem>
-              <a href="/" onClick={logOut}>
-                Close
-              </a>
+              <button className="btn btn-primary mb-3" onClick={logOut}>
+                Log out
+              </button>
             </NavItem>
           )}
         </Nav>

@@ -15,16 +15,11 @@ interface NotificationModal {
 }
 
 export interface ModalsSliceState {
-  txSubmittedModal: TxSubmittedModal;
+  txSubmittedModal?: TxSubmittedModal;
   notificationModal?: NotificationModal;
 }
 
-const initialState: ModalsSliceState = {
-  txSubmittedModal: {
-    sessionId: "",
-    submittedMessage: "",
-  },
-};
+const initialState: ModalsSliceState = {};
 
 export const modalsSlice = createSlice({
   name: "modals",
@@ -42,6 +37,9 @@ export const modalsSlice = createSlice({
     ) => {
       state.notificationModal = action.payload;
     },
+    clearTxSubmittedModal: (state: ModalsSliceState) => {
+      state.txSubmittedModal = undefined;
+    },
     clearNotificationModal: (state: ModalsSliceState) => {
       state.notificationModal = undefined;
     },
@@ -57,6 +55,7 @@ export const modalsSlice = createSlice({
 export const {
   setTxSubmittedModal,
   setNotificationModal,
+  clearTxSubmittedModal,
   clearNotificationModal,
 } = modalsSlice.actions;
 

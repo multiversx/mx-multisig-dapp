@@ -3,11 +3,11 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import SVG from "react-inlinesvg";
-import { ReactComponent as BoardMember } from "../../assets/img/clipboard-check.svg";
-import { ReactComponent as Proposer } from "../../assets/img/clipboard-list.svg";
-import { ReactComponent as Money } from "../../assets/img/money.svg";
-import { ReactComponent as Quorum } from "../../assets/img/quorum.svg";
-import { ReactComponent as User } from "../../assets/img/user.svg";
+import { ReactComponent as BoardMember } from "assets/img/clipboard-check.svg";
+import { ReactComponent as Proposer } from "assets/img/clipboard-list.svg";
+import { ReactComponent as Money } from "assets/img/money.svg";
+import { ReactComponent as Quorum } from "assets/img/quorum.svg";
+import { ReactComponent as User } from "assets/img/user.svg";
 
 export interface StatCardType {
   title?: string;

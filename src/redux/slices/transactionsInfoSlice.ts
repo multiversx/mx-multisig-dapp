@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RawTransactionType } from "helpers/types";
+import { logoutAction } from "../commonActions";
 
 export interface TransactionInfoSlice {
   processingMessage: string;
@@ -7,7 +7,7 @@ export interface TransactionInfoSlice {
   successMessage: string;
   submittedMessage: string;
   submittedMessageShown: string;
-  grouping: Number[];
+  grouping: number[];
 }
 
 export type StateType = TransactionInfoSlice | void;
@@ -25,6 +25,11 @@ export const signTransactionsSlice = createSlice({
       return { ...state, ...action.payload };
     },
     clearTransactionsInfo: () => initialState,
+  },
+  extraReducers: (builder) => {
+    builder.addCase(logoutAction, () => {
+      return initialState;
+    });
   },
 });
 

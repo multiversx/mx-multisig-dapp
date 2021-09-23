@@ -44,12 +44,12 @@ export function useMultisigContract() {
       smartContract,
       ...args,
     );
-    return sendTransactionsToBeSigned({ transactions: [transaction] });
+    return sendTransactionsToBeSigned(transaction);
   }
 
   function deposit(amount: number) {
     const transaction = buildTransaction(amount, "deposit", smartContract);
-    return sendTransactionsToBeSigned({ transactions: [transaction] });
+    return sendTransactionsToBeSigned(transaction);
   }
 
   function mutateSign(actionId: number) {

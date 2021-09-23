@@ -33,7 +33,11 @@ export default function useSendTransactions() {
     account: { balance },
   } = useDappContext();
 
-  return ({ transactions }: { transactions: Transaction[] }) => {
+  return (transactionPayload: Transaction[] | Transaction) => {
+    //this will make sure that we can send single transactions to be signed
+    const transactions = Array.isArray(transactionPayload)
+      ? transactionPayload
+      : [transactionPayload];
     const bNtotalFee = calcTotalFee(transactions);
     const bNbalance = new BigNumber(
       validation.stringIsFloat(balance) ? balance : "0",

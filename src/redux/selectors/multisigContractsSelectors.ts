@@ -11,12 +11,7 @@ export const multisigContractsLoadingSelector = createDeepEqualSelector(
 
 export const multisigContractsSelector = createDeepEqualSelector(
   mainSelector,
-  (state) => {
-    return state.multisigContracts.map((contract) => ({
-      ...contract,
-      address: new Address(contract.address.hex),
-    }));
-  },
+  (state) => state.multisigContracts,
 );
 
 export const currentMultisigAddressSelector = createDeepEqualSelector(
