@@ -68,6 +68,10 @@ export function useManagerContract() {
   ): Promise<MultisigContractInfoType[]> {
     const result = await query(functionName, ...args);
 
+    if (result.returnData.length === 0) {
+      return [];
+    }
+
     const contractInfos = [];
     for (const buffer of result.outputUntyped()) {
       const contractInfo = parseContractInfo(buffer);
