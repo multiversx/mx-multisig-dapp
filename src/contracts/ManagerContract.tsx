@@ -6,9 +6,13 @@ import {
   AddressValue,
   BytesValue,
   TypedValue,
+  U8Value,
 } from "@elrondnetwork/erdjs";
 import { Query } from "@elrondnetwork/erdjs/out/smartcontracts/query";
-import { multisigManagerContract } from "helpers/constants";
+import {
+  multisigDeployerContracts,
+  multisigManagerContract,
+} from "helpers/constants";
 import { parseContractInfo } from "helpers/converters";
 import useSendTransactions from "hooks/useSendTransactions";
 import { MultisigContractInfoType } from "types/multisigContracts";
@@ -31,6 +35,23 @@ export function useManagerContract() {
       ...args,
     );
     return sendTransactionsToBeSigned({ transactions: [transaction] });
+  }
+
+  function deployMultisigContract(quorum: number, boardMembers: Address[]) {
+    const randomInt = Math.floor(
+      Math.random() * multisigDeployerContracts.length,
+    );
+    const multisigDeployerContract = multisigDeployerContracts[randomInt];
+    const contract = new SmartContract({
+      address: new Address(multisigDeployerContract ?? ""),
+    });
+    return buildTransaction(
+      0,
+      "deployContract",
+      contract,
+      new U8Value(quorum),
+      ...boardMembers.map((x) => new AddressValue(x)),
+    );
   }
 
   function mutateRegisterMultisigContract(multisigAddress: Address) {
@@ -116,6 +137,7 @@ export function useManagerContract() {
   }
 
   return {
+    deployMultisigContract,
     mutateRegisterMultisigContract,
     mutateUnregisterMultisigContract,
     mutateRegisterMultisigContractName,
