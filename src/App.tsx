@@ -1,5 +1,6 @@
 import React from "react";
 import * as Dapp from "@elrondnetwork/dapp";
+import { ChainID, NetworkConfig } from "@elrondnetwork/erdjs/out";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { Provider as ReduxProvider } from "react-redux";
@@ -16,8 +17,11 @@ import {
   walletConnectBridge,
   walletConnectDeepLink,
   dAppName,
+  chainID,
 } from "./config";
 import routes, { routeNames } from "./routes";
+
+NetworkConfig.getDefault().ChainID = new ChainID(chainID);
 
 i18n.use(initReactI18next).init({
   resources: {

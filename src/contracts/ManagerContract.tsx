@@ -8,21 +8,26 @@ import {
   TypedValue,
   U8Value,
 } from "@elrondnetwork/erdjs";
-import { Account, ProxyProvider } from "@elrondnetwork/erdjs/out";
+import {
+  Balance,
+  CodeMetadata,
+  DeployArguments,
+  GasLimit,
+} from "@elrondnetwork/erdjs/out";
+import { Code } from "@elrondnetwork/erdjs/out/smartcontracts/code";
 import { Query } from "@elrondnetwork/erdjs/out/smartcontracts/query";
 
 import { parseContractInfo } from "helpers/converters";
 import useSendTransactions from "hooks/useSendTransactions";
 import { MultisigContractInfoType } from "types/multisigContracts";
-import {
-  multisigDeployerContract,
-  multisigManagerContract,
-  network,
-} from "../config";
+import { multisigManagerContract } from "../config";
+import { smartContractCode } from "../helpers/constants";
 import { buildTransaction } from "./transactionUtils";
 
+export const deployContractGasLimit = 120000000;
+
 export function useManagerContract() {
-  const { address, dapp } = useDappContext();
+  const { address, account, dapp } = useDappContext();
   const sendTransactions = useSendTransactions();
 
   const smartContract = new SmartContract({
@@ -31,16 +36,14 @@ export function useManagerContract() {
   const transactionAddress = new Address(address);
 
   async function deployMultisigContract(contractName: string) {
-    const deployedAccount = new Account(new Address(multisigDeployerContract));
-    const provider = new ProxyProvider(network.gatewayAddress!);
-    await deployedAccount.sync(provider);
     const multisigAddressHex = SmartContract.computeAddress(
-      new Address(deployedAccount.address),
-      deployedAccount.nonce,
+      new Address(address),
+      account.nonce,
     );
+
     const multisigAddress = new Address(multisigAddressHex);
 
-    const boardMembers = [new Address(address)];
+    const boardMembers = [new AddressValue(new Address(address))];
     const quorum = 1;
     const deployTransaction = getDeployContractTransaction(
       quorum,
@@ -62,18 +65,22 @@ export function useManagerContract() {
 
   function getDeployContractTransaction(
     quorum: number,
-    boardMembers: Address[],
+    boardMembers: AddressValue[],
   ) {
-    const contract = new SmartContract({
-      address: new Address(multisigDeployerContract ?? ""),
-    });
-    return buildTransaction(
-      0,
-      "deployContract",
-      contract,
-      new U8Value(quorum),
-      ...boardMembers.map((x) => new AddressValue(x)),
-    );
+    const contract = new SmartContract({});
+    const code = Code.fromBuffer(Buffer.from(smartContractCode, "hex"));
+    const codeMetadata = new CodeMetadata(false, true, true);
+    const quorumTyped = new U8Value(quorum);
+    const initArguments: TypedValue[] = [quorumTyped, ...boardMembers];
+    const value = Balance.Zero();
+    const deployArguments: DeployArguments = {
+      code,
+      codeMetadata,
+      initArguments,
+      value,
+      gasLimit: new GasLimit(deployContractGasLimit),
+    };
+    return contract.deploy(deployArguments);
   }
 
   function mutateRegisterMultisigContract(multisigAddress: Address) {

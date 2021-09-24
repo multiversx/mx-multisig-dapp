@@ -43,13 +43,6 @@ export default function SignTransactions() {
     setNewCallbackRoute("");
     setError("");
     setShowSignModal(false);
-    dispatch(
-      updateSignStatus({
-        [newSessionId]: {
-          status: transactionStatuses.cancelled,
-        },
-      }),
-    );
   };
 
   const signTransactions = ({

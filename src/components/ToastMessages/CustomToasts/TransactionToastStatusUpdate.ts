@@ -114,7 +114,7 @@ export default function TransactionToastStatusUpdate({
     if (pending) {
       intervalRef.current = setInterval(() => {
         checkTransactionStatus();
-      }, 500);
+      }, 1000);
     } else {
       clearInterval(intervalRef.current);
     }

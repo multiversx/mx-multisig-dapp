@@ -1,4 +1,4 @@
-import { object, string, InferType, array } from "yup";
+import { object, string, InferType } from "yup";
 
 export const dAppName = "Multisig";
 export const decimals = 2;
@@ -16,8 +16,6 @@ export const walletConnectDeepLink =
 
 export const contractAddress =
   "erd1qqqqqqqqqqqqqpgqp699jngundfqw07d8jzkepucvpzush6k3wvqyc44rx";
-export const multisigDeployerContract =
-  "erd1qqqqqqqqqqqqqpgqp593httv72s3decqv2psa3yssajmmrhqerms52yjjd";
 export const multisigManagerContract =
   "erd1qqqqqqqqqqqqqpgq4wxs8k5060eph7ehdkx4wmm9s4qgdj70ermspyr7pq";
 

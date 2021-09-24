@@ -57,6 +57,7 @@ const SignWithExtensionModal = ({
           setSignedTransactions(signedTxs);
         })
         .catch((e: any) => {
+          console.error(e);
           setError(e.message);
         });
     }
