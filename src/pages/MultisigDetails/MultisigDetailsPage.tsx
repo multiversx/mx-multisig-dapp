@@ -19,12 +19,12 @@ import { tryParseTransactionParameter } from "helpers/urlparameters";
 import MultisigProposalCard from "pages/MultisigDetails/MultisigProposalCard";
 import {
   currentMultisigAddressSelector,
-  multisigContractsLoadingSelector,
+  multisigContractsFetchedSelector,
 } from "redux/selectors/multisigContractsSelectors";
 import { refetchSelector } from "redux/selectors/toastSelector";
 import {
   setCurrentMultisigAddress,
-  setMultisigContractsLoading,
+  setMultisigContractsFetched,
 } from "redux/slices/multisigContractsSlice";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import ProposeAction from "./Propose/ProposeAction";
@@ -65,7 +65,7 @@ const MultisigDetailsPage = () => {
     allActions: [],
   });
 
-  const loading = useSelector(multisigContractsLoadingSelector);
+  const contractsFetched = useSelector(multisigContractsFetchedSelector);
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
 
   const { address, apiAddress, dapp, egldLabel } = useDappContext();
@@ -102,8 +102,6 @@ const MultisigDetailsPage = () => {
       return;
     }
 
-    dispatch(setMultisigContractsLoading(true));
-
     try {
       const [
         newTotalBoardMembers,
@@ -136,7 +134,7 @@ const MultisigDetailsPage = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      dispatch(setMultisigContractsLoading(false));
+      dispatch(setMultisigContractsFetched(true));
     }
   };
 
@@ -366,7 +364,7 @@ const MultisigDetailsPage = () => {
           </div>
 
           <div className="card-body pt-0 px-spacer pb-spacer">
-            {loading ? (
+            {!contractsFetched ? (
               <State icon={faCircleNotch} iconClass="fa-spin text-primary" />
             ) : (
               <div className="card mt-spacer">

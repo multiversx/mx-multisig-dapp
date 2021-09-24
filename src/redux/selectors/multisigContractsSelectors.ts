@@ -4,7 +4,7 @@ import { createDeepEqualSelector } from "./helpers";
 
 const mainSelector = (state: RootState) => state.multisigContracts;
 
-export const multisigContractsLoadingSelector = createDeepEqualSelector(
+export const multisigContractsFetchedSelector = createDeepEqualSelector(
   mainSelector,
   (state) => state.loading,
 );

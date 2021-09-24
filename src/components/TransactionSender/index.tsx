@@ -73,6 +73,7 @@ const TransactionSender = () => {
               );
               return proxy.sendTransaction(transactionObject);
             });
+            setNonce(account.nonce.valueOf() + transactions.length);
             const responseHashes = await Promise.all(transactionsPromises);
 
             const withoutCurrent = transactionToasts.filter(
@@ -86,7 +87,6 @@ const TransactionSender = () => {
                 getPlainTransactionStatus(new TransactionStatus("pending"));
               return acc;
             }, {} as any);
-            setNonce(account.nonce.valueOf() + transactions.length);
             const newToast = {
               toastSignSession: sessionId,
               processingMessage: "Processing transaction",

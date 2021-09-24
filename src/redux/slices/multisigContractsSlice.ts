@@ -21,7 +21,7 @@ export const multisigContractsSlice = createSlice({
   name: "multisigContracts",
   initialState,
   reducers: {
-    setMultisigContractsLoading: (
+    setMultisigContractsFetched: (
       state: StateType,
       action: PayloadAction<boolean>,
     ) => {
@@ -48,7 +48,7 @@ export const multisigContractsSlice = createSlice({
 });
 
 export const {
-  setMultisigContractsLoading,
+  setMultisigContractsFetched,
   setCurrentMultisigAddress,
   setMultisigContracts,
 } = multisigContractsSlice.actions;
