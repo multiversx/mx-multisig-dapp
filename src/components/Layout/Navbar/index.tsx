@@ -17,7 +17,7 @@ const Navbar = () => {
     localStorage.clear();
     sessionStorage.clear();
     document.cookie = "";
-    dispatch(logoutAction);
+    dispatch(logoutAction());
   };
 
   return (
