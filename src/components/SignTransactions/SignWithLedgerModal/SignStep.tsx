@@ -125,11 +125,13 @@ const SignStep = ({
             </div>
             <div className="form-group text-left">
               <span className="form-label"> Data:</span>
-              <textarea className="form-control ">
-                {transaction.getData() != null
-                  ? transaction.getData().toString()
-                  : null}
-              </textarea>
+              {transaction.getData() != null && (
+                <textarea
+                  readOnly
+                  className="form-control overflow-x-hidden"
+                  value={transaction.getData().toString()}
+                />
+              )}
             </div>
             {error && (
               <p className="text-danger d-flex justify-content-center align-items-center">
