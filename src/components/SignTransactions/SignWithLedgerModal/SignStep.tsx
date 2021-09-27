@@ -81,7 +81,8 @@ const SignStep = ({
           history.push(callbackRoute);
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error(err, "sign error");
         reset();
         handleClose({ updateBatchStatus: false });
       });
@@ -113,55 +114,53 @@ const SignStep = ({
       iconSize="3x"
       title="Confirm on Ledger"
       description={
-        <React.Fragment>
-          {transaction && (
-            <React.Fragment>
-              <div
-                className="form-group text-left"
-                data-testid="transactionTitle"
-              >
-                <span className="form-label">To: </span>
-                {transaction.getReceiver().toString()}
-              </div>
-              <div className="form-group text-left">
-                <span className="form-label">Data: </span>
-                {transaction.getData() && (
-                  <React.Fragment>
-                    {transaction.getData().toString()}
-                  </React.Fragment>
-                )}
-              </div>
-              {error && (
-                <p className="text-danger d-flex justify-content-center align-items-center">
-                  {error}
-                </p>
-              )}
+        transaction && (
+          <React.Fragment>
+            <div
+              className="form-group text-left"
+              data-testid="transactionTitle"
+            >
+              <span className="form-label">To: </span>
+              {transaction.getReceiver().toString()}
+            </div>
+            <div className="form-group text-left">
+              <span className="form-label"> Data:</span>
+              <textarea className="form-control ">
+                {transaction.getData() != null
+                  ? transaction.getData().toString()
+                  : null}
+              </textarea>
+            </div>
+            {error && (
+              <p className="text-danger d-flex justify-content-center align-items-center">
+                {error}
+              </p>
+            )}
 
-              <div className="d-flex align-items-center flex-column mt-spacer">
-                {error && <p className="text-danger">{error}</p>}
-                <button
-                  type="button"
-                  className="btn btn-primary px-spacer"
-                  id="signBtn"
-                  data-testid="signBtn"
-                  onClick={sign}
-                  disabled={waitingForDevice}
-                >
-                  {signBtnLabel}
-                </button>
-                <a
-                  href="/"
-                  id="closeButton"
-                  data-testid="closeButton"
-                  onClick={close}
-                  className="btn btn-close-link mt-2"
-                >
-                  {isFirst ? "Cancel" : "Back"}
-                </a>
-              </div>
-            </React.Fragment>
-          )}
-        </React.Fragment>
+            <div className="d-flex align-items-center flex-column mt-spacer">
+              {error && <p className="text-danger">{error}</p>}
+              <button
+                type="button"
+                className="btn btn-primary px-spacer"
+                id="signBtn"
+                data-testid="signBtn"
+                onClick={sign}
+                disabled={waitingForDevice}
+              >
+                {signBtnLabel}
+              </button>
+              <a
+                href="/"
+                id="closeButton"
+                data-testid="closeButton"
+                onClick={close}
+                className="btn btn-close-link mt-2"
+              >
+                {isFirst ? "Cancel" : "Back"}
+              </a>
+            </div>
+          </React.Fragment>
+        )
       }
     />
   ) : null;

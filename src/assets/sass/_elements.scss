@@ -19,6 +19,10 @@ body.modal-open .layout {
   box-shadow: rgba(255, 255, 255, 0.2) 0 0 0 0.5px inset;
 }
 
+textarea {
+  min-height: 8rem;
+}
+
 .btn {
   &:hover {
     background: rgba(0, 0, 0, 0.4);
