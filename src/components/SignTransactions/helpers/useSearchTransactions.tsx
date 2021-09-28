@@ -8,7 +8,7 @@ import {
 import qs from "qs";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { transactionStatuses } from "helpers/constants";
+import { providerTypes, transactionStatuses } from "helpers/constants";
 import { updateSignStatus } from "redux/slices/transactionsSlice";
 import { dappInitRoute, walletSignSession } from "./constants";
 
@@ -36,7 +36,7 @@ export default function useSearchTransactions() {
                 transactions: signedTransactions.map((tx) => {
                   // TODO: REMOVE
                   //#region REMOVE when options is available in erdjs getTransactionsFromWalletUrl
-                  if (searchData.signMethod === "ledger") {
+                  if (searchData.signMethod === providerTypes.ledger) {
                     tx.version = TransactionVersion.withTxHashSignVersion();
                     tx.options = TransactionOptions.withTxHashSignOptions();
                   }

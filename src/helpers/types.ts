@@ -9,4 +9,5 @@ export interface RawTransactionType {
   nonce: number;
   chainID: string;
   version: number;
+  options: number;
 }

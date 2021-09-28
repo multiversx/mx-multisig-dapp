@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Address } from "@elrondnetwork/erdjs/out";
+import { Address } from "@elrondnetwork/erdjs";
 import { useTranslation } from "react-i18next";
 
 interface ProposeInputAddressType {
@@ -13,9 +13,11 @@ const ProposeInputAddress = ({
   const { t } = useTranslation();
 
   const handleAddressChanged = (event: any) => {
-    setAddress(event.target.value);
-
-    handleParamsChange(new Address(event.target.value));
+    try {
+      const newAddress = event.target.value;
+      setAddress(newAddress);
+      handleParamsChange(new Address(newAddress));
+    } catch (err) {}
   };
 
   return (

@@ -52,40 +52,38 @@ const SignStep = ({
     updateSignStatus({});
   };
 
-  const sign = () => {
-    setWaitingForDevice(true);
-    provider
-      .signTransaction(transaction)
-      .then((tx) => {
-        const newSignedTx = { [index]: tx };
-        const newSignedTransactions = signedTransactions
-          ? { ...signedTransactions, ...newSignedTx }
-          : newSignedTx;
-        setSignedTransactions(newSignedTransactions);
-        if (!isLast) {
-          setCurrentStep((exising) => exising + 1);
-        } else if (newSignedTransactions) {
-          handleClose({ updateBatchStatus: false });
-
-          dispatch(
-            updateSignStatus({
-              [sessionId]: {
-                status: transactionStatuses.signed,
-                transactions: Object.values(newSignedTransactions).map(
-                  (txEntry) => txEntry.toPlainObject(),
-                ),
-              },
-            }),
-          );
-          reset();
-          history.push(callbackRoute);
-        }
-      })
-      .catch((err) => {
-        console.error(err, "sign error");
-        reset();
+  const sign = async () => {
+    try {
+      setWaitingForDevice(true);
+      const tx = await provider.signTransaction(transaction);
+      const newSignedTx = { [index]: tx };
+      const newSignedTransactions = signedTransactions
+        ? { ...signedTransactions, ...newSignedTx }
+        : newSignedTx;
+      setSignedTransactions(newSignedTransactions);
+      if (!isLast) {
+        setCurrentStep((exising) => exising + 1);
+      } else if (newSignedTransactions) {
         handleClose({ updateBatchStatus: false });
-      });
+
+        dispatch(
+          updateSignStatus({
+            [sessionId]: {
+              status: transactionStatuses.signed,
+              transactions: Object.values(newSignedTransactions).map(
+                (txEntry) => txEntry.toPlainObject(),
+              ),
+            },
+          }),
+        );
+        reset();
+        history.push(callbackRoute);
+      }
+    } catch (err) {
+      console.error(err, "sign error");
+      reset();
+      handleClose({ updateBatchStatus: false });
+    }
   };
 
   let signBtnLabel = "Sign & Continue";

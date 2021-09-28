@@ -28,6 +28,7 @@ import { MultisigAction } from "types/MultisigAction";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendToken } from "types/MultisigSendToken";
+import getProviderType from "../components/SignTransactions/helpers/getProviderType";
 import { buildTransaction } from "./transactionUtils";
 
 export function useMultisigContract() {
@@ -35,12 +36,15 @@ export function useMultisigContract() {
   const { dapp } = useDappContext();
   const sendTransactionsToBeSigned = useSendTransactions();
 
+  const providerType = getProviderType(dapp.provider);
+
   const smartContract = new SmartContract({ address: currentMultisigAddress });
 
   function sendTransaction(functionName: string, ...args: TypedValue[]) {
     const transaction = buildTransaction(
       0,
       functionName,
+      providerType,
       smartContract,
       ...args,
     );
@@ -48,7 +52,12 @@ export function useMultisigContract() {
   }
 
   function deposit(amount: number) {
-    const transaction = buildTransaction(amount, "deposit", smartContract);
+    const transaction = buildTransaction(
+      amount,
+      "deposit",
+      providerType,
+      smartContract,
+    );
     return sendTransactionsToBeSigned(transaction);
   }
 

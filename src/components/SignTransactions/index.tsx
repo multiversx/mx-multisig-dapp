@@ -2,7 +2,7 @@ import * as React from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { Transaction, Address, Nonce } from "@elrondnetwork/erdjs";
 import { useDispatch, useSelector } from "react-redux";
-import { transactionStatuses } from "helpers/constants";
+import { providerTypes, transactionStatuses } from "helpers/constants";
 import newTransaction from "helpers/newTransaction";
 import { transactionsToSignSelector } from "redux/selectors/transactionsSelector";
 import { updateSignStatus } from "redux/slices/transactionsSlice";
@@ -131,11 +131,13 @@ export default function SignTransactions() {
 
   return (
     <React.Fragment>
-      {providerType === "ledger" && <SignWithLedgerModal {...signProps} />}
-      {providerType === "walletconnect" && (
+      {providerType === providerTypes.ledger && (
+        <SignWithLedgerModal {...signProps} />
+      )}
+      {providerType === providerTypes.walletconnect && (
         <SignWithWalletConnectModal {...signProps} />
       )}
-      {providerType === "extension" && (
+      {providerType === providerTypes.extension && (
         <SignWithExtensionModal {...signProps} />
       )}
     </React.Fragment>

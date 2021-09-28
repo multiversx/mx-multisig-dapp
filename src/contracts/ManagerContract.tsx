@@ -20,6 +20,7 @@ import { Query } from "@elrondnetwork/erdjs/out/smartcontracts/query";
 import { parseContractInfo } from "helpers/converters";
 import useSendTransactions from "hooks/useSendTransactions";
 import { MultisigContractInfoType } from "types/multisigContracts";
+import getProviderType from "../components/SignTransactions/helpers/getProviderType";
 import { multisigManagerContract } from "../config";
 import { smartContractCode } from "../helpers/constants";
 import { buildTransaction } from "./transactionUtils";
@@ -29,6 +30,7 @@ export const deployContractGasLimit = 120000000;
 export function useManagerContract() {
   const { address, account, dapp } = useDappContext();
   const sendTransactions = useSendTransactions();
+  const providerType = getProviderType(dapp.provider);
 
   const smartContract = new SmartContract({
     address: new Address(multisigManagerContract ?? ""),
@@ -92,6 +94,7 @@ export function useManagerContract() {
     return buildTransaction(
       0,
       "registerMultisigContract",
+      providerType,
       smartContract,
       new AddressValue(multisigAddress),
     );
@@ -103,6 +106,7 @@ export function useManagerContract() {
     return buildTransaction(
       0,
       "registerMultisigName",
+      providerType,
       smartContract,
       new AddressValue(multisigAddress),
       BytesValue.fromUTF8(name),
@@ -113,6 +117,7 @@ export function useManagerContract() {
     const transaction = buildTransaction(
       0,
       "unregisterMultisigContract",
+      providerType,
       smartContract,
       new AddressValue(multisigAddress),
     );
