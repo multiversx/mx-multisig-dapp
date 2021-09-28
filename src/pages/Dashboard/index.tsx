@@ -1,7 +1,9 @@
 import React from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { Address } from "@elrondnetwork/erdjs";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { useManagerContract } from "contracts/ManagerContract";
@@ -9,12 +11,14 @@ import MultisigListItem from "pages/Dashboard/MultisigListItem";
 import { multisigContractsSelector } from "redux/selectors/multisigContractsSelectors";
 import { refetchSelector } from "redux/selectors/toastSelector";
 import { setMultisigContracts } from "redux/slices/multisigContractsSlice";
+import getProviderType from "../../components/SignTransactions/helpers/getProviderType";
+import { providerTypes } from "../../helpers/constants";
 import AddMultisigModal from "./AddMultisigModal";
 import DeployStepsModal from "./DeployMultisigModal";
 
 const Index = () => {
   const multisigContracts = useSelector(multisigContractsSelector);
-  const { loggedIn, address } = useDappContext();
+  const { loggedIn, dapp, address } = useDappContext();
   const dispatch = useDispatch();
   const refetch = useSelector(refetchSelector);
   const {
@@ -26,6 +30,10 @@ const Index = () => {
   const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
   const [showDeployMultisigModal, setShowDeployMultisigModal] =
     React.useState(false);
+
+  const providerType = getProviderType(dapp.provider);
+
+  const isWalletProvider = providerType === providerTypes.wallet;
 
   const onDeployClicked = async () => {
     setShowDeployMultisigModal(true);
@@ -59,18 +67,42 @@ const Index = () => {
     return <Redirect to="/" />;
   }
 
+  const deployButton = (
+    <button
+      disabled={isWalletProvider}
+      onClick={onDeployClicked}
+      className="btn btn-primary mb-3 mr-2"
+      style={{ pointerEvents: isWalletProvider ? "none" : "auto" }}
+    >
+      {t("Deploy Multisig")}
+    </button>
+  );
+
+  const deployButtonContainer = isWalletProvider ? (
+    <OverlayTrigger
+      placement="top"
+      delay={{ show: 250, hide: 400 }}
+      overlay={(props) => {
+        return (
+          <Tooltip id="deploy-button-tooltip" {...props}>
+            {t("Please use another login method to deploy a contract")}
+          </Tooltip>
+        );
+      }}
+    >
+      <span className="d-inline-block">{deployButton}</span>
+    </OverlayTrigger>
+  ) : (
+    deployButton
+  );
+
   return (
     <>
       <div className="owner w-100">
         <div className="card">
           <div className="card-body">
             <div className="p-spacer">
-              <button
-                onClick={onDeployClicked}
-                className="btn btn-primary mb-3 mr-2"
-              >
-                {t("Deploy Multisig")}
-              </button>
+              {deployButtonContainer}
 
               <button
                 onClick={onAddMultisigClicked}
@@ -101,14 +133,7 @@ const Index = () => {
                       {t("No Multisig Wallet Yet")}
                     </p>
                     <div className="mb-3">{t("Welcome to our platform!")}</div>
-                    <div>
-                      <button
-                        onClick={onDeployClicked}
-                        className="btn btn-primary mb-3 mr-2"
-                      >
-                        {t("Deploy Multisig")}
-                      </button>
-                    </div>
+                    <div>{deployButtonContainer}</div>
                   </div>
                 </div>
               )}

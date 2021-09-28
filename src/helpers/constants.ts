@@ -9,6 +9,7 @@ export enum providerTypes {
   "ledger" = "ledger",
   "walletconnect" = "walletconnect",
   "extension" = "extension",
+  "wallet" = "wallet",
 }
 
 export const smartContractCode =
