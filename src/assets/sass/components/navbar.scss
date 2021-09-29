@@ -1,7 +1,96 @@
-.navbar {
-  svg.logo {
-    width: auto;
+  .navbar {
+    height: 5rem;
+
+    .nav-link {
+      transition: color 200ms ease;
+      min-width: auto;
+      border-bottom: 0.25rem solid transparent;
+      font-size: 0.725rem;
+      @include media-breakpoint-up(xl) {
+        border-top: 0.25rem solid transparent;
+        min-width: 5rem;
+      }
+      &.soon {
+        cursor: pointer;
+      }
+    }
+    .navbar-brand {
+      svg {
+        height: 1.5rem;
+        width: auto;
+        margin-right: 0.8rem;
+      }
+      span {
+        margin-bottom: 1px;
+        font-size: 1rem;
+        font-weight: 200;
+        padding-left: 0.6rem;
+      }
+      @include media-breakpoint-up(lg) {
+        svg {
+          height: 2.2rem;
+        }
+        span {
+          font-size: 1.2rem;
+        }
+      }
+    }
+    .navbar-buttons .btn {
+      padding-left: 0.8rem;
+      padding-right: 0.8rem;
+      height: 2.475rem;
+      svg {
+        width: auto;
+      }
+      @include media-breakpoint-down(sm) {
+        padding-left: 0.55rem;
+        padding-right: 0.55rem;
+      }
+    }
+
+    .address-btn{
+      background-color: #4AA8FF13;
+      padding: 0.8rem !important;
+      svg {
+        color: #4AA8FF;
+      }
+    }
+    .navbar-address {
+      width: 7rem;
+      .ellipsis,
+      .trim .left span,
+      .trim .right span {
+        font-size: 0.8rem;
+        color: #4AA8FF;
+      }
+    }
+
+    @include media-breakpoint-up(sm) {
+      .navbar-logo,
+      .navbar-buttons {
+        width: 30%;
+      }
+
+      .show-claim-mex-btn {
+        width: 43% !important;
+      }
+    }
   }
-  .navbar-brand {
+  @include media-breakpoint-down(xs) {
+    .navbar-nav {
+      width: 100%;
+      .nav-pills {
+        justify-content: space-between;
+        .nav-item {
+          flex-grow: 1;
+          .nav-link {
+            min-width: auto;
+          }
+        }
+      }
+    }
   }
-}
+
+
+
+
