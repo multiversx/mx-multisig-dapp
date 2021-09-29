@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import layout from "./slices/layoutSlice";
 import modals from "./slices/modalsSlice";
 import multisigContracts from "./slices/multisigContractsSlice";
 import toasts from "./slices/toastsSlice";
@@ -10,5 +11,6 @@ export default function makeRootReducer() {
     signTransactions,
     toasts,
     modals,
+    layout,
   });
 }

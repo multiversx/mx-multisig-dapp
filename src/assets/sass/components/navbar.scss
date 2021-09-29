@@ -1,6 +1,11 @@
   .navbar {
     height: 5rem;
 
+    .navbar-toggler{
+      display: block;
+      padding:0.4rem;
+    }
+
     .nav-link {
       transition: color 200ms ease;
       min-width: auto;
