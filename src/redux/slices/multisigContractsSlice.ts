@@ -39,6 +39,25 @@ export const multisigContractsSlice = createSlice({
     ) => {
       state.currentMultisigAddress = action.payload;
     },
+
+    updateMultisigContract: (
+      state: StateType,
+      action: PayloadAction<Partial<MultisigContractInfoType>>,
+    ) => {
+      const { address } = action.payload;
+      if (address == null) {
+        return state;
+      }
+      state.multisigContracts = state.multisigContracts.map((contract) => {
+        if (contract.address.bech32 === address.bech32) {
+          return {
+            ...contract,
+            ...action.payload,
+          };
+        }
+        return contract;
+      });
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(logoutAction, () => {
@@ -50,6 +69,7 @@ export const multisigContractsSlice = createSlice({
 export const {
   setMultisigContractsFetched,
   setCurrentMultisigAddress,
+  updateMultisigContract,
   setMultisigContracts,
 } = multisigContractsSlice.actions;
 

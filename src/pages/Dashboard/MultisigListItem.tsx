@@ -1,30 +1,29 @@
 import React from "react";
 import { Address } from "@elrondnetwork/erdjs/out";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getIsContractTrusted } from "apiCalls/multisigContractsCalls";
 import { ReactComponent as Wallet } from "assets/img/wallet.svg";
+import TrustedBadge from "components/TrustedBadge";
 import { useManagerContract } from "contracts/ManagerContract";
+import { updateMultisigContract } from "redux/slices/multisigContractsSlice";
 import { MultisigContractInfoType } from "types/multisigContracts";
 
 const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
   const { t } = useTranslation();
   const history = useHistory();
+  const dispatch = useDispatch();
   const { mutateUnregisterMultisigContract } = useManagerContract();
-  const [isTrusted, setIsTrusted] = React.useState(false);
 
-  async function validateContractHash() {
-    const isContractTrusted = await getIsContractTrusted(
-      contract.address.bech32,
+  function ontTrustVerificationComplete(isContractTrusted: boolean) {
+    dispatch(
+      updateMultisigContract({
+        address: contract.address,
+        isTrusted: isContractTrusted,
+      }),
     );
-    setIsTrusted(isContractTrusted);
   }
 
-  React.useEffect(() => {
-    if (isTrusted != null) {
-      validateContractHash();
-    }
-  }, []);
   const onEnterClicked = () => {
     history.push("/multisig/" + contract.address.bech32);
   };
@@ -60,9 +59,11 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
           </button>
         </div>
       </div>
-      {isTrusted && (
-        <span className="trusted-badge badge badge-secondary">Trusted</span>
-      )}
+      <TrustedBadge
+        contractAddress={contract.address.bech32}
+        onVerificationComplete={ontTrustVerificationComplete}
+        initialValue={contract.isTrusted}
+      />
     </div>
   );
 };

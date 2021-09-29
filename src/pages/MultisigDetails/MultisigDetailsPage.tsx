@@ -10,6 +10,7 @@ import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
 import DepositModal from "components/DepositModal/DepositModal";
 import StatCard from "components/StatCard";
 import State from "components/State";
+import TrustedBadge from "components/TrustedBadge";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { useManagerContract } from "contracts/ManagerContract";
 import { useMultisigContract } from "contracts/MultisigContract";
@@ -64,6 +65,7 @@ const MultisigDetailsPage = () => {
     multisigName: "",
     allActions: [],
   });
+  const [showDepositModal, setShowDepositModal] = useState(false);
 
   const contractsFetched = useSelector(multisigContractsFetchedSelector);
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
@@ -85,7 +87,6 @@ const MultisigDetailsPage = () => {
   const confirmModal = useConfirmModal();
   const refetch = useSelector(refetchSelector);
   const { t } = useTranslation();
-  const [showDepositModal, setShowDepositModal] = useState(false);
   const isProposer = userRole !== 0;
   const isBoardMember = userRole === 2;
 
@@ -302,11 +303,17 @@ const MultisigDetailsPage = () => {
         <div className="card border-0">
           <div className="header card-header d-flex align-items-center border-0 justify-content-between px-spacer">
             <div className="py-spacer text-truncate">
-              <p className="opacity-6 mb-0">{multisigName}</p>
+              <div className="d-flex justify-content-start align-items-center">
+                <p className="opacity-6 mb-0">{multisigName} </p>{" "}
+                <div className="px-3">
+                  <TrustedBadge contractAddress={multisigAddressParam} />
+                </div>
+              </div>
               <span className="text-truncate">
                 {currentMultisigAddress?.bech32()}
               </span>
             </div>
+
             <div className="d-flex justify-content-center align-items-center justify-content-between">
               <button
                 onClick={onDepositClicked}
