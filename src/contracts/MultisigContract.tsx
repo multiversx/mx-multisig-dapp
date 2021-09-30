@@ -51,16 +51,6 @@ export function useMultisigContract() {
     return sendTransactionsToBeSigned(transaction);
   }
 
-  function deposit(amount: number) {
-    const transaction = buildTransaction(
-      amount,
-      "deposit",
-      providerType,
-      smartContract,
-    );
-    return sendTransactionsToBeSigned(transaction);
-  }
-
   function mutateSign(actionId: number) {
     return sendTransaction("sign", new U32Value(actionId));
   }
@@ -336,7 +326,6 @@ export function useMultisigContract() {
     queryQuorumCount,
     queryActionLastId,
     queryActionData,
-    deposit,
     queryUserRole,
     queryActionIsSignedByAddress,
     queryActionIsQuorumReached,

@@ -9,15 +9,21 @@ interface ProposeChangeQuorumType {
 const ProposeChangeQuorum = ({
   handleParamsChange,
 }: ProposeChangeQuorumType) => {
-  const { quorumSize } = useContext(MultisigDetailsContext);
+  const { quorumSize, totalBoardMembers } = useContext(MultisigDetailsContext);
   const { t } = useTranslation();
 
   const [newQuorumSize, setNewQuorumSize] = useState(0);
+  const [error, setError] = useState(false);
 
   const handleNewQuorumSizeChanged = (event: any) => {
-    setNewQuorumSize(event.target.value);
-
-    handleParamsChange(event.target.value);
+    const newQuorum = Number(event.target.value);
+    if (newQuorum > totalBoardMembers || newQuorum < 0) {
+      setError(true);
+      return;
+    }
+    setError(false);
+    setNewQuorumSize(newQuorum);
+    handleParamsChange(newQuorum);
   };
 
   useEffect(() => {
@@ -25,7 +31,7 @@ const ProposeChangeQuorum = ({
   }, [quorumSize]);
 
   return (
-    <div className="modal-control-container">
+    <div className="d-flex flex-column modal-control-container">
       <span>{t("Quorum Size")}: </span>
       <input
         style={{ width: 250 }}
@@ -35,6 +41,11 @@ const ProposeChangeQuorum = ({
         autoComplete="off"
         onChange={handleNewQuorumSizeChanged}
       />
+      {error && (
+        <p className="text-danger">
+          {t("Quorum cannot be bigger than the number of board members")}
+        </p>
+      )}
     </div>
   );
 };

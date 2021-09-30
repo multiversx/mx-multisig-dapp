@@ -43,7 +43,6 @@ const MultisigProposalCard = ({
     useMultisigContract();
   const { quorumSize } = React.useContext(MultisigDetailsContext);
   const { t } = useTranslation();
-
   const sign = () => {
     mutateSign(actionId);
   };

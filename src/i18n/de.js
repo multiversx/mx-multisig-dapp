@@ -19,7 +19,6 @@ export const germanTranslations = {
   Propose: "Vorschlagen",
   "Multisig Address": "Multisignaturadresse",
   "Manage Multisigs": "Multisignaturen verwalten",
-  Deposit: "Hinterlegen",
   Proposer: "Antragsteller",
   "Proposer / Signer": "Antragsteller / Unterzeichner",
   "No rights": "Keine Rechte",

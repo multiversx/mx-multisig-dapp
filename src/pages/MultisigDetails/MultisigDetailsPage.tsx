@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Redirect, useParams } from "react-router-dom";
 import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
-import DepositModal from "components/DepositModal/DepositModal";
 import StatCard from "components/StatCard";
 import State from "components/State";
 import TrustedBadge from "components/TrustedBadge";
@@ -65,7 +64,6 @@ const MultisigDetailsPage = () => {
     multisigName: "",
     allActions: [],
   });
-  const [showDepositModal, setShowDepositModal] = useState(false);
 
   const contractsFetched = useSelector(multisigContractsFetchedSelector);
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
@@ -137,14 +135,6 @@ const MultisigDetailsPage = () => {
     } finally {
       dispatch(setMultisigContractsFetched(true));
     }
-  };
-
-  const onDepositClicked = () => {
-    setShowDepositModal(true);
-  };
-
-  const onCloseDepositModal = () => {
-    setShowDepositModal(false);
   };
 
   const userRoleAsString = () => {
@@ -298,7 +288,7 @@ const MultisigDetailsPage = () => {
     return <Redirect to="/multisig" />;
   }
   return (
-    <MultisigDetailsContext.Provider value={{ quorumSize }}>
+    <MultisigDetailsContext.Provider value={{ quorumSize, totalBoardMembers }}>
       <div className="dashboard w-100">
         <div className="card border-0">
           <div className="header card-header d-flex align-items-center border-0 justify-content-between px-spacer">
@@ -315,12 +305,6 @@ const MultisigDetailsPage = () => {
             </div>
 
             <div className="d-flex justify-content-center align-items-center justify-content-between">
-              <button
-                onClick={onDepositClicked}
-                className="btn btn-primary mr-3"
-              >
-                {t("Deposit")}
-              </button>
               <Link to="/multisig" className="btn btn-primary btn-sm">
                 {t("Manage Multisigs")}
               </Link>
@@ -404,7 +388,6 @@ const MultisigDetailsPage = () => {
           </div>
         </div>
       </div>
-      {showDepositModal && <DepositModal onClose={onCloseDepositModal} />}
     </MultisigDetailsContext.Provider>
   );
 };
