@@ -1,0 +1,18 @@
+.action-card {
+  border: none;
+  width: 18rem;
+  box-shadow: rgba(0,0,0, 0.17) 4px 3px 5px 0px;
+  border-radius: 5px;
+  display: flex;
+
+  .image-container{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    width: 30%;
+    background-color: lightgray;
+  }
+}
