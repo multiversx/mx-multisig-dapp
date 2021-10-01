@@ -10,7 +10,6 @@ import ToastMessages from "../ToastMessages";
 import TransactionSender from "../TransactionSender";
 import TxSubmittedModal from "../TxSubmittedModal";
 import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { loggedIn } = Dapp.useContext();
@@ -40,7 +39,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Navbar />
 
       <main className="d-flex flex-column position-relative flex-grow-1">
-        <Sidebar />
         <Dapp.Authenticate routes={routes} unlockRoute={routeNames.unlock}>
           {children}
           <SignTransactions />
