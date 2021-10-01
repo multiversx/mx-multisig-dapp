@@ -13,7 +13,7 @@ function calcTotalFee(transactions: Transaction[]) {
 
   transactions.forEach((tx) => {
     const fee = operations.calculateFeeLimit({
-      minGasLimit: gasLimit,
+      minGasLimit: String(gasLimit),
       gasPerDataByte: gasPerDataByte,
       gasPriceModifier: gasPriceModifier,
       gasLimit: tx.getGasLimit().valueOf().toString(),

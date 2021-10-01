@@ -14,7 +14,7 @@ import { Address } from "@elrondnetwork/erdjs/out";
 import { chainID } from "config";
 import { providerTypes } from "helpers/constants";
 
-const standardGasLimit = 60000000;
+export const deployGasLimit = 60000000;
 
 interface TransactionPayloadType {
   chainID: ChainID;
@@ -43,7 +43,7 @@ export function buildTransaction(
     chainID: new ChainID(chainID),
     receiver: contract.getAddress(),
     value: Balance.egld(value),
-    gasLimit: new GasLimit(standardGasLimit),
+    gasLimit: new GasLimit(deployGasLimit),
     data: payload,
   };
   if (providerType === providerTypes.ledger) {

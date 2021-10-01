@@ -7,9 +7,9 @@ export const gasPrice = 1000000000;
 export const version = 1;
 export const gasPriceModifier = "0.01";
 export const gasPerDataByte = "1500";
-export const gasLimit = "50000";
 export const chainID = "1";
-
+export const gasLimit = 50000;
+export const maxGasLimit = 1500000000;
 export const walletConnectBridge = "https://bridge.walletconnect.org";
 export const walletConnectDeepLink =
   "https://maiar.page.link/?apn=com.elrond.maiar.wallet&isi=1519405832&ibi=com.elrond.maiar.wallet.dev&link=https://maiar.com/";

@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import economics from "./slices/economicsSlice";
 import layout from "./slices/layoutSlice";
 import modals from "./slices/modalsSlice";
 import multisigContracts from "./slices/multisigContractsSlice";
@@ -12,5 +13,6 @@ export default function makeRootReducer() {
     toasts,
     modals,
     layout,
+    economics,
   });
 }

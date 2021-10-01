@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Redirect, useParams } from "react-router-dom";
 import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
+import ReceiveModal from "components/ReceiveModal";
+import SendModal from "components/SendModal";
 import StatCard from "components/StatCard";
 import State from "components/State";
 import TrustedBadge from "components/TrustedBadge";
@@ -288,10 +290,17 @@ const MultisigDetailsPage = () => {
     return <Redirect to="/multisig" />;
   }
   return (
-    <MultisigDetailsContext.Provider value={{ quorumSize, totalBoardMembers }}>
+    <MultisigDetailsContext.Provider
+      value={{ quorumSize, totalBoardMembers, multisigBalance }}
+    >
       <div className="dashboard w-100">
         <div className="card border-0">
-          <div className="header card-header d-flex align-items-center border-0 justify-content-between px-spacer">
+          <div className="header card-header flex-column d-flex align-items-center border-0 justify-content-between px-spacer">
+            <div className="d-flex align-self-lg-start ">
+              <Link to="/multisig" className="btn btn-primary btn-sm">
+                {t("Manage Multisigs")}
+              </Link>
+            </div>
             <div className="py-spacer text-truncate">
               <div className="d-flex justify-content-start align-items-center">
                 <p className="opacity-6 mb-0">{multisigName} </p>{" "}
@@ -303,12 +312,8 @@ const MultisigDetailsPage = () => {
                 {currentMultisigAddress?.bech32()}
               </span>
             </div>
-
-            <div className="d-flex justify-content-center align-items-center justify-content-between">
-              <Link to="/multisig" className="btn btn-primary btn-sm">
-                {t("Manage Multisigs")}
-              </Link>
-            </div>
+            <SendModal />
+            <ReceiveModal address={currentMultisigAddress?.bech32()} />
           </div>
 
           <div className="cards d-flex flex-wrap mr-spacer">

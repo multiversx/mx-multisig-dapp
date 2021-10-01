@@ -1,8 +1,10 @@
 import React from "react";
 import * as Dapp from "@elrondnetwork/dapp";
-import { Container } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import SignTransactions from "components/SignTransactions";
 import routes, { routeNames } from "routes";
+import { getEconomicsData } from "../../apiCalls/economicsCalls";
+import { setEconomics } from "../../redux/slices/economicsSlice";
 import NotificationModal from "../NotificationModal";
 import ToastMessages from "../ToastMessages";
 import TransactionSender from "../TransactionSender";
@@ -12,6 +14,7 @@ import Sidebar from "./Sidebar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { loggedIn } = Dapp.useContext();
+  const dispatch = useDispatch();
   const refreshAccount = Dapp.useRefreshAccount();
 
   React.useEffect(() => {
@@ -20,6 +23,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
+
+  React.useEffect(() => {
+    fetchEconomics();
+  }, []);
+
+  async function fetchEconomics() {
+    const economics = await getEconomicsData();
+    if (economics !== null) {
+      dispatch(setEconomics(economics));
+    }
+  }
 
   return (
     <div className="bg-light d-flex flex-column flex-fill wrapper">
