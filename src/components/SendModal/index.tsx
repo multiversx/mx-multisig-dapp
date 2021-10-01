@@ -20,10 +20,18 @@ import { priceSelector } from "redux/selectors/economicsSelector";
 
 const SendModal = () => {
   const [showModal, setShowModal] = React.useState(false);
+  const minGasLimitRef = React.useRef(gasLimit);
   const { multisigBalance } = useContext(MultisigDetailsContext);
   const egldPrice = useSelector(priceSelector);
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
+
+  interface FormValues {
+    recipient: string;
+    amount: number;
+    gasLimit: number;
+    data: string;
+  }
 
   const validationSchema = Yup.object().shape({
     recipient: Yup.string()
@@ -43,7 +51,7 @@ const SendModal = () => {
       recipient: "",
       amount: 0,
       gasPrice: gasPrice,
-      gasLimit: gasLimit,
+      gasLimit: minGasLimitRef.current,
       data: "",
     },
     validationSchema,
@@ -67,7 +75,8 @@ const SendModal = () => {
     showLastNonZeroDecimal: true,
   });
 
-  async function handleSubmit(values: any) {
+  async function handleSubmit(values: FormValues) {
+    console.log(values);
     return null;
   }
 
@@ -110,24 +119,39 @@ const SendModal = () => {
     decimals: 4,
     showLastNonZeroDecimal: true,
   });
+
   function onGasLimitChange(e: any) {
     const newAmount = Number(e.target.value);
     if (newAmount > maxGasLimit) {
-      console.log("triggered");
       formik.setFieldError(
         "gasLimit",
         `Gas limit must be lower or equal to ${maxGasLimit}`,
       );
       return;
     }
-    if (newAmount < gasLimit) {
-      console.log("triggered");
+    if (newAmount < minGasLimitRef.current) {
+      formik.setFieldValue("gasLimit", minGasLimitRef.current);
       formik.setFieldError(
         "gasLimit",
-        `Gas limit must be greater or equal to ${gasLimit}`,
+        `Gas limit must be greater or equal to ${minGasLimitRef.current}`,
       );
       return;
     }
+    formik.handleChange(e);
+  }
+
+  function onDataChange(e: any) {
+    const newData = e.target.value;
+    if (newData == null) {
+      return formik.handleChange(e);
+    }
+    const gasLimitForBytes = Number(gasPerDataByte) * newData.length;
+    const newMinGasLimit = gasLimitForBytes + gasLimit;
+    minGasLimitRef.current = newMinGasLimit;
+    if (formik.values.gasLimit < newMinGasLimit || !formik.touched.data) {
+      formik.setFieldValue("gasLimit", newMinGasLimit);
+    }
+
     formik.handleChange(e);
   }
 
@@ -263,7 +287,7 @@ const SendModal = () => {
                   id="data"
                   name="data"
                   type="data"
-                  onChange={formik.handleChange}
+                  onChange={onDataChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.data}
                 />
@@ -271,6 +295,7 @@ const SendModal = () => {
             </Form>
             <div>
               <button
+                type="submit"
                 onClick={formik.handleSubmit as any}
                 className="btn btn-primary mx-3 mb-3"
               >
