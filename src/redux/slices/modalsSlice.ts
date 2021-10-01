@@ -15,6 +15,10 @@ interface NotificationModal {
   description: string;
 }
 
+interface PerformActionModal {
+  selectedActionId: number | null;
+}
+
 interface ProposeModal {
   selectedOption?: ProposalsTypes | null;
 }
@@ -23,11 +27,15 @@ export interface ModalsSliceState {
   txSubmittedModal?: TxSubmittedModal;
   notificationModal?: NotificationModal;
   proposeModal: ProposeModal;
+  performActionModal: PerformActionModal;
 }
 
 const initialState: ModalsSliceState = {
   proposeModal: {
     selectedOption: null,
+  },
+  performActionModal: {
+    selectedActionId: null,
   },
 };
 
@@ -59,6 +67,12 @@ export const modalsSlice = createSlice({
     ) => {
       state.proposeModal.selectedOption = action.payload;
     },
+    setSelectedPerformedActionId: (
+      state: ModalsSliceState,
+      action: PayloadAction<number | null>,
+    ) => {
+      state.performActionModal.selectedActionId = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -74,6 +88,7 @@ export const {
   clearTxSubmittedModal,
   clearNotificationModal,
   setProposeModalSelectedOption,
+  setSelectedPerformedActionId,
 } = modalsSlice.actions;
 
 export default modalsSlice.reducer;

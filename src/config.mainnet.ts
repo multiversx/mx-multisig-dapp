@@ -8,7 +8,8 @@ export const version = 1;
 export const gasPriceModifier = "0.01";
 export const gasPerDataByte = "1500";
 export const chainID = "1";
-export const gasLimit = 50000;
+export const gasLimit = 60000000;
+
 export const maxGasLimit = 1500000000;
 export const walletConnectBridge = "https://bridge.walletconnect.org";
 export const walletConnectDeepLink =

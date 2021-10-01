@@ -79,6 +79,7 @@ const ProposeModal = () => {
         console.error(`Unrecognized option ${selectedOption}`);
         break;
     }
+    handleClose();
   };
 
   const handleNumericParamChange = (value: number) => {

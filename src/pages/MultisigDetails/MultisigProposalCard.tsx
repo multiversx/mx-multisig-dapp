@@ -3,6 +3,7 @@ import { Address } from "@elrondnetwork/erdjs/out";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
 import { ReactComponent as AddUser } from "assets/img/add-user.svg";
 import { ReactComponent as Circle } from "assets/img/circle.svg";
 import { ReactComponent as DeleteUser } from "assets/img/delete-user.svg";
@@ -13,6 +14,7 @@ import { ReactComponent as Token } from "assets/img/token.svg";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { useMultisigContract } from "contracts/MultisigContract";
 import { MultisigActionType } from "types/MultisigActionType";
+import { setSelectedPerformedActionId } from "../../redux/slices/modalsSlice";
 
 export interface MultisigProposalCardType {
   type: number;
@@ -39,10 +41,11 @@ const MultisigProposalCard = ({
   canDiscardAction = false,
   signers = [],
 }: MultisigProposalCardType) => {
-  const { mutateSign, mutateUnsign, mutatePerformAction, mutateDiscardAction } =
+  const { mutateSign, mutateUnsign, mutateDiscardAction } =
     useMultisigContract();
   const { quorumSize } = React.useContext(MultisigDetailsContext);
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const sign = () => {
     mutateSign(actionId);
   };
@@ -52,7 +55,7 @@ const MultisigProposalCard = ({
   };
 
   const performAction = () => {
-    mutatePerformAction(actionId);
+    dispatch(setSelectedPerformedActionId(actionId));
   };
 
   const discardAction = () => {
@@ -112,6 +115,8 @@ const MultisigProposalCard = ({
           </p>
           <span className="opacity-6">{value}</span>
         </div>
+        <p>{`signers: ${signers.length} / ${quorumSize}`}</p>
+
         <div className="d-flex align-items-center">
           {canSign && (
             <button onClick={sign} className="btn btn-primary mb-3 mr-2">

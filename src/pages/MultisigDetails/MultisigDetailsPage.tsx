@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { Address, Balance } from "@elrondnetwork/erdjs";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleLeft } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Redirect, useParams } from "react-router-dom";
 import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
+import PerformActionModal from "components/PerformActionModal";
 import ReceiveModal from "components/ReceiveModal";
 import StatCard from "components/StatCard";
 import State from "components/State";
@@ -23,7 +26,10 @@ import {
   multisigContractsFetchedSelector,
 } from "redux/selectors/multisigContractsSelectors";
 import { refetchSelector } from "redux/selectors/toastSelector";
-import { setProposeModalSelectedOption } from "redux/slices/modalsSlice";
+import {
+  setProposeModalSelectedOption,
+  setSelectedPerformedActionId,
+} from "redux/slices/modalsSlice";
 import {
   setCurrentMultisigAddress,
   setMultisigContractsFetched,
@@ -79,7 +85,6 @@ const MultisigDetailsPage = () => {
     queryUserRole,
     queryAllActions,
     queryActionValidSignerCount,
-    mutatePerformAction,
     mutateDiscardAction,
   } = useMultisigContract();
   const { queryContractName } = useManagerContract();
@@ -236,7 +241,7 @@ const MultisigDetailsPage = () => {
         t("Perform Action"),
       );
       if (success) {
-        await mutatePerformAction(actionId);
+        dispatch(setSelectedPerformedActionId(actionId));
       }
     }
   };
@@ -317,7 +322,7 @@ const MultisigDetailsPage = () => {
           <div className="header card-header flex-column d-flex align-items-center border-0 justify-content-between px-spacer">
             <div className="d-flex align-self-lg-start ">
               <Link to="/multisig" className="btn btn-primary btn-sm">
-                {t("Manage Multisigs")}
+                <FontAwesomeIcon icon={faArrowCircleLeft} />
               </Link>
             </div>
             <div className="py-spacer text-truncate">
@@ -393,7 +398,7 @@ const MultisigDetailsPage = () => {
             />
             <StatCard
               title={t("Quorum Size")}
-              value={quorumSize.toString()}
+              value={`${quorumSize.toString()} / ${totalBoardMembers} `}
               valueUnit=""
               color="orange"
               onEditAction={onChangeQuorum}
@@ -440,6 +445,7 @@ const MultisigDetailsPage = () => {
         </div>
       </div>
       <ProposeModal />
+      <PerformActionModal />
     </MultisigDetailsContext.Provider>
   );
 };

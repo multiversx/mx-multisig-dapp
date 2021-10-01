@@ -14,8 +14,6 @@ import { Address } from "@elrondnetwork/erdjs/out";
 import { chainID } from "config";
 import { providerTypes } from "helpers/constants";
 
-export const deployGasLimit = 60000000;
-
 interface TransactionPayloadType {
   chainID: ChainID;
   receiver: Address;
@@ -31,6 +29,7 @@ export function buildTransaction(
   functionName: string,
   providerType: string,
   contract: SmartContract,
+  transactionGasLimit: number,
   ...args: TypedValue[]
 ): Transaction {
   const func = new ContractFunction(functionName);
@@ -43,7 +42,7 @@ export function buildTransaction(
     chainID: new ChainID(chainID),
     receiver: contract.getAddress(),
     value: Balance.egld(value),
-    gasLimit: new GasLimit(deployGasLimit),
+    gasLimit: new GasLimit(transactionGasLimit),
     data: payload,
   };
   if (providerType === providerTypes.ledger) {

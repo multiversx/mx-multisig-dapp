@@ -21,7 +21,7 @@ import { parseContractInfo } from "helpers/converters";
 import useSendTransactions from "hooks/useSendTransactions";
 import { MultisigContractInfoType } from "types/multisigContracts";
 import getProviderType from "../components/SignTransactions/helpers/getProviderType";
-import { multisigManagerContract } from "../config";
+import { gasLimit, multisigManagerContract } from "../config";
 import { smartContractCode } from "../helpers/constants";
 import { buildTransaction } from "./transactionUtils";
 
@@ -62,7 +62,7 @@ export function useManagerContract() {
       registerMultisigNameTransaction,
       attachMultisigTransaction,
     ];
-    sendTransactions(transactions);
+    sendTransactions(transactions, deployContractGasLimit);
   }
 
   function getDeployContractTransaction(
@@ -96,6 +96,7 @@ export function useManagerContract() {
       "registerMultisigContract",
       providerType,
       smartContract,
+      gasLimit,
       new AddressValue(multisigAddress),
     );
   }
@@ -108,6 +109,7 @@ export function useManagerContract() {
       "registerMultisigName",
       providerType,
       smartContract,
+      gasLimit,
       new AddressValue(multisigAddress),
       BytesValue.fromUTF8(name),
     );
@@ -119,6 +121,7 @@ export function useManagerContract() {
       "unregisterMultisigContract",
       providerType,
       smartContract,
+      gasLimit,
       new AddressValue(multisigAddress),
     );
     sendTransactions(transaction);

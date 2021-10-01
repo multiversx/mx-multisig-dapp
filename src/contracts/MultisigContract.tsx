@@ -21,6 +21,7 @@ import {
 } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import BigNumber from "bignumber.js";
 import { useSelector } from "react-redux";
+import { gasLimit } from "config";
 import { parseAction, parseActionDetailed } from "helpers/converters";
 import useSendTransactions from "hooks/useSendTransactions";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
@@ -40,47 +41,72 @@ export function useMultisigContract() {
 
   const smartContract = new SmartContract({ address: currentMultisigAddress });
 
-  function sendTransaction(functionName: string, ...args: TypedValue[]) {
+  function sendTransaction(
+    functionName: string,
+    transactionGasLimit = gasLimit,
+    ...args: TypedValue[]
+  ) {
     const transaction = buildTransaction(
       0,
       functionName,
       providerType,
       smartContract,
+      transactionGasLimit,
       ...args,
     );
     return sendTransactionsToBeSigned(transaction);
   }
 
   function mutateSign(actionId: number) {
-    return sendTransaction("sign", new U32Value(actionId));
+    return sendTransaction("sign", gasLimit, new U32Value(actionId));
   }
 
   function mutateUnsign(actionId: number) {
-    return sendTransaction("unsign", new U32Value(actionId));
+    return sendTransaction("unsign", gasLimit, new U32Value(actionId));
   }
 
-  function mutatePerformAction(actionId: number) {
-    return sendTransaction("performAction", new U32Value(actionId));
+  function mutatePerformAction(actionId: number, transactionGasLimit: number) {
+    return sendTransaction(
+      "performAction",
+      transactionGasLimit,
+      new U32Value(actionId),
+    );
   }
 
   function mutateDiscardAction(actionId: number) {
-    return sendTransaction("discard", new U32Value(actionId));
+    return sendTransaction("discard", gasLimit, new U32Value(actionId));
   }
 
   function mutateProposeChangeQuorum(quorumSize: number) {
-    return sendTransaction("proposeChangeQuorum", new U32Value(quorumSize));
+    return sendTransaction(
+      "proposeChangeQuorum",
+      gasLimit,
+      new U32Value(quorumSize),
+    );
   }
 
   function mutateProposeAddProposer(address: Address) {
-    return sendTransaction("proposeAddProposer", new AddressValue(address));
+    return sendTransaction(
+      "proposeAddProposer",
+      gasLimit,
+      new AddressValue(address),
+    );
   }
 
   function mutateProposeAddBoardMember(address: Address) {
-    return sendTransaction("proposeAddBoardMember", new AddressValue(address));
+    return sendTransaction(
+      "proposeAddBoardMember",
+      gasLimit,
+      new AddressValue(address),
+    );
   }
 
   function mutateProposeRemoveUser(address: Address) {
-    return sendTransaction("proposeRemoveUser", new AddressValue(address));
+    return sendTransaction(
+      "proposeRemoveUser",
+      gasLimit,
+      new AddressValue(address),
+    );
   }
 
   function mutateSendEgld(
@@ -90,6 +116,7 @@ export function useMultisigContract() {
   ) {
     return sendTransaction(
       "proposeSendEgld",
+      gasLimit,
       new AddressValue(address),
       amount,
       BytesValue.fromUTF8(data),
@@ -109,7 +136,7 @@ export function useMultisigContract() {
     ];
     allArgs.push(...args);
 
-    return sendTransaction("proposeSCCall", ...allArgs);
+    return sendTransaction("proposeSCCall", gasLimit, ...allArgs);
   }
 
   function mutateEsdtSendToken(proposal: MultisigSendToken) {
