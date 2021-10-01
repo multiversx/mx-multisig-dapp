@@ -1,5 +1,6 @@
 import { faInfoCircle } from "@fortawesome/pro-solid-svg-icons/faInfoCircle";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ProposalsTypes } from "../../types/Proposals";
 import { logoutAction } from "../commonActions";
 
 interface TxSubmittedModal {
@@ -14,12 +15,21 @@ interface NotificationModal {
   description: string;
 }
 
+interface ProposeModal {
+  selectedOption?: ProposalsTypes | null;
+}
+
 export interface ModalsSliceState {
   txSubmittedModal?: TxSubmittedModal;
   notificationModal?: NotificationModal;
+  proposeModal: ProposeModal;
 }
 
-const initialState: ModalsSliceState = {};
+const initialState: ModalsSliceState = {
+  proposeModal: {
+    selectedOption: null,
+  },
+};
 
 export const modalsSlice = createSlice({
   name: "modals",
@@ -43,6 +53,12 @@ export const modalsSlice = createSlice({
     clearNotificationModal: (state: ModalsSliceState) => {
       state.notificationModal = undefined;
     },
+    setProposeModalSelectedOption: (
+      state: ModalsSliceState,
+      action: PayloadAction<ProposalsTypes | null>,
+    ) => {
+      state.proposeModal.selectedOption = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -57,6 +73,7 @@ export const {
   setNotificationModal,
   clearTxSubmittedModal,
   clearNotificationModal,
+  setProposeModalSelectedOption,
 } = modalsSlice.actions;
 
 export default modalsSlice.reducer;

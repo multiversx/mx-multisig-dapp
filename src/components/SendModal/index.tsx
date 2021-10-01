@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { operations } from "@elrondnetwork/dapp-utils";
 import { Address } from "@elrondnetwork/erdjs/out";
 import { useFormik } from "formik";
@@ -18,23 +18,24 @@ import {
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { priceSelector } from "redux/selectors/economicsSelector";
 
+interface FormValues {
+  receiver: string;
+  amount: number;
+  gasLimit: number;
+  data: string;
+}
+
 const SendModal = () => {
   const [showModal, setShowModal] = React.useState(false);
   const minGasLimitRef = React.useRef(gasLimit);
-  const { multisigBalance } = useContext(MultisigDetailsContext);
+  const { multisigBalance } = React.useContext(MultisigDetailsContext);
   const egldPrice = useSelector(priceSelector);
+
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  interface FormValues {
-    recipient: string;
-    amount: number;
-    gasLimit: number;
-    data: string;
-  }
-
   const validationSchema = Yup.object().shape({
-    recipient: Yup.string()
+    receiver: Yup.string()
       .min(2, "Too Short!")
       .max(500, "Too Long!")
       .required("Required")
@@ -48,7 +49,7 @@ const SendModal = () => {
 
   const formik = useFormik({
     initialValues: {
-      recipient: "",
+      receiver: "",
       amount: 0,
       gasPrice: gasPrice,
       gasLimit: minGasLimitRef.current,
@@ -76,7 +77,6 @@ const SendModal = () => {
   });
 
   async function handleSubmit(values: FormValues) {
-    console.log(values);
     return null;
   }
 
@@ -157,7 +157,7 @@ const SendModal = () => {
 
   const { touched, errors } = formik;
 
-  const recipientError = touched.recipient && errors.recipient;
+  const receiverError = touched.receiver && errors.receiver;
   const amountError = touched.amount && errors.amount;
   const gasLimitError = touched.gasLimit && errors.gasLimit;
 
@@ -222,7 +222,7 @@ const SendModal = () => {
               Send
             </p>
             <p className="h6 mb-spacer" data-testid="delegateSubTitle">
-              Enter amount and recipient address
+              Enter amount and receiver address
             </p>
             <Form
               className={"d-flex flex-column my-3"}
@@ -233,21 +233,21 @@ const SendModal = () => {
                   "d-flex flex-grow-1 flex-column my-2 align-items-stretch"
                 }
               >
-                <label className={"align-self-start"} htmlFor="recipient">
+                <label className={"align-self-start"} htmlFor="receiver">
                   To
                 </label>
                 <Form.Control
-                  id="recipient"
-                  name="recipient"
+                  id="receiver"
+                  name="receiver"
                   type="text"
-                  isInvalid={recipientError != null}
+                  isInvalid={receiverError != null}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.recipient}
+                  value={formik.values.receiver}
                 />
-                {recipientError != null && (
+                {receiverError != null && (
                   <Form.Control.Feedback type={"invalid"}>
-                    {recipientError}
+                    {receiverError}
                   </Form.Control.Feedback>
                 )}
               </div>

@@ -12,3 +12,13 @@ export const notificationModalSelector = createDeepEqualSelector(
   modalsSliceSelector,
   (state) => state.notificationModal,
 );
+
+export const proposeModal = createDeepEqualSelector(
+  modalsSliceSelector,
+  (state) => state.proposeModal,
+);
+
+export const proposeModalSelectedOptionSelector = createDeepEqualSelector(
+  modalsSliceSelector,
+  (state) => state.proposeModal.selectedOption,
+);

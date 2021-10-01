@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, Redirect, useParams } from "react-router-dom";
 import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
 import ReceiveModal from "components/ReceiveModal";
-import SendModal from "components/SendModal";
 import StatCard from "components/StatCard";
 import State from "components/State";
 import TrustedBadge from "components/TrustedBadge";
@@ -24,12 +23,14 @@ import {
   multisigContractsFetchedSelector,
 } from "redux/selectors/multisigContractsSelectors";
 import { refetchSelector } from "redux/selectors/toastSelector";
+import { setProposeModalSelectedOption } from "redux/slices/modalsSlice";
 import {
   setCurrentMultisigAddress,
   setMultisigContractsFetched,
 } from "redux/slices/multisigContractsSlice";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
-import ProposeAction from "./Propose/ProposeAction";
+import { ProposalsTypes } from "../../types/Proposals";
+import ProposeModal from "./Propose/ProposeModal";
 
 interface MultisigDetailsPageParams {
   multisigAddressParam: string;
@@ -255,6 +256,24 @@ const MultisigDetailsPage = () => {
     }
   };
 
+  const onSendEgld = () =>
+    dispatch(setProposeModalSelectedOption(ProposalsTypes.send_egld));
+
+  const onIssueToken = () =>
+    dispatch(setProposeModalSelectedOption(ProposalsTypes.issue_token));
+
+  const onSendToken = () =>
+    dispatch(setProposeModalSelectedOption(ProposalsTypes.send_token));
+
+  const onAddBoardMember = () =>
+    dispatch(setProposeModalSelectedOption(ProposalsTypes.add_board_member));
+  const onAddProposers = () =>
+    dispatch(setProposeModalSelectedOption(ProposalsTypes.add_proposer));
+  const onRemoveUser = () =>
+    dispatch(setProposeModalSelectedOption(ProposalsTypes.remove_user));
+  const onChangeQuorum = () =>
+    dispatch(setProposeModalSelectedOption(ProposalsTypes.change_quorum));
+
   React.useEffect(() => {
     tryParseUrlParams();
 
@@ -291,7 +310,7 @@ const MultisigDetailsPage = () => {
   }
   return (
     <MultisigDetailsContext.Provider
-      value={{ quorumSize, totalBoardMembers, multisigBalance }}
+      value={{ quorumSize, totalBoardMembers, isProposer, multisigBalance }}
     >
       <div className="dashboard w-100">
         <div className="card border-0">
@@ -312,8 +331,34 @@ const MultisigDetailsPage = () => {
                 {currentMultisigAddress?.bech32()}
               </span>
             </div>
-            <SendModal />
-            <ReceiveModal address={currentMultisigAddress?.bech32()} />
+            <div className={"d-flex"}>
+              <div className={"d-flex flex-column mx-5"}>
+                {isProposer && (
+                  <button onClick={onSendEgld} className="btn btn-primary mb-3">
+                    Send
+                  </button>
+                )}
+                <ReceiveModal address={currentMultisigAddress?.bech32()} />
+              </div>
+              <div className={"d-flex flex-column"}>
+                {isProposer && (
+                  <button
+                    onClick={onIssueToken}
+                    className="btn btn-primary mb-3"
+                  >
+                    Issue Token
+                  </button>
+                )}
+                {isProposer && (
+                  <button
+                    onClick={onSendToken}
+                    className="btn btn-primary mb-3"
+                  >
+                    Send Token
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="cards d-flex flex-wrap mr-spacer">
@@ -335,6 +380,8 @@ const MultisigDetailsPage = () => {
               value={totalBoardMembers.toString()}
               color="orange"
               svg="clipboard-check.svg"
+              onRemoveAction={onRemoveUser}
+              onAddAction={onAddBoardMember}
             />
             <StatCard
               title={t("Proposers")}
@@ -342,12 +389,14 @@ const MultisigDetailsPage = () => {
               valueUnit=""
               color="orange"
               svg="clipboard-list.svg"
+              onAddAction={onAddProposers}
             />
             <StatCard
               title={t("Quorum Size")}
               value={quorumSize.toString()}
               valueUnit=""
               color="orange"
+              onEditAction={onChangeQuorum}
               svg="quorum.svg"
             />
             <StatCard
@@ -367,9 +416,6 @@ const MultisigDetailsPage = () => {
                 <div className="card-body p-spacer">
                   <div className="d-flex flex-wrap align-items-center justify-content-between">
                     <p className="h6 mb-3">{t("Proposals")}</p>
-                    <div className="d-flex flex-wrap">
-                      {isProposer ? <ProposeAction /> : null}
-                    </div>
                   </div>
 
                   {allActions.map((action) => (
@@ -393,6 +439,7 @@ const MultisigDetailsPage = () => {
           </div>
         </div>
       </div>
+      <ProposeModal />
     </MultisigDetailsContext.Provider>
   );
 };

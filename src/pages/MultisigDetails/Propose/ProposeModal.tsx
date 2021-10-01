@@ -2,24 +2,32 @@ import React, { useState } from "react";
 import { Address } from "@elrondnetwork/erdjs/out";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import Select from "react-select";
+import { useDispatch, useSelector } from "react-redux";
 import { useMultisigContract } from "contracts/MultisigContract";
+import { proposeModalSelectedOptionSelector } from "redux/selectors/modalsSelector";
 import { MultisigAction } from "types/MultisigAction";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
 import { MultisigSendToken } from "types/MultisigSendToken";
+import { setProposeModalSelectedOption } from "../../../redux/slices/modalsSlice";
+import { ProposalsTypes } from "../../../types/Proposals";
 import ProposeChangeQuorum from "./ProposeChangeQuorum";
 import ProposeInputAddressType from "./ProposeInputAddress";
 import ProposeIssueToken from "./ProposeIssueToken";
 import ProposeSendEgld from "./ProposeSendEgld";
 import ProposeSendToken from "./ProposeSendToken";
 
-interface ProposeModalType {
-  show: boolean;
-  handleClose: () => void;
-}
+const titles = {
+  [ProposalsTypes.send_egld]: "send egld",
+  [ProposalsTypes.add_proposer]: "add proposer",
+  [ProposalsTypes.add_board_member]: "add board Member",
+  [ProposalsTypes.remove_user]: "remove user",
+  [ProposalsTypes.change_quorum]: "change quorum",
+  [ProposalsTypes.issue_token]: "issue token",
+  [ProposalsTypes.send_token]: "send token",
+};
 
-const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
+const ProposeModal = () => {
   const {
     mutateSendEgld,
     mutateEsdtSendToken,
@@ -29,32 +37,15 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
     mutateProposeAddBoardMember,
     mutateProposeRemoveUser,
   } = useMultisigContract();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
-
-  const [selectedOption, setSelectedOption] = useState("");
+  const selectedOption = useSelector(proposeModalSelectedOptionSelector);
   const [selectedNumericParam, setSelectedNumericParam] = useState(0);
   const [selectedAddressParam, setSelectedAddressParam] = useState(
     new Address(),
   );
   const [selectedProposal, setSelectedProposal] =
     useState<MultisigAction | null>(null);
-
-  const options = [
-    { value: "change_quorum", label: t("Change Quorum") },
-    { value: "add_proposer", label: t("Add Proposer") },
-    { value: "add_board_member", label: t("Add Board Member") },
-    { value: "remove_user", label: t("Remove User") },
-    { value: "send_egld", label: t("Send eGLD") },
-    { value: "issue_token", label: t("Issue Token") },
-    { value: "send_token", label: t("Send Token") },
-  ];
-
-  const handleOptionChange = (option: any) => {
-    setSelectedProposal(null);
-
-    setSelectedOption(option.value.toString());
-  };
-
   const onProposeClicked = () => {
     if (selectedProposal instanceof MultisigSendEgld) {
       mutateSendEgld(
@@ -102,10 +93,16 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
     setSelectedProposal(proposal);
   };
 
+  const handleClose = () => {
+    dispatch(setProposeModalSelectedOption(null));
+  };
+  if (selectedOption == null) {
+    return null;
+  }
   return (
     <Modal
+      show
       size="lg"
-      show={show}
       onHide={handleClose}
       className="modal-container"
       animation={false}
@@ -114,17 +111,8 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
       <div className="card">
         <div className="card-body p-spacer text-center">
           <p className="h6 mb-spacer" data-testid="delegateTitle">
-            {t("Propose")}
+            {`${t("Propose")} ${titles[selectedOption]}`}
           </p>
-          <Select
-            placeholder={t("Select") + "..."}
-            options={options}
-            onChange={handleOptionChange}
-            theme={(theme: any) => ({
-              ...theme,
-              borderRadius: 0,
-            })}
-          />
 
           <div className="p-spacer">
             {selectedOption === "change_quorum" ? (

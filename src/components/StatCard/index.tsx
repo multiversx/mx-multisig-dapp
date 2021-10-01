@@ -1,5 +1,10 @@
 import React from "react";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faInfoCircle,
+  faMinus,
+  faPlus,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import SVG from "react-inlinesvg";
@@ -18,6 +23,9 @@ export interface StatCardType {
   percentage?: string;
   tooltipText?: string;
   children?: any;
+  onAddAction?: () => void;
+  onRemoveAction?: () => void;
+  onEditAction?: () => void;
 }
 
 const StatCard = ({
@@ -28,6 +36,9 @@ const StatCard = ({
   percentage = "",
   tooltipText = "",
   children = null,
+  onAddAction,
+  onRemoveAction,
+  onEditAction,
 }: StatCardType) => {
   return (
     <div
@@ -76,6 +87,24 @@ const StatCard = ({
           </OverlayTrigger>
         )}
       </small>
+      <div className={"d-flex justify-content-end"}>
+        {onEditAction != null && (
+          <button onClick={onEditAction} className={"action-edit m-lg-1"}>
+            <FontAwesomeIcon icon={faEdit} />
+          </button>
+        )}
+
+        {onRemoveAction != null && (
+          <button onClick={onRemoveAction} className={"action-remove m-lg-1"}>
+            <FontAwesomeIcon icon={faMinus} />
+          </button>
+        )}
+        {onAddAction != null && (
+          <button onClick={onAddAction} className={"action-add m-lg-1"}>
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        )}
+      </div>
     </div>
   );
 };
