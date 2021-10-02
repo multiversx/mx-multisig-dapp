@@ -12,12 +12,12 @@ const ProposeChangeQuorum = ({
   const { quorumSize, totalBoardMembers } = useContext(MultisigDetailsContext);
   const { t } = useTranslation();
 
-  const [newQuorumSize, setNewQuorumSize] = useState(0);
+  const [newQuorumSize, setNewQuorumSize] = useState(1);
   const [error, setError] = useState(false);
 
   const handleNewQuorumSizeChanged = (event: any) => {
     const newQuorum = Number(event.target.value);
-    if (newQuorum > totalBoardMembers || newQuorum < 0) {
+    if (newQuorum > totalBoardMembers || newQuorum < 1) {
       setError(true);
       return;
     }
@@ -36,6 +36,7 @@ const ProposeChangeQuorum = ({
       <input
         style={{ width: 250 }}
         type="number"
+        min={1}
         className="form-control"
         value={newQuorumSize}
         autoComplete="off"

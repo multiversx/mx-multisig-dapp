@@ -40,7 +40,7 @@ const ProposeModal = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const selectedOption = useSelector(proposeModalSelectedOptionSelector);
-  const [selectedNumericParam, setSelectedNumericParam] = useState(0);
+  const [selectedNumericParam, setSelectedNumericParam] = useState(1);
   const [selectedAddressParam, setSelectedAddressParam] = useState(
     new Address(),
   );
