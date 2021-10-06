@@ -50,14 +50,36 @@ html {
 /* Navbar
 -------------------------------------------------- */
 .elrond-logo {
-  width: 85px;
-  height: 25px;
+  width: 144px;
+  height: 43px;
 }
 
 .dapp-name {
   font-size: 2rem;
-  margin-left: 1rem;
+  margin-left: 1.6428571428571428rem;
 }
+
+
+.navbar{
+  
+  .dapp-name {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 400;
+    color: #9BA5B4;
+    margin-left: 1.6428571428571428rem;
+    &:before {
+      content: "";
+      display: block;
+      width: 1px;
+      height: 42px;
+      background-color:#9BA5B4;
+      margin-right: 24px;
+  }
+  }
+}
+
 
 /* Dashboard
 -------------------------------------------------- */
