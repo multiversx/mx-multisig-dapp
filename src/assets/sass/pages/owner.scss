@@ -1,4 +1,52 @@
 .owner {
+  .my-wallets {
+    width: 100%;
+    max-width: 812px;
+    margin-top: auto;
+    .welcome{
+      h2{
+        font-size: 36px;
+        font-weight: bold !important;
+      }
+      span{
+        margin-left: 20.1px;
+      }
+      p{
+        color: #A0A9BC;
+        font-size: 24px;
+      }
+    }
+    .wallet-card {
+      .wallet-spacer{
+        gap: 24px;
+      }
+      button{
+        background-color: #fff;
+        border-radius: 12px;
+        min-height: 308px;
+        flex: 1;
+        border:1px solid #fff;
+        p{
+          font-size: 21px;
+          line-height: 25px;
+        }
+        .info-text{
+          font-size: 16px;
+          line-height: 19px;
+          color: #9DABBD;
+        }
+        &:hover{
+          border: 1px solid #1390FF;
+          .action{
+            color: #1390FF;
+          }
+          }
+      }
+    }
+  }
+  .info-msg {
+    margin-top: auto;
+  }
   .action-dropdown {
     padding: 0;
     svg {

@@ -33,7 +33,7 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
   };
 
   return (
-    <div className="statcard position-relative card-bg-grey text-black py-3 px-4 mb-spacer ml-spacer rounded mx-4">
+    <div className="col-md-4 statcard position-relative card-bg-grey text-black py-3 px-4 mb-spacer ml-spacer rounded mx-4">
       <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
         <div className="icon my-1 fill-black">
           <Wallet className="logo" />
