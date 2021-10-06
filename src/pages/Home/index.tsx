@@ -2,10 +2,9 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { dAppName } from "config";
 import { routeNames } from "routes";
-import { ReactComponent as Hero } from "assets/img/home-image.svg";
-import { ReactComponent as Shields } from "assets/img/shield.svg";
+import { ReactComponent as Hero } from "assets/img/home-img.svg";
 import union from "assets/img/Union.svg";
-import shield from "assets/img/shield.svg";
+import shields from "assets/img/shield.svg";
 
 const Home = () => {
   return (
@@ -14,7 +13,7 @@ const Home = () => {
         <div className="connect col-lg-6 col-sm-6 border-0 d-flex align-items-center">
           <div className="cart-connect">
             <figure>
-              <img src={shield} alt="shield-icon" width="64" height="64" />
+              <img src={shields} alt="shield-icon" width="64" height="64" />
             </figure>
             <h2 className="mb-3" data-testid="title">
               Security designed to
