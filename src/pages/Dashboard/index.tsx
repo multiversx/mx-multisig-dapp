@@ -18,6 +18,8 @@ import DeployStepsModal from "./DeployMultisigModal";
 import wawe from "assets/img/wawe.svg";
 import CreateWallet from "assets/img/create-wallet.svg";
 import OpenWallet from "assets/img/open-wallet.svg";
+import { faArrowRight } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Index = () => {
   const multisigContracts = useSelector(multisigContractsSelector);
@@ -80,7 +82,10 @@ const Index = () => {
       <figure>
         <img src={CreateWallet} alt="create-wallet-icon" />
       </figure>
-      <p className="action">{t("Create wallet")}</p>
+      <p className="action">
+        {t("Create wallet")}
+        <FontAwesomeIcon icon={faArrowRight} />
+      </p>
       <p className="info-text">Search and explore existing organizations</p>
     </button>
   );
@@ -129,7 +134,7 @@ const Index = () => {
                 </figure>
                 <p className="action">
                   {t("Open wallet")}
-                  <span>a</span>
+                  <FontAwesomeIcon icon={faArrowRight} />
                 </p>
                 <p className="info-text">
                   Search and explore existing organizations

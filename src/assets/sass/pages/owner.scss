@@ -4,9 +4,11 @@
     max-width: 812px;
     margin-top: auto;
     .welcome{
+      margin-bottom: 56px;
       h2{
         font-size: 36px;
         font-weight: bold !important;
+        margin-bottom: 6px;
       }
       span{
         margin-left: 20.1px;
@@ -26,9 +28,19 @@
         min-height: 308px;
         flex: 1;
         border:1px solid #fff;
+        padding: 40px;
         p{
           font-size: 21px;
           line-height: 25px;
+        }
+        .action{
+          svg{
+            color: #1390FF;
+            opacity: 0;
+            margin-left: 10px;
+            position: relative;
+            transition: .1s;
+          }
         }
         .info-text{
           font-size: 16px;
@@ -39,13 +51,23 @@
           border: 1px solid #1390FF;
           .action{
             color: #1390FF;
+            svg{
+              opacity: 1;
+            }
           }
           }
       }
     }
   }
   .info-msg {
+    color: #9DABBD;
+    font-size: 16px;
+    line-height: 19px;
     margin-top: auto;
+    margin-bottom: 64px;
+    a{
+      color: #1390FF;
+    }
   }
   .action-dropdown {
     padding: 0;
