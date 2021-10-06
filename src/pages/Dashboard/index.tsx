@@ -76,7 +76,7 @@ const Index = () => {
     <button
       disabled={isWalletProvider}
       onClick={onDeployClicked}
-      className="rounded1 "
+      className="rounded1 shadow-sm"
       style={{ pointerEvents: isWalletProvider ? "none" : "auto" }}
     >
       <figure>
@@ -127,7 +127,7 @@ const Index = () => {
 
               <button
                 onClick={onAddMultisigClicked}
-                className="rounded14 mb-34"
+                className="rounded14 shadow-sm"
               >
                 <figure>
                   <img src={OpenWallet} alt="create-wallet-icon" />

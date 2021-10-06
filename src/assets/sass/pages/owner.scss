@@ -29,6 +29,7 @@
         flex: 1;
         border:1px solid #fff;
         padding: 40px;
+        transition: .1s;
         p{
           font-size: 21px;
           line-height: 25px;
@@ -39,7 +40,6 @@
             opacity: 0;
             margin-left: 10px;
             position: relative;
-            transition: .1s;
           }
         }
         .info-text{
