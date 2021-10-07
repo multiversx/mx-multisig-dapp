@@ -9,36 +9,15 @@ import MultisigDetailsPage from "./pages/MultisigDetails/MultisigDetailsPage";
 
 type RouteType = Dapp.RouteType & { title: string };
 
-export type BackgroundRoutesType =
+export type BackgroundRoutesType = "unlock";
+export type ForegroundRoutesType =
   | "home"
   | "dashboard"
   | "multisig"
-  | "multisigAddress"
-  | "unlock";
+  | "multisigAddress";
 export type ModalRoutesType = "walletconnect" | "ledger";
 
 export const backgroundRoutes: Record<BackgroundRoutesType, RouteType> = {
-  home: {
-    path: "/",
-    title: "Home",
-    component: Home,
-  },
-  dashboard: {
-    path: "/dashboard",
-    title: "Dashboard",
-    component: Dashboard,
-    authenticatedRoute: true,
-  },
-  multisigAddress: {
-    path: "/multisig/:multisigAddressParam",
-    title: "Multisig",
-    component: MultisigDetailsPage,
-  },
-  multisig: {
-    path: "/multisig",
-    title: "Multisig Details",
-    component: Dashboard,
-  },
   unlock: {
     path: "/unlock",
     title: "Unlock",
@@ -59,6 +38,32 @@ export const modalRoutes: Record<ModalRoutesType, RouteType> = {
   },
 };
 
+export const foregroundRoutes: Record<ForegroundRoutesType, RouteType> = {
+  home: {
+    path: "/",
+    title: "Home",
+    component: Home,
+  },
+  dashboard: {
+    path: "/dashboard",
+    title: "Dashboard",
+    component: Dashboard,
+    authenticatedRoute: true,
+  },
+  multisigAddress: {
+    path: "/multisig/:multisigAddressParam",
+    title: "Multisig",
+    component: MultisigDetailsPage,
+    authenticatedRoute: true,
+  },
+  multisig: {
+    path: "/multisig",
+    title: "Multisig Details",
+    component: Dashboard,
+    authenticatedRoute: true,
+  },
+};
+
 export const backgroundRouteNames = Object.keys(backgroundRoutes).reduce(
   (acc, cur) => ({
     ...acc,
@@ -75,20 +80,30 @@ export const modalRouteNames = Object.keys(modalRoutes).reduce(
   {} as Record<ModalRoutesType, string>,
 );
 
-export const foregoundRouteNames = {
-  doesNotExist: "/fixesBug",
-};
+export const foregroundRouteNames = Object.keys(foregroundRoutes).reduce(
+  (acc, cur) => ({
+    ...acc,
+    [cur]: foregroundRoutes[cur as ForegroundRoutesType].path,
+  }),
+  {} as Record<ForegroundRoutesType, string>,
+);
 
 export const routeNames = {
   ...backgroundRouteNames,
   ...modalRouteNames,
-  ...foregoundRouteNames,
+  ...foregroundRouteNames,
 };
 
 const routes: RouteType[] = [
   ...Object.keys(modalRoutes).map((route) => {
     const { path, title, authenticatedRoute, component } =
       modalRoutes[route as ModalRoutesType];
+    return { path, title, authenticatedRoute, component };
+  }),
+
+  ...Object.keys(foregroundRoutes).map((route) => {
+    const { path, title, authenticatedRoute, component } =
+      foregroundRoutes[route as ForegroundRoutesType];
     return { path, title, authenticatedRoute, component };
   }),
 

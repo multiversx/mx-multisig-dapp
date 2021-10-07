@@ -45,8 +45,8 @@ export default function App() {
       <Dapp.Context
         config={{ network, walletConnectBridge, walletConnectDeepLink }}
       >
-        <PersistGate loading={null} persistor={persistor}>
-          <Router basename={process.env.PUBLIC_URL}>
+        <Router basename={process.env.PUBLIC_URL}>
+          <PersistGate loading={null} persistor={persistor}>
             <Layout>
               <Switch>
                 {routes.map((route, i) => (
@@ -60,8 +60,8 @@ export default function App() {
                 <Route component={PageNotFound} />
               </Switch>
             </Layout>
-          </Router>
-        </PersistGate>
+          </PersistGate>
+        </Router>
       </Dapp.Context>
     </ReduxProvider>
   );

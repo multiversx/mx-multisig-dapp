@@ -44,11 +44,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <Dapp.Authenticate routes={routes} unlockRoute={routeNames.unlock}>
           {!hideBgPage && <>{BgPage}</>}
           {children}
-          <SignTransactions />
-          <TransactionSender />
-          <NotificationModal />
-          <TxSubmittedModal />
-          <ToastMessages />
+          {loggedIn && (
+            <>
+              <SignTransactions />
+              <TransactionSender />
+              <NotificationModal />
+              <TxSubmittedModal />
+              <ToastMessages />
+            </>
+          )}
         </Dapp.Authenticate>
       </main>
     </div>
