@@ -18,7 +18,7 @@
         font-size: 24px;
       }
     }
-    .wallet-card {
+    .c-o-wallet-card {
       max-width: 812px;
       margin: 0 auto;
       .wallet-spacer {
@@ -39,6 +39,8 @@
         .action {
           svg {
             position: relative;
+            width: 14px;
+            height: 16px;
             color: #1390ff;
             opacity: 0;
             margin-left: 10px;

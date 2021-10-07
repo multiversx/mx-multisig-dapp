@@ -78,7 +78,7 @@ const Index = () => {
     <button
       disabled={isWalletProvider}
       onClick={onDeployClicked}
-      className="rounded1 shadow-sm"
+      className="shadow-sm"
       style={{ pointerEvents: isWalletProvider ? "none" : "auto" }}
     >
       <figure>
@@ -125,14 +125,11 @@ const Index = () => {
           </div>
 
           {multisigContracts.length == 0 ? (
-            <div className="wallet-card">
+            <div className="c-o-wallet-card">
               <div className="d-flex wallet-spacer">
                 {deployButtonContainer}
 
-                <button
-                  onClick={onAddMultisigClicked}
-                  className="rounded14 shadow-sm"
-                >
+                <button onClick={onAddMultisigClicked} className="shadow-sm">
                   <figure>
                     <img src={OpenWallet} alt="create-wallet-icon" />
                   </figure>
