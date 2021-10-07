@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import CopyButton from "components/CopyButton";
 import Trim from "components/Trim";
 import { logoutAction } from "redux/commonActions";
+import { routeNames } from "routes";
 
 const Account = () => {
   const { address, explorerAddress } = useDappContext();
@@ -24,7 +25,7 @@ const Account = () => {
   const intervalRef = React.useRef<any>();
 
   const logOut = () => {
-    dappLogout({ callbackUrl: `${window.location.origin}/` });
+    dappLogout({ callbackUrl: `${window.location.origin}${routeNames.home}` });
     localStorage.clear();
     sessionStorage.clear();
     document.cookie = "";

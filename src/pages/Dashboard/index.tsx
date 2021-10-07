@@ -5,7 +5,6 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
 import { useManagerContract } from "contracts/ManagerContract";
 import MultisigListItem from "pages/Dashboard/MultisigListItem";
 import { multisigContractsSelector } from "redux/selectors/multisigContractsSelectors";
@@ -18,7 +17,7 @@ import DeployStepsModal from "./DeployMultisigModal";
 
 const Index = () => {
   const multisigContracts = useSelector(multisigContractsSelector);
-  const { loggedIn, dapp, address } = useDappContext();
+  const { dapp, address } = useDappContext();
   const dispatch = useDispatch();
   const refetch = useSelector(refetchSelector);
   const {
@@ -62,10 +61,6 @@ const Index = () => {
       readMultisigContracts();
     }
   }, [address, refetch]);
-
-  if (!loggedIn) {
-    return <Redirect to="/" />;
-  }
 
   const deployButton = (
     <button

@@ -10,9 +10,11 @@ import ToastMessages from "../ToastMessages";
 import TransactionSender from "../TransactionSender";
 import TxSubmittedModal from "../TxSubmittedModal";
 import Navbar from "./Navbar";
+import useBgPage from "./useBgPage";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { loggedIn } = Dapp.useContext();
+  const { BgPage, hideBgPage } = useBgPage();
   const dispatch = useDispatch();
   const refreshAccount = Dapp.useRefreshAccount();
 
@@ -40,6 +42,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       <main className="d-flex flex-column position-relative flex-grow-1">
         <Dapp.Authenticate routes={routes} unlockRoute={routeNames.unlock}>
+          {!hideBgPage && <>{BgPage}</>}
           {children}
           <SignTransactions />
           <TransactionSender />

@@ -4,7 +4,7 @@ import { ChainID, NetworkConfig } from "@elrondnetwork/erdjs/out";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { Provider as ReduxProvider } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { germanTranslations } from "i18n/de";
 import { englishTranslations } from "i18n/en";
@@ -16,10 +16,9 @@ import {
   network,
   walletConnectBridge,
   walletConnectDeepLink,
-  dAppName,
   chainID,
 } from "./config";
-import routes, { routeNames } from "./routes";
+import routes from "./routes";
 
 NetworkConfig.getDefault().ChainID = new ChainID(chainID);
 
@@ -46,54 +45,23 @@ export default function App() {
       <Dapp.Context
         config={{ network, walletConnectBridge, walletConnectDeepLink }}
       >
-        <Layout>
-          <PersistGate loading={null} persistor={persistor}>
-            <Switch>
-              <Route
-                path={routeNames.unlock}
-                component={() => (
-                  <Dapp.Pages.Unlock
-                    callbackRoute={routeNames.dashboard}
-                    title={`${dAppName} Template`}
-                    lead="Please select your login method:"
-                    ledgerRoute={routeNames.ledger}
-                    walletConnectRoute={routeNames.walletconnect}
+        <PersistGate loading={null} persistor={persistor}>
+          <Router basename={process.env.PUBLIC_URL}>
+            <Layout>
+              <Switch>
+                {routes.map((route, i) => (
+                  <Route
+                    path={route.path}
+                    key={route.path + i}
+                    component={route.component}
+                    exact={true}
                   />
-                )}
-                exact={true}
-              />
-              <Route
-                path={routeNames.ledger}
-                component={() => (
-                  <Dapp.Pages.Ledger callbackRoute={routeNames.dashboard} />
-                )}
-                exact={true}
-              />
-              <Route
-                path={routeNames.walletconnect}
-                component={() => (
-                  <Dapp.Pages.WalletConnect
-                    callbackRoute={routeNames.dashboard}
-                    logoutRoute={routeNames.home}
-                    title="Maiar Login"
-                    lead="Scan the QR code using Maiar"
-                  />
-                )}
-                exact={true}
-              />
-
-              {routes.map((route, i) => (
-                <Route
-                  path={route.path}
-                  key={route.path + i}
-                  component={route.component}
-                  exact={true}
-                />
-              ))}
-              <Route component={PageNotFound} />
-            </Switch>
-          </PersistGate>
-        </Layout>
+                ))}
+                <Route component={PageNotFound} />
+              </Switch>
+            </Layout>
+          </Router>
+        </PersistGate>
       </Dapp.Context>
     </ReduxProvider>
   );

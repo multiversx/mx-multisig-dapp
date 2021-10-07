@@ -1,0 +1,32 @@
+.modal-container {
+  .modal-dialog {
+    .modal-content {
+      border: none;
+      align-items: center;
+    }
+
+    .modal-card {
+      .modal-card-body {
+        border-radius: $card-border-radius;
+      }
+
+      @include media-breakpoint-up(sm) {
+        width: 39rem;
+      }
+
+      .card {
+        background-color: $card-bg;
+        border-radius: 0;
+        box-shadow: none !important;
+        border: none;
+        width: unset;
+        > .p-4 {
+          padding: 0 !important;
+        }
+        &.my-4 {
+          margin: 0 !important;
+        }
+      }
+    }
+  }
+}
