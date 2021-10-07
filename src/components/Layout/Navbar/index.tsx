@@ -9,9 +9,9 @@ const Navbar = () => {
   const { loggedIn } = useDappContext();
 
   return (
-    <BsNavbar className="bg-white border-bottom px-4 py-3">
-      <div className="container-fluid">
-        <NavItem className="d-flex align-items-center">
+    <BsNavbar className="bg-white shadow-sm px-4 py-3">
+      <div className="container">
+        <NavItem className="d-flex align-items-center nav-logo">
           <ElrondLogo className="elrond-logo" />
           <span className="dapp-name">{dAppName}</span>
         </NavItem>

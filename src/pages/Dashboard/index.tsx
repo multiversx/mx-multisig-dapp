@@ -14,6 +14,13 @@ import getProviderType from "../../components/SignTransactions/helpers/getProvid
 import { providerTypes } from "../../helpers/constants";
 import AddMultisigModal from "./AddMultisigModal";
 import DeployStepsModal from "./DeployMultisigModal";
+import wawe from "assets/img/wawe.svg";
+import CreateWallet from "assets/img/create-wallet.svg";
+import OpenWallet from "assets/img/open-wallet.svg";
+import { faArrowRight } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faWallet } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Index = () => {
   const multisigContracts = useSelector(multisigContractsSelector);
@@ -66,10 +73,17 @@ const Index = () => {
     <button
       disabled={isWalletProvider}
       onClick={onDeployClicked}
-      className="btn btn-primary mb-3 mr-2"
+      className="rounded1 shadow-sm"
       style={{ pointerEvents: isWalletProvider ? "none" : "auto" }}
     >
-      {t("Deploy Multisig")}
+      <figure>
+        <img src={CreateWallet} alt="create-wallet-icon" />
+      </figure>
+      <p className="action">
+        {t("Create wallet")}
+        <FontAwesomeIcon icon={faArrowRight} />
+      </p>
+      <p className="info-text">Search and explore existing organizations</p>
     </button>
   );
 
@@ -93,47 +107,75 @@ const Index = () => {
 
   return (
     <>
-      <div className="owner w-100">
-        <div className="card">
-          <div className="card-body">
-            <div className="p-spacer">
-              {deployButtonContainer}
+      <div className="owner w-100 d-flex justify-content-center align-items-center flex-column">
+        <div className="my-wallets">
+          <div className="welcome text-center">
+            <h2>
+              Welcome to Multisig
+              <span>
+                <img src={wawe} alt="wawe-icon" width="36" height="36" />
+              </span>
+            </h2>
+            <p>Create your own organization in a few minutes</p>
+          </div>
 
-              <button
-                onClick={onAddMultisigClicked}
-                className="btn btn-primary mb-3"
-              >
-                {t("Add Existing Multisig")}
-              </button>
-            </div>
+          {multisigContracts.length == 0 ? (
+            <div className="wallet-card">
+              <div className="d-flex wallet-spacer">
+                {deployButtonContainer}
 
-            <div className="card border-0">
-              <div className="card-body pt-0 px-spacer pb-spacer">
-                <h2 className="text-center my-5">
-                  {t("Your Multisig Wallets")}
-                </h2>
+                <button
+                  onClick={onAddMultisigClicked}
+                  className="rounded14 shadow-sm"
+                >
+                  <figure>
+                    <img src={OpenWallet} alt="create-wallet-icon" />
+                  </figure>
+                  <p className="action">
+                    {t("Open wallet")}
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </p>
+                  <p className="info-text">
+                    Search and explore existing organizations
+                  </p>
+                </button>
               </div>
-
-              {multisigContracts.length > 0 ? (
-                multisigContracts.map((contract) => (
+            </div>
+          ) : (
+            <div className="wallets-section shadow bg-white">
+              <div className="top-bar">
+                <h3>My wallets</h3>
+                <div className="create-btns d-flex">
+                  <button
+                    className="btn btn-light mr-2 d-flex flex-row align-items-center"
+                    onClick={onDeployClicked}
+                  >
+                    <FontAwesomeIcon icon={faPlus} size="lg" />
+                    <div className="navbar-address ml-2 d-none d-lg-block">
+                      Create
+                    </div>
+                  </button>
+                  <button
+                    className="btn address-btn btn-light mr-2 d-flex flex-row align-items-center"
+                    onClick={onAddMultisigClicked}
+                  >
+                    <FontAwesomeIcon icon={faWallet} size="lg" />
+                    <div className="navbar-address ml-2 d-none d-lg-block">
+                      Open
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div className="list-wallets">
+                {multisigContracts.map((contract) => (
                   <MultisigListItem
                     key={contract.address.hex}
                     contract={contract}
                   />
-                ))
-              ) : (
-                <div className="m-auto text-center py-spacer">
-                  <div className="state m-auto p-spacer text-center">
-                    <p className="h4 mt-2 mb-1">
-                      {t("No Multisig Wallet Yet")}
-                    </p>
-                    <div className="mb-3">{t("Welcome to our platform!")}</div>
-                    <div>{deployButtonContainer}</div>
-                  </div>
-                </div>
-              )}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <AddMultisigModal
@@ -148,6 +190,10 @@ const Index = () => {
           handleClose={() => setShowDeployMultisigModal(false)}
           handleDeploy={onDeploy}
         />
+        <p className="info-msg">
+          New to Multisig?&nbsp;&nbsp;&nbsp;&nbsp;
+          <a href="">Learn more</a>
+        </p>
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import "./trustedBadge.scss";
 import { getIsContractTrusted } from "../../apiCalls/multisigContractsCalls";
+import TrustedBadgeIcon from "assets/img/trusted-badge.svg";
 
 interface TrustedBadgePropsType {
   contractAddress: string;
@@ -28,7 +29,9 @@ function TrustedBadge({
   return (
     <>
       {isTrusted && (
-        <span className="trusted-badge badge badge-secondary">Trusted</span>
+        <span>
+          <img src={TrustedBadgeIcon} alt="trusted-badge" />
+        </span>
       )}
     </>
   );
