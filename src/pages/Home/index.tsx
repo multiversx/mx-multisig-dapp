@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import * as Dapp from "@elrondnetwork/dapp";
+import { Link, Redirect } from "react-router-dom";
 import { dAppName } from "config";
 import { routeNames } from "routes";
 import { ReactComponent as Hero } from "assets/img/home-img.svg";
@@ -7,6 +8,11 @@ import union from "assets/img/Union.svg";
 import shield from "assets/img/shield.svg";
 
 const Home = () => {
+  const { loggedIn } = Dapp.useContext();
+  if (loggedIn) {
+    return <Redirect to={routeNames.dashboard} />;
+  }
+
   return (
     <div className="main flex-fill align-items-center container">
       <div className="row w-100">

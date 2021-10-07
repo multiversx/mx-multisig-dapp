@@ -3,7 +3,7 @@ import * as Dapp from "@elrondnetwork/dapp";
 import { faArrowRight, faInfoCircle } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { network } from "config";
 import { routeNames } from "routes";
 import Ledger from "./Ledger";
@@ -44,6 +44,8 @@ const UnlockTitle = () => (
 );
 
 const Unlock = () => {
+  const { loggedIn } = Dapp.useContext();
+
   const webWalletLogin = Dapp.useWebWalletLogin({
     callbackRoute: routeNames.dashboard,
   });
@@ -51,6 +53,10 @@ const Unlock = () => {
   const extensionWalletLogin = Dapp.useExtensionLogin({
     callbackRoute: routeNames.dashboard,
   });
+
+  if (loggedIn) {
+    return <Redirect to={routeNames.dashboard} />;
+  }
 
   return (
     <div className="unlock-page m-auto">
