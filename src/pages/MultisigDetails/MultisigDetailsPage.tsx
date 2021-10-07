@@ -333,7 +333,7 @@ const MultisigDetailsPage = () => {
               </span>
             </div>
             <div className={"d-flex"}>
-              <div className={"d-flex flex-column mx-5"}>
+              <div className={"d-flex flex-row gap-3 my-5"}>
                 {isProposer && (
                   <button onClick={onSendEgld} className="btn btn-primary mb-3">
                     Send
@@ -341,7 +341,7 @@ const MultisigDetailsPage = () => {
                 )}
                 <ReceiveModal address={currentMultisigAddress?.bech32()} />
               </div>
-              <div className={"d-flex flex-column"}>
+              {/* <div className={"d-flex flex-column"}>
                 {isProposer && (
                   <button
                     onClick={onIssueToken}
@@ -358,7 +358,7 @@ const MultisigDetailsPage = () => {
                     Send Token
                   </button>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
 

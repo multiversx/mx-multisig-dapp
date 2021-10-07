@@ -36,31 +36,23 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
   };
 
   return (
-    <button
-      onClick={onEnterClicked}
-      className="shadow-sm text-black rounded bg-white"
-    >
-      <div className=" position-relative ">
-        <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
-          <div className="d-flex icon">
-            <Wallet className="logo" />
-          </div>
-        </div>
-        <div className="align-items-center justify-content-between mb-2">
-          <div className="wallet-details">
-            <div className="h5 mb-0">{contract.name}</div>
+    <button onClick={onEnterClicked} className="shadow-sm bg-white">
+      <div className="d-flex icon">
+        <Wallet className="logo" />
+      </div>
+      <div className="align-items-center justify-content-between mb-2">
+        <div className="wallet-details">
+          <h5 className="name mb-20">{contract.name}</h5>
 
-            <div className="d-flex wallet-address">
-              <TrustedBadge
-                contractAddress={contract.address.bech32}
-                onVerificationComplete={ontTrustVerificationComplete}
-                initialValue={contract.isTrusted}
-              />
-              <Trim text={contract.address.bech32} />
-              <FontAwesomeIcon icon={faExternalLinkAlt} size="lg" />
-            </div>
+          <div className="d-flex wallet-address">
+            <TrustedBadge
+              contractAddress={contract.address.bech32}
+              onVerificationComplete={ontTrustVerificationComplete}
+              initialValue={contract.isTrusted}
+            />
+            <Trim text={contract.address.bech32} />
+            <FontAwesomeIcon icon={faExternalLinkAlt} size="lg" />
           </div>
-          <div></div>
         </div>
       </div>
     </button>

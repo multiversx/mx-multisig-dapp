@@ -18,7 +18,7 @@
         font-size: 24px;
       }
     }
-    .wallet-card {
+    .c-o-wallet-card {
       max-width: 812px;
       margin: 0 auto;
       .wallet-spacer {
@@ -38,10 +38,12 @@
         }
         .action {
           svg {
+            position: relative;
+            width: 14px;
+            height: 16px;
             color: #1390ff;
             opacity: 0;
             margin-left: 10px;
-            position: relative;
           }
         }
         .info-text {
@@ -51,6 +53,7 @@
         }
         &:hover {
           border: 1px solid #1390ff;
+          box-shadow: 0px 6px 8px rgba(19, 146, 255, 0.12) !important;
           .action {
             color: #1390ff;
             svg {
@@ -87,19 +90,35 @@
         gap: 24px;
         margin-top: 50px;
         button {
+          position: relative;
           flex: 1;
           flex-basis: 247px;
           max-width: 247px;
-          border: none;
+          border: 1px solid #f1f1f1;
+          border-radius: 10px;
+          padding: 30px 21px;
+          &:hover {
+            border: 1px solid #1390ff;
+            box-shadow: 0px 6px 8px rgba(19, 146, 255, 0.12) !important;
+          }
           .icon {
             width: 100%;
             justify-content: center;
-            position: relative;
-            top: -30.5px;
+            position: absolute;
+            top: -27.5px;
+            left: 0;
           }
           .wallet-details {
+            .name {
+              margin: 12px 0 20px;
+            }
             .wallet-address {
+              font-size: 14px;
+              color: #9dabbd;
               gap: 30px;
+              svg {
+                width: 12px;
+              }
             }
           }
         }
