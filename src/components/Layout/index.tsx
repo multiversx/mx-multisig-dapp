@@ -38,7 +38,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <div className="bg-light d-flex flex-column flex-fill wrapper">
       <Navbar />
 
-      <main className="d-flex flex-row flex-fill position-relative justify-center">
+      <main className="d-flex flex-row flex-fill position-relative justify-center container">
         <Dapp.Authenticate routes={routes} unlockRoute={routeNames.unlock}>
           {children}
           <SignTransactions />

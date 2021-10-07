@@ -19,6 +19,8 @@ import wawe from "assets/img/wawe.svg";
 import CreateWallet from "assets/img/create-wallet.svg";
 import OpenWallet from "assets/img/open-wallet.svg";
 import { faArrowRight } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faWallet } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Index = () => {
@@ -145,12 +147,39 @@ const Index = () => {
               </div>
             </div>
           ) : (
-            multisigContracts.map((contract) => (
-              <MultisigListItem
-                key={contract.address.hex}
-                contract={contract}
-              />
-            ))
+            <div className="wallets-section shadow bg-white">
+              <div className="top-bar">
+                <h3>My wallets</h3>
+                <div className="create-btns d-flex">
+                  <button
+                    className="btn btn-light mr-2 d-flex flex-row align-items-center"
+                    onClick={onDeployClicked}
+                  >
+                    <FontAwesomeIcon icon={faPlus} size="lg" />
+                    <div className="navbar-address ml-2 d-none d-lg-block">
+                      Create
+                    </div>
+                  </button>
+                  <button
+                    className="btn address-btn btn-light mr-2 d-flex flex-row align-items-center"
+                    onClick={onAddMultisigClicked}
+                  >
+                    <FontAwesomeIcon icon={faWallet} size="lg" />
+                    <div className="navbar-address ml-2 d-none d-lg-block">
+                      Open
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div className="list-wallets">
+                {multisigContracts.map((contract) => (
+                  <MultisigListItem
+                    key={contract.address.hex}
+                    contract={contract}
+                  />
+                ))}
+              </div>
+            </div>
           )}
         </div>
 
