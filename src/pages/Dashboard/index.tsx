@@ -121,27 +121,37 @@ const Index = () => {
             </h2>
             <p>Create your own organization in a few minutes</p>
           </div>
-          <div className="wallet-card">
-            <div className="d-flex wallet-spacer">
-              {deployButtonContainer}
 
-              <button
-                onClick={onAddMultisigClicked}
-                className="rounded14 shadow-sm"
-              >
-                <figure>
-                  <img src={OpenWallet} alt="create-wallet-icon" />
-                </figure>
-                <p className="action">
-                  {t("Open wallet")}
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </p>
-                <p className="info-text">
-                  Search and explore existing organizations
-                </p>
-              </button>
+          {multisigContracts.length == 0 ? (
+            <div className="wallet-card">
+              <div className="d-flex wallet-spacer">
+                {deployButtonContainer}
+
+                <button
+                  onClick={onAddMultisigClicked}
+                  className="rounded14 shadow-sm"
+                >
+                  <figure>
+                    <img src={OpenWallet} alt="create-wallet-icon" />
+                  </figure>
+                  <p className="action">
+                    {t("Open wallet")}
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </p>
+                  <p className="info-text">
+                    Search and explore existing organizations
+                  </p>
+                </button>
+              </div>
             </div>
-          </div>
+          ) : (
+            multisigContracts.map((contract) => (
+              <MultisigListItem
+                key={contract.address.hex}
+                contract={contract}
+              />
+            ))
+          )}
         </div>
 
         <AddMultisigModal
