@@ -7,39 +7,64 @@
     position: absolute;
     top: -51px;
   }
-
-  border-radius: 12px;
   .card {
     display: flex;
     max-width: 842px;
     width: 100%;
+    border-radius: 12px;
     .user-profile {
       border-bottom: 1px solid #e6e8ec;
+      padding: 40px 0 65px;
       .wallet {
+        padding: 0 40px;
+        p {
+          color: #a0a9bc;
+          svg {
+            font-size: 13px;
+            margin-right: 8px;
+          }
+          span {
+            color: #000;
+          }
+        }
         .wallet-name {
           margin-top: 40px;
+          margin-bottom: 10px;
         }
         div {
           flex: 1;
         }
       }
+      .address {
+        color: #a0a9bc;
+      }
     }
     .action-panel {
       width: 100%;
       border-bottom: 1px solid #e6e8ec;
-      margin-bottom: 20px;
       .actions-btns {
         display: flex;
-        gap: 10px;
+        gap: 12px;
+        padding-bottom: 40px;
         button {
           display: flex;
           align-items: center;
           width: 160px;
           height: 56px;
-          background: white;
+          background: #fff;
           color: #000;
           border-radius: 500px;
           border: 1px solid #f1f1f1 !important;
+          &:hover {
+            background: #1390ff;
+            color: #fff;
+            span {
+              background: #fff;
+              svg {
+                color: #1390ff;
+              }
+            }
+          }
           span {
             width: 48px;
             height: 48px;
@@ -50,12 +75,21 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            left: -8px;
+            left: -7px;
+            svg {
+              width: 16px;
+              height: 18px;
+            }
           }
         }
       }
       .balance {
         font-weight: 600 !important;
+        padding-top: 70px;
+        .ex-currency {
+          color: #a0a9bc;
+          padding-bottom: 30px;
+        }
       }
     }
   }

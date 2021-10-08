@@ -17,7 +17,7 @@ const ReceiveModal = ({ address }: { address?: string }) => {
 
   return (
     <>
-      <button onClick={handleOpenModal} className="btn btn-primary mb-3">
+      <button onClick={handleOpenModal} className="btn btn-primary">
         <span>
           <FontAwesomeIcon icon={faQrcode} />
         </span>

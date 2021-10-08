@@ -331,20 +331,18 @@ const MultisigDetailsPage = () => {
         <div className="card shadow-lg border-0">
           <div className="flex-column d-flex align-items-center">
             <WalletLogo className="wallet-logo " />
-            <div className="py-spacer w-100 user-profile">
+            <div className="w-100 user-profile">
               <div className="d-flex justify-content-between wallet">
-                <div className="user">
+                <div className="meta user-role">
                   <p>
                     <FontAwesomeIcon icon={faUser} />
-                    Role: <span>Signer</span>
+                    Role: <span>{t(userRoleAsString())}</span>
                   </p>
                 </div>
                 <div className="wallet-name text-center position-relative">
-                  <h3 className="opacity-6 mb-0 text-center">
-                    {multisigName}{" "}
-                  </h3>
+                  <h3 className="mb-0 text-center">{multisigName} </h3>
                 </div>
-                <div className="date d-flex justify-content-end">
+                <div className="meta date d-flex justify-content-end">
                   <p>
                     <FontAwesomeIcon icon={faCalendarAlt} /> Created:{" "}
                     <span>12/10/2021</span>
@@ -358,7 +356,7 @@ const MultisigDetailsPage = () => {
                 </span>
               </div>
             </div>
-            <div className="d-flex flex-column action-panel">
+            <div className="d-flex flex-column action-panel w-100">
               <div className="balance">
                 <h2 className="text-center">
                   {multisigBalance
@@ -371,11 +369,11 @@ const MultisigDetailsPage = () => {
                     " " +
                     egldLabel}
                 </h2>
-                <p className="ex-currency text-center">$3,623.85 USD</p>
+                <h5 className="ex-currency text-center">$3,623.85 USD</h5>
               </div>
               <div className="d-flex justify-content-center actions-btns">
                 {isProposer && (
-                  <button onClick={onSendEgld} className="btn btn-primary mb-3">
+                  <button onClick={onSendEgld} className="btn btn-primary">
                     <span>
                       <FontAwesomeIcon icon={faHandPaper} />
                     </span>
@@ -387,12 +385,12 @@ const MultisigDetailsPage = () => {
             </div>
           </div>
 
-          <div className="cards d-flex flex-wrap mr-spacer">
+          <div className="cards d-flex flex-wrap ">
             <StatCard
               title={t("Board Members")}
               value={totalBoardMembers.toString()}
               color="orange"
-              svg="clipboard-check.svg"
+              svg=""
               onRemoveAction={onRemoveUser}
               onAddAction={onAddBoardMember}
             />
@@ -411,13 +409,6 @@ const MultisigDetailsPage = () => {
               color="orange"
               onEditAction={onChangeQuorum}
               svg="quorum.svg"
-            />
-            <StatCard
-              title={t("User Role")}
-              value={t(userRoleAsString())}
-              valueUnit=""
-              color="orange"
-              svg="user.svg"
             />
           </div>
 
