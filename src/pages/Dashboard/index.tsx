@@ -17,9 +17,11 @@ import DeployStepsModal from "./DeployMultisigModal";
 import wawe from "assets/img/wawe.svg";
 import CreateWallet from "assets/img/create-wallet.svg";
 import OpenWallet from "assets/img/open-wallet.svg";
-import { faArrowRight } from "@fortawesome/pro-solid-svg-icons";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { faWallet } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faWallet,
+  faPlus,
+  faArrowRight,
+} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Index = () => {

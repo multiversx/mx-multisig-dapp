@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { Address, Balance } from "@elrondnetwork/erdjs";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-import { faArrowCircleLeft } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faUser,
+  faCalendarAlt,
+  faArrowCircleLeft,
+  faCircleNotch,
+  faQrcode,
+  faHandPaper,
+} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReactComponent as WalletLogo } from "assets/img/bn-wallet-logo.svg";
 
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
@@ -314,68 +321,69 @@ const MultisigDetailsPage = () => {
       value={{ quorumSize, totalBoardMembers, isProposer, multisigBalance }}
     >
       <div className="dashboard w-100">
-        <div className="card border-0">
-          <div className="header card-header flex-column d-flex align-items-center border-0 justify-content-between px-spacer">
-            <div className="d-flex align-self-lg-start ">
-              <Link to="/multisig" className="btn btn-primary btn-sm">
-                <FontAwesomeIcon icon={faArrowCircleLeft} />
-              </Link>
-            </div>
-            <div className="py-spacer text-truncate">
-              <div className="d-flex justify-content-start align-items-center">
-                <p className="opacity-6 mb-0">{multisigName} </p>{" "}
-                <div className="px-3">
-                  <TrustedBadge contractAddress={multisigAddressParam} />
+        <Link to="/multisig" className="btn btn-primary btn-sm d-block">
+          <FontAwesomeIcon icon={faArrowCircleLeft} />
+        </Link>
+        <div className="card shadow-lg border-0">
+          <div className="flex-column d-flex align-items-center">
+            <WalletLogo className="wallet-logo " />
+            <div className="py-spacer w-100 user-profile">
+              <div className="d-flex justify-content-between wallet">
+                <div className="user">
+                  <p>
+                    <FontAwesomeIcon icon={faUser} />
+                    Role: <span>Signer</span>
+                  </p>
+                </div>
+                <div className="wallet-name text-center position-relative">
+                  <h3 className="opacity-6 mb-0 text-center">
+                    {multisigName}{" "}
+                  </h3>
+                </div>
+                <div className="date d-flex justify-content-end">
+                  <p>
+                    <FontAwesomeIcon icon={faCalendarAlt} /> Created:{" "}
+                    <span>12/10/2021</span>
+                  </p>
                 </div>
               </div>
-              <span className="text-truncate">
-                {currentMultisigAddress?.bech32()}
-              </span>
+              <div className="px-3 address text-center">
+                <TrustedBadge contractAddress={multisigAddressParam} />
+                <span className="text-truncate">
+                  {currentMultisigAddress?.bech32()}
+                </span>
+              </div>
             </div>
-            <div className={"d-flex"}>
-              <div className={"d-flex flex-row gap-3 my-5"}>
+            <div className="d-flex flex-column action-panel">
+              <div className="balance">
+                <h2 className="text-center">
+                  {multisigBalance
+                    .toDenominated()
+                    .toString()
+                    .slice(
+                      0,
+                      multisigBalance.toDenominated().toString().length - 16,
+                    ) +
+                    " " +
+                    egldLabel}
+                </h2>
+                <p className="ex-currency text-center">$3,623.85 USD</p>
+              </div>
+              <div className="d-flex justify-content-center actions-btns">
                 {isProposer && (
                   <button onClick={onSendEgld} className="btn btn-primary mb-3">
-                    Send
+                    <span>
+                      <FontAwesomeIcon icon={faHandPaper} />
+                    </span>
+                    Propose
                   </button>
                 )}
                 <ReceiveModal address={currentMultisigAddress?.bech32()} />
               </div>
-              {/* <div className={"d-flex flex-column"}>
-                {isProposer && (
-                  <button
-                    onClick={onIssueToken}
-                    className="btn btn-primary mb-3"
-                  >
-                    Issue Token
-                  </button>
-                )}
-                {isProposer && (
-                  <button
-                    onClick={onSendToken}
-                    className="btn btn-primary mb-3"
-                  >
-                    Send Token
-                  </button>
-                )}
-              </div> */}
             </div>
           </div>
 
           <div className="cards d-flex flex-wrap mr-spacer">
-            <StatCard
-              title={t("Balance")}
-              value={multisigBalance
-                .toDenominated()
-                .toString()
-                .slice(
-                  0,
-                  multisigBalance.toDenominated().toString().length - 16,
-                )}
-              valueUnit={egldLabel}
-              color="orange"
-              svg="money.svg"
-            />
             <StatCard
               title={t("Board Members")}
               value={totalBoardMembers.toString()}
