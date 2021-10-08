@@ -23,7 +23,7 @@ const Navbar = () => {
               style={{ minWidth: 0 }}
             >
               <Account />
-              <Settings />
+              {/* <Settings /> */}
             </div>
           )}
         </Nav>

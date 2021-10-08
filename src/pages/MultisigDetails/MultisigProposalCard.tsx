@@ -15,6 +15,10 @@ import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { useMultisigContract } from "contracts/MultisigContract";
 import { MultisigActionType } from "types/MultisigActionType";
 import { setSelectedPerformedActionId } from "../../redux/slices/modalsSlice";
+import {
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
 
 export interface MultisigProposalCardType {
   type: number;
@@ -62,7 +66,7 @@ const MultisigProposalCard = ({
     mutateDiscardAction(actionId);
   };
   return (
-    <div className="statcard card-bg-grey text-black py-3 px-4 mb-spacer rounded">
+    <div className="statcard shadow-sm text-black py-3 px-4 mb-spacer rounded">
       <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
         <div className="icon my-1 fill-dark">
           {type === MultisigActionType.AddBoardMember ||
@@ -115,8 +119,19 @@ const MultisigProposalCard = ({
           </p>
           <span className="opacity-6">{value}</span>
         </div>
-        <p>{`signers: ${signers.length} / ${quorumSize}`}</p>
-
+        <div style={{ width: 72, height: 72 }} className="">
+          <CircularProgressbarWithChildren
+            value={signers.length}
+            maxValue={quorumSize}
+            strokeWidth={10}
+            styles={buildStyles({
+              strokeLinecap: "butt",
+              pathColor: "#16D296",
+            })}
+          >
+            <div>{`${signers.length} / ${quorumSize}`}</div>
+          </CircularProgressbarWithChildren>
+        </div>
         <div className="d-flex align-items-center">
           {canSign && (
             <button onClick={sign} className="btn btn-primary mb-3 mr-2">
