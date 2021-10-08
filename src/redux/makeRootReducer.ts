@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import account from "./slices/accountSlice";
 import appConfig from "./slices/appConfigSlice";
 import economics from "./slices/economicsSlice";
 import modals from "./slices/modalsSlice";
@@ -13,6 +14,7 @@ export default function makeRootReducer() {
     toasts,
     modals,
     economics,
+    account,
     appConfig,
   });
 }
