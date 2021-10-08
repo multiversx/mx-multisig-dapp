@@ -84,12 +84,28 @@
         }
       }
       .balance {
-        font-weight: 600 !important;
         padding-top: 70px;
+        h2 {
+          font-weight: 600 !important;
+        }
         .ex-currency {
           color: #a0a9bc;
           padding-bottom: 30px;
         }
+      }
+    }
+  }
+  .proposals-list {
+    .no-active-proposals {
+      padding: 40px 0;
+      svg {
+        margin-bottom: 16px;
+      }
+      p {
+        color: #9dabbd;
+      }
+      a {
+        text-decoration: underline;
       }
     }
   }

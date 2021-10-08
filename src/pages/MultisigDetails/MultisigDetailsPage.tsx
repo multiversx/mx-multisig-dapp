@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactComponent as WalletLogo } from "assets/img/bn-wallet-logo.svg";
+import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
 
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
@@ -325,9 +326,9 @@ const MultisigDetailsPage = () => {
       value={{ quorumSize, totalBoardMembers, isProposer, multisigBalance }}
     >
       <div className="dashboard w-100">
-        <Link to="/multisig" className="btn btn-primary btn-sm d-block">
+        {/* <Link to="/multisig" className="btn btn-primary btn-sm d-block">
           <FontAwesomeIcon icon={faArrowCircleLeft} />
-        </Link>
+        </Link> */}
         <div className="card shadow-lg border-0">
           <div className="flex-column d-flex align-items-center">
             <WalletLogo className="wallet-logo " />
@@ -373,7 +374,7 @@ const MultisigDetailsPage = () => {
               </div>
               <div className="d-flex justify-content-center actions-btns">
                 {isProposer && (
-                  <button onClick={onSendEgld} className="btn btn-primary">
+                  <button onClick={onSendEgld} className="btn btn-primarygit ">
                     <span>
                       <FontAwesomeIcon icon={faHandPaper} />
                     </span>
@@ -412,14 +413,18 @@ const MultisigDetailsPage = () => {
             />
           </div>
 
-          <div className="card-body pt-0 px-spacer pb-spacer">
+          <div className="card-body">
             {!contractsFetched ? (
               <State icon={faCircleNotch} iconClass="fa-spin text-primary" />
             ) : (
-              <div className="card mt-spacer">
-                <div className="card-body p-spacer">
-                  <div className="d-flex flex-wrap align-items-center justify-content-between">
-                    <p className="h6 mb-3">{t("Proposals")}</p>
+              <div className="proposals-list">
+                <div className="d-flex flex-wrap align-items-center justify-content-between">
+                  <div className="d-flex flex-column align-items-center w-100 no-active-proposals">
+                    <NoPoposalsIcon className=" " />
+                    <p className="mb-3">
+                      {t("Currently there are no active proposals.")}
+                    </p>
+                    <a href="3">Make a proposal</a>
                   </div>
 
                   {allActions.map((action) => (
