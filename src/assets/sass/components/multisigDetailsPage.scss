@@ -1,0 +1,62 @@
+.dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .wallet-logo {
+    position: absolute;
+    top: -51px;
+  }
+
+  border-radius: 12px;
+  .card {
+    display: flex;
+    max-width: 842px;
+    width: 100%;
+    .user-profile {
+      border-bottom: 1px solid #e6e8ec;
+      .wallet {
+        .wallet-name {
+          margin-top: 40px;
+        }
+        div {
+          flex: 1;
+        }
+      }
+    }
+    .action-panel {
+      width: 100%;
+      border-bottom: 1px solid #e6e8ec;
+      margin-bottom: 20px;
+      .actions-btns {
+        display: flex;
+        gap: 10px;
+        button {
+          display: flex;
+          align-items: center;
+          width: 160px;
+          height: 56px;
+          background: white;
+          color: #000;
+          border-radius: 500px;
+          border: 1px solid #f1f1f1 !important;
+          span {
+            width: 48px;
+            height: 48px;
+            color: #fff;
+            border-radius: 500px;
+            background: #1390ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            left: -8px;
+          }
+        }
+      }
+      .balance {
+        font-weight: 600 !important;
+      }
+    }
+  }
+}

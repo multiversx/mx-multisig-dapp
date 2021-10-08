@@ -7,9 +7,10 @@
 @import "./components/toastMessages";
 @import "./components/modal";
 @import "./components/override";
+@import "./components/multisigDetailsPage";
 
 @import "../../components/Trim/trim";
 @import "../../components/Layout/Navbar/Account/account";
-@import '../../components/IconState/iconState';
-@import '../../components/SendModal/sendModal';
-@import '../../components/ReceiveModal/receiveModal';
+@import "../../components/IconState/iconState";
+@import "../../components/SendModal/sendModal";
+@import "../../components/ReceiveModal/receiveModal";
