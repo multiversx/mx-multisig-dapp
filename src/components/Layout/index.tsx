@@ -3,22 +3,27 @@ import * as Dapp from "@elrondnetwork/dapp";
 import { useDispatch } from "react-redux";
 import SignTransactions from "components/SignTransactions";
 import routes, { routeNames } from "routes";
+import { getAccountData } from "../../apiCalls/accountCalls";
 import { getEconomicsData } from "../../apiCalls/economicsCalls";
+import { setAccountData } from "../../redux/slices/accountSlice";
 import { setEconomics } from "../../redux/slices/economicsSlice";
 import NotificationModal from "../NotificationModal";
 import ToastMessages from "../ToastMessages";
 import TransactionSender from "../TransactionSender";
 import TxSubmittedModal from "../TxSubmittedModal";
 import Navbar from "./Navbar";
+import useBgPage from "./useBgPage";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { loggedIn } = Dapp.useContext();
+  const { loggedIn, address } = Dapp.useContext();
+  const { BgPage, hideBgPage } = useBgPage();
   const dispatch = useDispatch();
   const refreshAccount = Dapp.useRefreshAccount();
 
   React.useEffect(() => {
     if (loggedIn) {
       refreshAccount();
+      fetchAccountData(address);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
@@ -34,18 +39,30 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  async function fetchAccountData(userAddress: string) {
+    const accountData = await getAccountData(userAddress);
+    if (accountData !== null) {
+      dispatch(setAccountData(accountData));
+    }
+  }
+
   return (
     <div className="bg-light d-flex flex-column flex-fill wrapper">
       <Navbar />
 
       <main className="d-flex flex-row flex-fill position-relative justify-center  container">
         <Dapp.Authenticate routes={routes} unlockRoute={routeNames.unlock}>
+          {!hideBgPage && <>{BgPage}</>}
           {children}
-          <SignTransactions />
-          <TransactionSender />
-          <NotificationModal />
-          <TxSubmittedModal />
-          <ToastMessages />
+          {loggedIn && (
+            <>
+              <SignTransactions />
+              <TransactionSender />
+              <NotificationModal />
+              <TxSubmittedModal />
+              <ToastMessages />
+            </>
+          )}
         </Dapp.Authenticate>
       </main>
     </div>

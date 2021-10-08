@@ -314,10 +314,6 @@ const MultisigDetailsPage = () => {
     }
   }, [currentMultisigAddress?.hex(), refetch, address]);
 
-  if (address === null) {
-    return <Redirect to="/" />;
-  }
-
   if (!parseMultisigAddress()) {
     return <Redirect to="/multisig" />;
   }

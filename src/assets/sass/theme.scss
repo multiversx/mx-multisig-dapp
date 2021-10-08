@@ -15,6 +15,9 @@ Override Bootstrap variables only above.
 // Dapp
 @import "./../../../node_modules/@elrondnetwork/dapp/dist/index.css";
 
+// Progress bar
+@import "./../../../node_modules/react-circular-progressbar/dist/styles.css";
+
 /* Base
 -------------------------------------------------- */
 html {
