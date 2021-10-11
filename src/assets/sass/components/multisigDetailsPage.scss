@@ -108,5 +108,20 @@
         text-decoration: underline;
       }
     }
+    .proposal {
+      display: flex;
+      gap: 20px;
+      > div {
+        flex: 1;
+      }
+      .action-btns {
+        .action {
+          max-width: 112px;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
   }
 }

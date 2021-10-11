@@ -1,6 +1,10 @@
 import React from "react";
 import { Address } from "@elrondnetwork/erdjs/out";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faInfoCircle,
+  faTimes,
+  faThumbsUp,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
@@ -67,43 +71,8 @@ const MultisigProposalCard = ({
   };
   return (
     <div className="statcard shadow-sm text-black py-3 px-4 mb-spacer rounded">
-      <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
-        <div className="icon my-1 fill-dark">
-          {type === MultisigActionType.AddBoardMember ||
-          type === MultisigActionType.AddProposer ? (
-            <AddUser />
-          ) : type === MultisigActionType.RemoveUser ? (
-            <DeleteUser />
-          ) : type === MultisigActionType.ChangeQuorum ? (
-            <Quorum />
-          ) : type === MultisigActionType.SCCall ? (
-            <Token />
-          ) : type === MultisigActionType.SendEgld ? (
-            <Logo style={{ width: 20, height: 20 }} />
-          ) : null}
-        </div>
-        <div>
-          {signers.map((_, index) => (
-            <Done
-              className={"done-icon"}
-              key={index}
-              style={{
-                marginRight: index === signers.length - 1 ? 4 : 8,
-              }}
-            />
-          ))}
-
-          {quorumSize > 0 &&
-            [...Array(quorumSize - signers.length)].map((index) => (
-              <Circle
-                key={index + signers.length}
-                style={{ width: 30, height: 30 }}
-              />
-            ))}
-        </div>
-      </div>
-      <div className="d-flex align-items-center justify-content-between">
-        <div>
+      <div className="d-flex align-items-center justify-content-between proposal">
+        <div className="meta">
           <p className="h5 mb-0">
             {title}
             {tooltip !== "" ? (
@@ -119,6 +88,24 @@ const MultisigProposalCard = ({
           </p>
           <span className="opacity-6">{value}</span>
         </div>
+        <div className="deadline">
+          <p>12/21/2021, 14:50</p>
+          <p>Proposal deadline</p>
+        </div>
+
+        <div className="d-flex align-items-center action-btns">
+          {canSign && (
+            <button onClick={sign} className="btn btn-light action sign">
+              <FontAwesomeIcon icon={faThumbsUp} />
+              {t("Approve")}
+            </button>
+          )}
+          {canUnsign && (
+            <button onClick={unsign} className="btn btn-light action unsign ">
+              <FontAwesomeIcon icon={faTimes} /> {t("Withdraw")}
+            </button>
+          )}
+        </div>
         <div style={{ width: 72, height: 72 }} className="">
           <CircularProgressbarWithChildren
             value={signers.length}
@@ -131,39 +118,6 @@ const MultisigProposalCard = ({
           >
             <div>{`${signers.length} / ${quorumSize}`}</div>
           </CircularProgressbarWithChildren>
-        </div>
-        <div className="d-flex align-items-center">
-          {canSign && (
-            <button onClick={sign} className="btn btn-primary mb-3 mr-2">
-              {t("Sign")}
-            </button>
-          )}
-
-          {canUnsign && (
-            <button onClick={unsign} className="btn btn-primary mb-3 mr-2">
-              {t("Unsign")}
-            </button>
-          )}
-
-          {canPerformAction && (
-            <button
-              style={{ whiteSpace: "nowrap" }}
-              onClick={performAction}
-              className="btn btn-primary mb-3 mr-2"
-            >
-              {t("Perform Action")}
-            </button>
-          )}
-
-          {canDiscardAction && (
-            <button
-              style={{ whiteSpace: "nowrap" }}
-              onClick={discardAction}
-              className="btn btn-primary mb-3 mr-2"
-            >
-              {t("Discard Action")}
-            </button>
-          )}
         </div>
       </div>
     </div>

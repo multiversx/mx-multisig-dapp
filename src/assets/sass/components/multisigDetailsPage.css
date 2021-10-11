@@ -154,4 +154,28 @@
 .dashboard .proposals-list .no-active-proposals a {
   text-decoration: underline;
 }
+
+.dashboard .proposals-list .proposal {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 20px;
+}
+
+.dashboard .proposals-list .proposal > div {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.dashboard .proposals-list .proposal .action-btns .action {
+  max-width: 112px;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
 /*# sourceMappingURL=multisigDetailsPage.css.map */
