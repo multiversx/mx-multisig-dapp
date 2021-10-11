@@ -415,29 +415,32 @@ const MultisigDetailsPage = () => {
             ) : (
               <div className="proposals-list">
                 <div className="d-flex flex-wrap align-items-center justify-content-between">
-                  <div className="d-flex flex-column align-items-center w-100 no-active-proposals">
-                    <NoPoposalsIcon className=" " />
-                    <p className="mb-3">
-                      {t("Currently there are no active proposals.")}
-                    </p>
-                    <a href="3">Make a proposal</a>
-                  </div>
-
-                  {allActions.map((action) => (
-                    <MultisigProposalCard
-                      key={action.actionId}
-                      type={action.typeNumber()}
-                      actionId={action.actionId}
-                      title={action.title()}
-                      tooltip={action.tooltip()}
-                      value={action.description()}
-                      canSign={canSign(action)}
-                      canUnsign={canUnsign(action)}
-                      canPerformAction={canPerformAction(action)}
-                      canDiscardAction={canDiscardAction(action)}
-                      signers={action.signers}
-                    />
-                  ))}
+                  {console.log(Object.entries(allActions))}
+                  {Object.keys(allActions).length === 0 ? (
+                    <div className="d-flex flex-column align-items-center w-100 no-active-proposals">
+                      <NoPoposalsIcon className=" " />
+                      <p className="mb-3">
+                        {t("Currently there are no active proposals.")}
+                      </p>
+                      <a href="3">Make a proposal</a>
+                    </div>
+                  ) : (
+                    allActions.map((action) => (
+                      <MultisigProposalCard
+                        key={action.actionId}
+                        type={action.typeNumber()}
+                        actionId={action.actionId}
+                        title={action.title()}
+                        tooltip={action.tooltip()}
+                        value={action.description()}
+                        canSign={canSign(action)}
+                        canUnsign={canUnsign(action)}
+                        canPerformAction={canPerformAction(action)}
+                        canDiscardAction={canDiscardAction(action)}
+                        signers={action.signers}
+                      />
+                    ))
+                  )}
                 </div>
               </div>
             )}
