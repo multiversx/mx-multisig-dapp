@@ -125,22 +125,6 @@ const Index = () => {
             </h2>
             <p>Create your own organization in a few minutes</p>
           </div>
-
-          {/* Example of progress bar */}
-          <div style={{ width: 60, height: 60 }} className="mx-auto mb-spacer">
-            <CircularProgressbarWithChildren
-              value={6}
-              maxValue={8}
-              strokeWidth={10}
-              styles={buildStyles({
-                strokeLinecap: "butt",
-                pathColor: "#08bee5",
-              })}
-            >
-              <div>6/8</div>
-            </CircularProgressbarWithChildren>
-          </div>
-
           {multisigContracts.length == 0 ? (
             <div className="c-o-wallet-card">
               <div className="d-flex wallet-spacer">

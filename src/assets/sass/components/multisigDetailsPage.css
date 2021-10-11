@@ -169,13 +169,37 @@
 }
 
 .dashboard .proposals-list .proposal .action-btns .action {
-  max-width: 112px;
-  width: 100%;
+  width: 112px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  font-size: 14px;
+  line-height: 16px;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 15px 20px 15px 16px;
+  border-radius: 6px;
+}
+
+.dashboard .proposals-list .proposal .action-btns .sign {
+  color: #16d296;
+  background: #f3fdfa;
+  border: 1px solid #ddf9f0;
+  -webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
+          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.dashboard .proposals-list .proposal .action-btns .unsign {
+  color: #138eff;
+  background: #f3f9ff;
+  border: 1px solid #ddeeff;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
+          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
 }
 /*# sourceMappingURL=multisigDetailsPage.css.map */

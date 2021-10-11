@@ -89,20 +89,20 @@ const MultisigProposalCard = ({
           <span className="opacity-6">{value}</span>
         </div>
         <div className="deadline">
-          <p>12/21/2021, 14:50</p>
-          <p>Proposal deadline</p>
+          <p className="font-weight-bold">12/21/2021, 14:50</p>
+          <p className="text">Proposal deadline</p>
         </div>
 
         <div className="d-flex align-items-center action-btns">
           {canSign && (
-            <button onClick={sign} className="btn btn-light action sign">
+            <button onClick={sign} className="btn action sign">
               <FontAwesomeIcon icon={faThumbsUp} />
-              {t("Approve")}
+              <span>{t("Approve")} </span>
             </button>
           )}
           {canUnsign && (
-            <button onClick={unsign} className="btn btn-light action unsign ">
-              <FontAwesomeIcon icon={faTimes} /> {t("Withdraw")}
+            <button onClick={unsign} className="btn  action unsign ">
+              <FontAwesomeIcon icon={faTimes} /> <span>{t("Withdraw")}</span>
             </button>
           )}
         </div>

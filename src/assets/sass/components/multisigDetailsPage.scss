@@ -114,12 +114,30 @@
       > div {
         flex: 1;
       }
+
       .action-btns {
         .action {
-          max-width: 112px;
-          width: 100%;
+          width: 112px;
           display: flex;
+          font-size: 14px;
+          line-height: 16px;
           justify-content: space-between;
+          align-items: center;
+          padding: 15px 20px 15px 16px;
+          border-radius: 6px;
+        }
+        .sign {
+          color: #16d296;
+          background: #f3fdfa;
+          border: 1px solid #ddf9f0;
+          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
+        }
+        .unsign {
+          color: #138eff;
+          background: #f3f9ff;
+          border: 1px solid #ddeeff;
+          box-sizing: border-box;
+          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
         }
       }
     }
