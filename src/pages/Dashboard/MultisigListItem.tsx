@@ -1,5 +1,9 @@
 import React from "react";
+import { useContext as useDappContext } from "@elrondnetwork/dapp";
+import { Ui } from "@elrondnetwork/dapp-utils";
 import { Address } from "@elrondnetwork/erdjs/out";
+import { faExternalLinkAlt } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -8,11 +12,9 @@ import TrustedBadge from "components/TrustedBadge";
 import { useManagerContract } from "contracts/ManagerContract";
 import { updateMultisigContract } from "redux/slices/multisigContractsSlice";
 import { MultisigContractInfoType } from "types/multisigContracts";
-import { faExternalLinkAlt } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Trim from "components/Trim";
 
 const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
+  const { explorerAddress } = useDappContext();
   const { t } = useTranslation();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -50,8 +52,15 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
               onVerificationComplete={ontTrustVerificationComplete}
               initialValue={contract.isTrusted}
             />
-            <Trim text={contract.address.bech32} />
-            <FontAwesomeIcon icon={faExternalLinkAlt} size="lg" />
+            <Ui.Trim text={contract.address.bech32} />
+            <a
+              href={`${explorerAddress}accounts/${contract.address.bech32}`}
+              target="_blank"
+              rel="noreferrer"
+              className="link-style ml-2"
+            >
+              <FontAwesomeIcon icon={faExternalLinkAlt} size="lg" />
+            </a>
           </div>
         </div>
       </div>

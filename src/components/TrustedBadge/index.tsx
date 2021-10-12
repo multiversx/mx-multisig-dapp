@@ -29,7 +29,7 @@ function TrustedBadge({
   return (
     <>
       {isTrusted && (
-        <span>
+        <span className="mr-2">
           <img src={TrustedBadgeIcon} alt="trusted-badge" />
         </span>
       )}

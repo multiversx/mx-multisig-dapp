@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
+import { Ui } from "@elrondnetwork/dapp-utils";
 import { Address, Balance } from "@elrondnetwork/erdjs";
 import {
   faUser,
@@ -8,14 +9,15 @@ import {
   faCircleNotch,
   faQrcode,
   faHandPaper,
+  faExternalLinkAlt,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ReactComponent as WalletLogo } from "assets/img/bn-wallet-logo.svg";
-import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
 
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Redirect, useParams } from "react-router-dom";
+import { ReactComponent as WalletLogo } from "assets/img/bn-wallet-logo.svg";
+import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
 import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
 import PerformActionModal from "components/PerformActionModal";
 import ReceiveModal from "components/ReceiveModal";
@@ -85,7 +87,8 @@ const MultisigDetailsPage = () => {
   const contractsFetched = useSelector(multisigContractsFetchedSelector);
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
 
-  const { address, apiAddress, dapp, egldLabel } = useDappContext();
+  const { address, apiAddress, dapp, egldLabel, explorerAddress } =
+    useDappContext();
   const {
     queryBoardMembersCount,
     queryProposersCount,
@@ -346,12 +349,20 @@ const MultisigDetailsPage = () => {
                   </p>
                 </div>
               </div>
-              <div className="px-3 address text-center">
-                <TrustedBadge contractAddress={multisigAddressParam} />
-                <span className="text-truncate">
-                  {currentMultisigAddress?.bech32()}
-                </span>
-              </div>
+              {currentMultisigAddress && (
+                <div className="px-spacer address text-center d-flex align-items-center justify-content-center">
+                  <TrustedBadge contractAddress={multisigAddressParam} />
+                  <Ui.Trim text={currentMultisigAddress.bech32()} />
+                  <a
+                    href={`${explorerAddress}accounts/${currentMultisigAddress.bech32()}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="link-style ml-2 mt-n1"
+                  >
+                    <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
+                  </a>
+                </div>
+              )}
             </div>
             <div className="d-flex flex-column action-panel w-100">
               <div className="balance">
