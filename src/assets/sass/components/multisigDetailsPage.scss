@@ -95,6 +95,11 @@
         .ex-currency {
           color: #a0a9bc;
           padding-bottom: 30px;
+          small {
+            display: inline-flex;
+            color: #a0a9bc !important;
+            @extend .h5;
+          }
         }
       }
     }
@@ -113,11 +118,9 @@
       }
     }
     .proposal {
+      width: 100%;
       display: flex;
       gap: 20px;
-      > div {
-        flex: 1;
-      }
 
       .action-btns {
         .action {

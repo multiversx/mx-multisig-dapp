@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
-import { Ui } from "@elrondnetwork/dapp-utils";
+import { Ui, operations } from "@elrondnetwork/dapp-utils";
 import { Address, Balance } from "@elrondnetwork/erdjs";
 import {
   faUser,
@@ -24,6 +24,7 @@ import ReceiveModal from "components/ReceiveModal";
 import StatCard from "components/StatCard";
 import State from "components/State";
 import TrustedBadge from "components/TrustedBadge";
+import { denomination, decimals } from "config";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { useManagerContract } from "contracts/ManagerContract";
 import { useMultisigContract } from "contracts/MultisigContract";
@@ -31,6 +32,7 @@ import { hexToNumber, hexToString } from "helpers/converters";
 import { PlainAddress } from "helpers/plainObjects";
 import { tryParseTransactionParameter } from "helpers/urlparameters";
 import MultisigProposalCard from "pages/MultisigDetails/MultisigProposalCard";
+import { priceSelector } from "redux/selectors/economicsSelector";
 import {
   currentMultisigAddressSelector,
   multisigContractsFetchedSelector,
@@ -103,6 +105,7 @@ const MultisigDetailsPage = () => {
   const { multisigAddressParam } = useParams<MultisigDetailsPageParams>();
   const confirmModal = useConfirmModal();
   const refetch = useSelector(refetchSelector);
+  const egldPrice = useSelector(priceSelector);
   const { t } = useTranslation();
   const isProposer = userRole !== 0;
   const isBoardMember = userRole === 2;
@@ -320,6 +323,9 @@ const MultisigDetailsPage = () => {
   if (!parseMultisigAddress()) {
     return <Redirect to="/multisig" />;
   }
+
+  console.log("---multisigBalance", multisigBalance.toString());
+
   return (
     <MultisigDetailsContext.Provider
       value={{ quorumSize, totalBoardMembers, isProposer, multisigBalance }}
@@ -367,17 +373,27 @@ const MultisigDetailsPage = () => {
             <div className="d-flex flex-column action-panel w-100">
               <div className="balance">
                 <h2 className="text-center">
-                  {multisigBalance
-                    .toDenominated()
-                    .toString()
-                    .slice(
-                      0,
-                      multisigBalance.toDenominated().toString().length - 16,
-                    ) +
-                    " " +
-                    egldLabel}
+                  {operations.denominate({
+                    input: multisigBalance.toString(),
+                    denomination,
+                    decimals,
+                    showLastNonZeroDecimal: true,
+                  })}{" "}
+                  {egldLabel}
                 </h2>
-                <h5 className="ex-currency text-center">$3,623.85 USD</h5>
+                <h5 className="ex-currency text-center">
+                  <Ui.UsdValue
+                    amount={operations.denominate({
+                      input: multisigBalance.toString(),
+                      denomination,
+                      decimals,
+                      showLastNonZeroDecimal: true,
+                      addCommas: false,
+                    })}
+                    usd={egldPrice}
+                  />{" "}
+                  USD
+                </h5>
               </div>
               <div className="d-flex justify-content-center actions-btns">
                 {isProposer && (

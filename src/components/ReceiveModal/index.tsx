@@ -43,7 +43,7 @@ const ReceiveModal = ({ address }: { address?: string }) => {
               {address}
               <div className={"mx-3"}>
                 <CopyButton text={address} />
-                <ExplorerLink page={`accounts/${address}`} />
+                <ExplorerLink page={`accounts/${address}`} className="ml-2" />
               </div>
             </p>
             <button onClick={handleCloseModal} className="btn btn-primary mb-3">
