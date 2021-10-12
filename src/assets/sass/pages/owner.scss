@@ -74,12 +74,17 @@
         flex-flow: row;
         justify-content: space-between;
         .create-btns {
+          gap: 16px;
           button {
             background-color: #4aa8ff13;
-            border: 1px solid #ddeeff;
+            border: 1px solid #ddeeff !important;
             border-radius: 10px;
+            padding: 14px 23px 14px 16px;
+            line-height: 16px;
             svg {
+              font-size: 14px;
               color: #4aa8ff;
+              margin-right: 12px;
             }
           }
         }

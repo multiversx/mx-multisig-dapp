@@ -150,16 +150,16 @@ const Index = () => {
                 <h3>My wallets</h3>
                 <div className="create-btns d-flex">
                   <button
-                    className="btn btn-light mr-2 d-flex flex-row align-items-center"
+                    className="btn btn-light d-flex flex-row align-items-center"
                     onClick={onDeployClicked}
                   >
                     <FontAwesomeIcon icon={faPlus} size="lg" />
-                    <div className="navbar-address ml-2 d-none d-lg-block">
+                    <div className="navbar-address d-none d-lg-block">
                       Create
                     </div>
                   </button>
                   <button
-                    className="btn address-btn btn-light mr-2 d-flex flex-row align-items-center"
+                    className="btn address-btn btn-light d-flex flex-row align-items-center"
                     onClick={onAddMultisigClicked}
                   >
                     <FontAwesomeIcon icon={faWallet} size="lg" />

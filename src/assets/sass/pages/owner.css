@@ -99,14 +99,22 @@
           justify-content: space-between;
 }
 
+.owner .my-wallets .wallets-section .top-bar .create-btns {
+  gap: 16px;
+}
+
 .owner .my-wallets .wallets-section .top-bar .create-btns button {
   background-color: #4aa8ff13;
-  border: 1px solid #ddeeff;
+  border: 1px solid #ddeeff !important;
   border-radius: 10px;
+  padding: 14px 23px 14px 16px;
+  line-height: 16px;
 }
 
 .owner .my-wallets .wallets-section .top-bar .create-btns button svg {
+  font-size: 14px;
   color: #4aa8ff;
+  margin-right: 12px;
 }
 
 .owner .my-wallets .wallets-section .list-wallets {
