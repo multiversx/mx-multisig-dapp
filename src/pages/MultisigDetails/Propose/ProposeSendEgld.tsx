@@ -53,7 +53,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
   return (
     <div>
       <div className="modal-control-container">
-        <span>{t("Address")}: </span>
+        <label>{t("Addresss")}: </label>
         <input
           type="text"
           className="form-control"
