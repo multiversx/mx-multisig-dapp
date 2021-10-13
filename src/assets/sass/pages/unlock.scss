@@ -12,26 +12,30 @@
     border: 1px solid #e6e8ec;
     box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.06);
     border-radius: 12px;
-  }
-  .btn-unlock {
-    color: $body-color;
-    padding: 1.2rem;
-    margin-bottom: 0.7rem;
-    font-size: 1rem;
-    border: 1px solid #e6e8ec !important;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
-    border-radius: 8px;
-    &:hover {
-      background: none;
-      border-color: #1392ff !important;
+    a {
+      color: #000 !important;
     }
-    .method {
-      gap: 15px;
-    }
-    .arrow {
-      width: 13.01px;
-      height: 16px;
-      color: #1392ff;
+    .btn-unlock {
+      color: $body-color;
+      padding: 1.2rem;
+      margin-bottom: 0.7rem;
+      font-size: 1rem;
+      border: 1px solid #e6e8ec !important;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
+      border-radius: 8px;
+      &:hover {
+        background: none;
+        border-color: #1392ff !important;
+      }
+      .method {
+        align-items: center;
+        gap: 15px;
+      }
+      .arrow {
+        width: 13.01px;
+        height: 16px;
+        color: #1392ff;
+      }
     }
   }
 }

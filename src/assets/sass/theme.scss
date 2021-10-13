@@ -4,6 +4,7 @@
 $headings-font-weight: 300 !important;
 $primary: #1b46c2;
 $light: #fafafa;
+$a: #1392ff;
 
 /* Do not move the imports from here. 
 Override Bootstrap variables only above.
@@ -33,6 +34,9 @@ span,
 a,
 div {
   font-family: Arial, Helvetica, sans-serif;
+}
+a {
+  color: #1392ff !important;
 }
 
 .wrapper {

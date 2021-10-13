@@ -16,6 +16,8 @@ import ProposeInputAddressType from "./ProposeInputAddress";
 import ProposeIssueToken from "./ProposeIssueToken";
 import ProposeSendEgld from "./ProposeSendEgld";
 import ProposeSendToken from "./ProposeSendToken";
+import { faTimes, faHandPaper } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const titles = {
   [ProposalsTypes.send_egld]: "send egld",
@@ -110,12 +112,12 @@ const ProposeModal = () => {
       centered
     >
       <div className="card">
-        <div className="card-body p-spacer text-center">
-          <p className="h6 mb-spacer" data-testid="delegateTitle">
-            {`${t("Propose")} ${titles[selectedOption]}`}
+        <div className="card-body">
+          <p className="h3 mb-spacer text-center" data-testid="delegateTitle">
+            {`${t("Make a proposal")}`}
           </p>
 
-          <div className="p-spacer">
+          <div className="">
             {selectedOption === "change_quorum" ? (
               <ProposeChangeQuorum
                 handleParamsChange={handleNumericParamChange}
@@ -133,12 +135,19 @@ const ProposeModal = () => {
             ) : selectedOption === "send_token" ? (
               <ProposeSendToken handleChange={handleProposalChange} />
             ) : null}
-          </div>
-
-          <div>
-            <button onClick={onProposeClicked} className="btn btn-primary mb-3">
-              {t("Propose")}
-            </button>
+            <div className="modal-action-btns">
+              <button
+                onClick={onProposeClicked}
+                className="btn btn-primary btn-light "
+              >
+                <FontAwesomeIcon icon={faTimes} />
+                {t("Cancel")}
+              </button>
+              <button onClick={onProposeClicked} className="btn btn-primary ">
+                <FontAwesomeIcon icon={faHandPaper} />
+                {t("Propose")}
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -1,10 +1,39 @@
 .modal-control-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  display: block;
+}
+
+.modal-control-container label {
+  display: block !important;
+  color: #9dabbd;
+  font-size: 18px;
+  line-height: 21px;
+}
+
+.modal-control-container .input-wrraper {
+  position: relative;
+}
+
+.modal-control-container .input-wrraper span {
+  position: absolute;
+  color: #1390ff;
+  top: calc(50% - 10px);
+  right: 10px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.modal-control-container input {
+  font-size: 18px;
+  height: 48px;
+  border-radius: 8px;
+  line-height: 21px;
+  margin-bottom: 32px !important;
+}
+
+.modal-control-container textarea {
+  font-size: 18px;
+  border-radius: 8px;
+  line-height: 21px;
 }
 
 .modal-control-container span {

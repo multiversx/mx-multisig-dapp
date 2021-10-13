@@ -25,30 +25,34 @@ const ReceiveModal = ({ address }: { address?: string }) => {
       </button>
       <Modal
         show={showModal}
+        size="lg"
         onHide={handleCloseModal}
         className="modal-container"
         animation={false}
         centered
       >
         <div className="card">
-          <div className="card-body p-spacer text-center">
-            <p className="h6 " data-testid="delegateTitle">
+          <div className="card-body  text-center">
+            <p className="h3 " data-testid="delegateTitle">
               Receive
             </p>
-            <p className="h6 mb-spacer" data-testid="delegateSubTitle">
-              Here is the QR code and your wallet address.
-            </p>
-            <QrCode value={address} />
+
+            <QrCode value={address} size={256} />
             <p className="h6 mb-spacer" data-testid="delegateSubTitle">
               {address}
               <div className={"mx-3"}>
                 <CopyButton text={address} />
-                <ExplorerLink page={`accounts/${address}`} className="ml-2" />
+                {/* <ExplorerLink page={`accounts/${address}`} className="ml-2" /> */}
               </div>
             </p>
-            <button onClick={handleCloseModal} className="btn btn-primary mb-3">
-              Done
-            </button>
+            <div className="modal-action-btns">
+              <button
+                onClick={handleCloseModal}
+                className="btn btn-primary mb-3"
+              >
+                Done
+              </button>
+            </div>
           </div>
         </div>
       </Modal>

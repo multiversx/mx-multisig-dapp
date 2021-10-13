@@ -10862,6 +10862,10 @@ div {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+a {
+  color: #1392ff !important;
+}
+
 .wrapper {
   min-height: 100vh;
 }
