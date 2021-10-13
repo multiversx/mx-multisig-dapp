@@ -8,6 +8,9 @@
   }
   .input-wrraper {
     position: relative;
+    input {
+      margin-bottom: 5px !important;
+    }
     span {
       position: absolute;
       color: #1390ff;
@@ -22,24 +25,18 @@
     height: 48px;
     border-radius: 8px;
     line-height: 21px;
-    margin-bottom: 32px !important;
+    margin-bottom: 32px;
   }
   textarea {
     font-size: 18px;
     border-radius: 8px;
     line-height: 21px;
   }
-}
-
-.modal-control-container span {
-  margin-right: 1rem;
-  margin-bottom: 0.7rem;
-  min-width: 120px;
-  text-align: right;
-}
-
-.modal-control-container input {
-  margin-bottom: 0.7rem;
+  span {
+    display: block;
+    color: #9dabbd;
+    margin-bottom: 32px;
+  }
 }
 
 .modal-control-container .form-check-label {

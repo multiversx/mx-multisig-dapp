@@ -74,6 +74,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
           />
           <span>MAX</span>
         </div>
+        <span>Balance: 14.5454 EGLD </span>
       </div>
       <div className="modal-control-container">
         <label>{t("Data")} </label>

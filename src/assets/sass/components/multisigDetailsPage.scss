@@ -119,9 +119,10 @@
     }
     .proposal {
       width: 100%;
-      display: flex;
       gap: 20px;
-
+      @include media-breakpoint-between(xs, sm) {
+        flex-flow: wrap;
+      }
       .action-btns {
         .action {
           width: 112px;

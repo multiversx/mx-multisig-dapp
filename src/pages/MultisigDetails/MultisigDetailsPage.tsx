@@ -442,7 +442,6 @@ const MultisigDetailsPage = () => {
             ) : (
               <div className="proposals-list">
                 <div className="d-flex flex-wrap align-items-center justify-content-between">
-                  {console.log(Object.entries(allActions))}
                   {Object.keys(allActions).length === 0 ? (
                     <div className="d-flex flex-column align-items-center w-100 no-active-proposals">
                       <NoPoposalsIcon className=" " />
