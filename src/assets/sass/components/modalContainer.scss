@@ -45,14 +45,22 @@
     button {
       flex: 1;
       display: flex;
+      max-width: 236px;
+      height: 48px;
       justify-content: center;
       align-items: center;
+      background-color: #1392ff;
+      border: 1px solid #007ded !important;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
+      border-radius: 6px;
       gap: 12px;
-      height: 48px;
     }
     .btn-light {
       color: #1392ff;
       background: #f3f9ff;
+      border: 1px solid #ddeeff !important;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
+      border-radius: 6px;
     }
   }
 }

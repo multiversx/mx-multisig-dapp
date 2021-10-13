@@ -55,24 +55,40 @@
 
   .address-btn {
     background-color: #4aa8ff13;
-    padding: 0.8rem !important;
+    width: 185px;
+    justify-content: center;
+    border: 1px solid #ddeeff !important;
     .disconnect {
       display: none;
     }
     .address {
       display: flex;
     }
+    svg {
+      color: #4aa8ff;
+      font-size: 16px;
+      margin-right: 10px;
+    }
     &:hover {
+      color: #fff;
+      background-color: #1392ff;
+      border: 1px solid #007ded !important;
       .disconnect {
         display: flex;
+        justify-content: center;
+        align-items: center;
+        svg {
+          color: #fff;
+        }
       }
       .address {
         display: none;
       }
+      > svg {
+        display: none;
+      }
     }
-    svg {
-      color: #4aa8ff;
-    }
+
     .navbar-address {
       width: 7rem;
       .ellipsis,

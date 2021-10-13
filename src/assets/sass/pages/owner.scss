@@ -92,6 +92,8 @@
       .list-wallets {
         display: flex;
         flex-flow: row;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 24px;
         margin-top: 50px;
         button {

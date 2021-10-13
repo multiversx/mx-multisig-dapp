@@ -12,9 +12,10 @@
     border: 1px solid #e6e8ec;
     box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.06);
     border-radius: 12px;
-    a {
+    > a {
       color: #000 !important;
     }
+
     .btn-unlock {
       color: $body-color;
       padding: 1.2rem;

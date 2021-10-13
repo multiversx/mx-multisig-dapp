@@ -4,7 +4,7 @@ import {
   useContext as useDappContext,
   useLogout as useDappLogout,
 } from "@elrondnetwork/dapp";
-import { faUserCircle } from "@fortawesome/pro-solid-svg-icons";
+import { faUserCircle, faPowerOff } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -52,22 +52,27 @@ const Account = () => {
   };
 
   return (
-    <button
-      className="btn address-btn btn-light mr-2 d-flex flex-row align-items-center"
-      onClick={onDisconnectClick}
-    >
-      <FontAwesomeIcon icon={faUserCircle} size="lg" />
-      <div className="navbar-address ml-2 d-none d-lg-block">
-        <span className="address">
-          {username ? (
-            `@${username.replace(".elrond", "")}`
-          ) : (
-            <Trim text={address} />
-          )}
-        </span>
-        <span className="disconnect">Disconnect</span>
-      </div>
-    </button>
+    <div className="connect-btns">
+      <button
+        className="btn address-btn btn-light d-flex flex-row align-items-center"
+        onClick={onDisconnectClick}
+      >
+        <FontAwesomeIcon icon={faUserCircle} size="lg" />
+        <div className="navbar-address d-none d-lg-block">
+          <span className="address">
+            {username ? (
+              `@${username.replace(".elrond", "")}`
+            ) : (
+              <Trim text={address} />
+            )}
+          </span>
+          <span className="disconnect">
+            <FontAwesomeIcon icon={faPowerOff} size="lg" />
+            Disconnect
+          </span>
+        </div>
+      </button>
+    </div>
   );
 };
 

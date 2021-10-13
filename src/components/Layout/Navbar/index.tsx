@@ -1,10 +1,14 @@
 import React from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { Navbar as BsNavbar, NavItem, Nav } from "react-bootstrap";
+import { Link, Redirect } from "react-router-dom";
+import { routeNames } from "routes";
 import { ReactComponent as ElrondLogo } from "assets/img/elrond.svg";
 import { dAppName } from "config";
 import Account from "./Account";
 import Settings from "./Settings";
+import union from "assets/img/Union.svg";
+
 const Navbar = () => {
   const { loggedIn } = useDappContext();
 
@@ -17,13 +21,26 @@ const Navbar = () => {
         </NavItem>
 
         <Nav className="ml-auto">
-          {loggedIn && (
+          {loggedIn === true ? (
             <div
               className="d-flex align-items-center logged-in"
               style={{ minWidth: 0 }}
             >
               <Account />
               {/* <Settings /> */}
+            </div>
+          ) : (
+            <div className="connect-btns">
+              <Link
+                to={routeNames.unlock}
+                className="btn primary"
+                data-testid="loginBtn"
+              >
+                <span>
+                  <img src={union} width="20" height="20" />
+                </span>
+                Connect now
+              </Link>
             </div>
           )}
         </Nav>

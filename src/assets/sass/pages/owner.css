@@ -125,6 +125,11 @@
   -webkit-box-direction: normal;
       -ms-flex-flow: row;
           flex-flow: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   gap: 24px;
   margin-top: 50px;
 }

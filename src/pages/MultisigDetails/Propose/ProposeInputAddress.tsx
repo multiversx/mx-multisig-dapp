@@ -22,7 +22,7 @@ const ProposeInputAddress = ({
 
   return (
     <div className="modal-control-container">
-      <span>{t("Address")}: </span>
+      <label>{t("Address")} </label>
       <input
         type="text"
         className="form-control"

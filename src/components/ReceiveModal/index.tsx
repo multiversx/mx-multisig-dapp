@@ -33,7 +33,7 @@ const ReceiveModal = ({ address }: { address?: string }) => {
       >
         <div className="card">
           <div className="card-body  text-center">
-            <p className="h3 " data-testid="delegateTitle">
+            <p className="h3 mb-spacer" data-testid="delegateTitle">
               Receive
             </p>
 

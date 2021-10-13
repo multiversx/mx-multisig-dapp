@@ -137,7 +137,7 @@ const ProposeModal = () => {
             ) : null}
             <div className="modal-action-btns">
               <button
-                onClick={onProposeClicked}
+                onClick={handleClose}
                 className="btn btn-primary btn-light "
               >
                 <FontAwesomeIcon icon={faTimes} />
