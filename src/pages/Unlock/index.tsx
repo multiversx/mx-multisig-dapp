@@ -8,6 +8,9 @@ import { network } from "config";
 import { routeNames } from "routes";
 import Ledger from "./Ledger";
 import Maiar from "./Maiar";
+import { ReactComponent as IconElrond } from "assets/img/icon-elrond.svg";
+import { ReactComponent as IconMaiar } from "assets/img/icon-maiar.svg";
+import { ReactComponent as IconLedger } from "assets/img/icon-ledger.svg";
 
 declare global {
   interface Window {
@@ -16,7 +19,7 @@ declare global {
 }
 
 const UnlockTitle = () => (
-  <div className="unlock-title mb-spacer">
+  <h5 className="unlock-title mb-spacer">
     Connect to a wallet{" "}
     <OverlayTrigger
       placement="top"
@@ -40,7 +43,7 @@ const UnlockTitle = () => (
         />
       </a>
     </OverlayTrigger>
-  </div>
+  </h5>
 );
 
 const Unlock = () => {
@@ -60,7 +63,7 @@ const Unlock = () => {
 
   return (
     <div className="unlock-page m-auto">
-      <div className="card p-spacer m-spacer text-center">
+      <div className="card unlock p-spacer text-center">
         <UnlockTitle />
         {!window.elrondWallet && (
           <Link
@@ -84,8 +87,9 @@ const Unlock = () => {
             className="btn btn-unlock btn-block"
           >
             <div className="d-flex justify-content-between align-items-center">
+              <IconMaiar />
               <div className="title">Maiar DeFi Wallet</div>
-              <FontAwesomeIcon icon={faArrowRight} />
+              <FontAwesomeIcon icon={faArrowRight} className="arrow" />
             </div>
           </button>
         )}
@@ -94,22 +98,25 @@ const Unlock = () => {
           className="btn btn-unlock btn-block"
         >
           <div className="d-flex justify-content-between align-items-center">
+            <IconMaiar />
             <div className="title">Maiar App</div>
-            <FontAwesomeIcon icon={faArrowRight} />
+            <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
         </Link>
 
         <Link to={routeNames.ledger} className="btn btn-unlock btn-block">
           <div className="d-flex justify-content-between align-items-center">
+            <IconLedger />
             <div className="title">Ledger</div>
-            <FontAwesomeIcon icon={faArrowRight} />
+            <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
         </Link>
 
         <button onClick={webWalletLogin} className="btn btn-unlock btn-block">
           <div className="d-flex justify-content-between align-items-center">
+            <IconElrond />
             <div className="title">Elrond Web Wallet</div>
-            <FontAwesomeIcon icon={faArrowRight} />
+            <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
         </button>
 

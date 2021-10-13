@@ -11,3 +11,8 @@ $spacers: (
 );
 
 $modal-lg: 640px;
+
+@function toRem($value) {
+  $remValue: ($value / 14) + rem;
+  @return $remValue;
+}
