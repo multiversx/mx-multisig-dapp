@@ -32,24 +32,24 @@ const ReceiveModal = ({ address }: { address?: string }) => {
         centered
       >
         <div className="card">
-          <div className="card-body  text-center">
+          <div className="card-body text-center receive">
             <p className="h3 mb-spacer" data-testid="delegateTitle">
               Receive
             </p>
 
             <QrCode value={address} size={256} />
-            <p className="h6 mb-spacer" data-testid="delegateSubTitle">
-              {address}
-              <div className={"mx-3"}>
+            <div
+              className="h6 mb-spacer copy-address"
+              data-testid="delegateSubTitle"
+            >
+              <p> {address} </p>
+              <span className={""}>
                 <CopyButton text={address} />
                 {/* <ExplorerLink page={`accounts/${address}`} className="ml-2" /> */}
-              </div>
-            </p>
+              </span>
+            </div>
             <div className="modal-action-btns">
-              <button
-                onClick={handleCloseModal}
-                className="btn btn-primary mb-3"
-              >
+              <button onClick={handleCloseModal} className="btn btn-primary">
                 Done
               </button>
             </div>

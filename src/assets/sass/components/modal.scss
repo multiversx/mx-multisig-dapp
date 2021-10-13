@@ -50,3 +50,43 @@
   margin-bottom: 2px;
   margin-right: 8px;
 }
+
+.receive canvas {
+  padding: 11px;
+  border: 1px solid #f1f1f1;
+  box-shadow: 0px 4px 4px rgba(150, 160, 181, 0.08);
+  border-radius: 10px;
+}
+
+.copy-address {
+  margin-top: 32px;
+  display: flex;
+  p {
+    margin: 0;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    padding: 0 26px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 8px 0px 0px 8px;
+    border-right: none;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+  span {
+    display: flex;
+    width: 66px;
+    height: 66px;
+    justify-content: center;
+    align-items: center;
+    background: #f3f9ff;
+    border: 1px solid #ddeeff;
+    border-radius: 0px 8px 8px 0px;
+    cursor: pointer;
+  }
+  svg {
+    font-size: 16px;
+    color: #1392ff;
+  }
+}

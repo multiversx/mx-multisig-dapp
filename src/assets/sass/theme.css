@@ -10931,6 +10931,7 @@ a,
   -webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
           box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
   border-radius: 6px;
+  gap: 8px;
 }
 
 .connect-btns .info {
