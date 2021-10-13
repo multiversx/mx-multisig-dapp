@@ -87,8 +87,11 @@ const Unlock = () => {
             className="btn btn-unlock btn-block"
           >
             <div className="d-flex justify-content-between align-items-center">
-              <IconMaiar />
-              <div className="title">Maiar DeFi Wallet</div>
+              <div className="d-flex flex-row method">
+                <IconMaiar />
+                <div className="title">Maiar DeFi Wallet</div>
+              </div>
+
               <FontAwesomeIcon icon={faArrowRight} className="arrow" />
             </div>
           </button>
@@ -98,24 +101,32 @@ const Unlock = () => {
           className="btn btn-unlock btn-block"
         >
           <div className="d-flex justify-content-between align-items-center">
-            <IconMaiar />
-            <div className="title">Maiar App</div>
+            <div className="d-flex flex-row method">
+              <IconMaiar />
+              <div className="title">Maiar App</div>
+            </div>
+
             <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
         </Link>
 
         <Link to={routeNames.ledger} className="btn btn-unlock btn-block">
           <div className="d-flex justify-content-between align-items-center">
-            <IconLedger />
-            <div className="title">Ledger</div>
+            <div className="d-flex flex-row method">
+              <IconLedger />
+              <div className="title">Ledger</div>
+            </div>
+
             <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
         </Link>
 
         <button onClick={webWalletLogin} className="btn btn-unlock btn-block">
           <div className="d-flex justify-content-between align-items-center">
-            <IconElrond />
-            <div className="title">Elrond Web Wallet</div>
+            <div className="d-flex flex-row method">
+              <IconElrond />
+              <div className="title">Elrond Web Wallet</div>
+            </div>
             <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
         </button>
