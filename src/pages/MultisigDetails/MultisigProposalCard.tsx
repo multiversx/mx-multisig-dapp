@@ -89,8 +89,8 @@ const MultisigProposalCard = ({
           <span className="text">{value}</span>
         </div>
         <div className="deadline">
-          <p className="font-weight-bold mb-0">12/21/2021, 14:50</p>
-          <p className="text mb-0">Proposal deadline</p>
+          <p className="font-weight-bold mb-0">Data</p>
+          <p className="text text-center mb-0">2</p>
         </div>
 
         <div className="d-flex align-items-center action-btns">

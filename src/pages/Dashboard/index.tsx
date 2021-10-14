@@ -115,11 +115,7 @@ const Index = () => {
   return (
     <>
       <div className="owner w-100 d-flex justify-content-center align-items-center flex-column">
-        <div
-          className={
-            "my-wallets" + (multisigContracts.length == 0 ? " mt-auto" : "")
-          }
-        >
+        <div className="my-wallets">
           <div className="welcome text-center">
             <h2>
               Welcome to Multisig
@@ -151,7 +147,7 @@ const Index = () => {
           ) : (
             <div className="wallets-section shadow bg-white">
               <div className="top-bar">
-                <h3>My wallets</h3>
+                <h3 className="title">My wallets</h3>
                 <div className="create-btns d-flex">
                   <button
                     className="btn btn-light d-flex flex-row align-items-center"

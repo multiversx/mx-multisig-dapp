@@ -72,7 +72,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
             autoComplete="off"
             onChange={onAmountChanged}
           />
-          <span>MAX</span>
+          <span>Max</span>
         </div>
         <span>Balance: 14.5454 EGLD </span>
       </div>

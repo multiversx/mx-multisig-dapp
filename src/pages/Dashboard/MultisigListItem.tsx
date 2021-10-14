@@ -57,7 +57,7 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
               href={`${explorerAddress}accounts/${contract.address.bech32}`}
               target="_blank"
               rel="noreferrer"
-              className="link-style ml-2"
+              className="link-second-style ml-2"
             >
               <FontAwesomeIcon icon={faExternalLinkAlt} size="lg" />
             </a>

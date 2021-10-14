@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Redirect, useParams } from "react-router-dom";
-import { ReactComponent as WalletLogo } from "assets/img/bn-wallet-logo.svg";
+import { ReactComponent as WalletLogo } from "assets/img/elrond-wallet-icon.svg";
 import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
 import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
 import PerformActionModal from "components/PerformActionModal";

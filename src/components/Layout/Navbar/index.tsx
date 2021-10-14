@@ -7,7 +7,7 @@ import { ReactComponent as ElrondLogo } from "assets/img/elrond.svg";
 import { dAppName } from "config";
 import Account from "./Account";
 import Settings from "./Settings";
-import union from "assets/img/Union.svg";
+import { ReactComponent as Union } from "assets/img/Union.svg";
 
 const Navbar = () => {
   const { loggedIn } = useDappContext();
@@ -37,7 +37,7 @@ const Navbar = () => {
                 data-testid="loginBtn"
               >
                 <span>
-                  <img src={union} width="20" height="20" />
+                  <Union />
                 </span>
                 Connect now
               </Link>

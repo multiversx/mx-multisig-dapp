@@ -39,6 +39,12 @@ a,
 .link-style {
   color: #1392ff !important;
 }
+.link-second-style {
+  color: #9dabbd !important;
+  &:hover {
+    color: #1392ff !important;
+  }
+}
 
 .wrapper {
   min-height: 100vh;
@@ -74,6 +80,12 @@ a,
 .text {
   color: #9dabbd;
 }
+.t-shadow {
+  text-shadow: 0px 4px 7px rgba(0, 0, 0, 0.3);
+}
+.btn {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04) !important;
+}
 .connect-btns {
   .btn {
     display: flex;
@@ -83,12 +95,17 @@ a,
     align-items: center;
     color: #fff !important;
     background-color: #1392ff;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
     border-radius: 6px;
     gap: 8px;
+    &:hover {
+      background-color: #1392ff;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0 0);
+    }
   }
+
   .info {
     color: #1392ff;
+    margin-left: 48px;
   }
 }
 /* Navbar

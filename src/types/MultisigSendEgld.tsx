@@ -44,11 +44,11 @@ export class MultisigSendEgld extends MultisigAction {
             }
           />
         </div>
-        {this.data !== "" && (
+        {/* {this.data !== "" && (
           <div>
             Data: <span className="text-body">{this.data}</span>
           </div>
-        )}
+        )} */}
       </>
     );
   }

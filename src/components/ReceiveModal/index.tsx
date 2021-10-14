@@ -34,7 +34,7 @@ const ReceiveModal = ({ address }: { address?: string }) => {
         <div className="card">
           <div className="card-body text-center receive">
             <p className="h3 mb-spacer" data-testid="delegateTitle">
-              Receive
+              Deposit
             </p>
 
             <QrCode value={address} size={256} />
