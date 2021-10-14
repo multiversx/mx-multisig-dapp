@@ -76,6 +76,9 @@
         flex-flow: row;
         justify-content: space-between;
         align-items: center;
+        @include media-breakpoint-down(md) {
+          flex-flow: column;
+        }
         .create-btns {
           gap: 16px;
           button {

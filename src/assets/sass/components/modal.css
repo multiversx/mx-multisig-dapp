@@ -73,7 +73,7 @@
   display: flex;
 }
 
-.copy-address p {
+.copy-address .address {
   margin: 0;
   height: 66px;
   display: -webkit-box;
@@ -94,7 +94,7 @@
           hyphens: auto;
 }
 
-.copy-address span {
+.copy-address .copy-btn {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

@@ -33,7 +33,7 @@ const ReceiveModal = ({ address }: { address?: string }) => {
       >
         <div className="card">
           <div className="card-body text-center receive">
-            <p className="h3 mb-spacer" data-testid="delegateTitle">
+            <p className="h3 mb-spacer title" data-testid="delegateTitle">
               Deposit
             </p>
 
@@ -42,8 +42,8 @@ const ReceiveModal = ({ address }: { address?: string }) => {
               className="h6 mb-spacer copy-address"
               data-testid="delegateSubTitle"
             >
-              <p> {address} </p>
-              <span className={""}>
+              <p className="address"> {address} </p>
+              <span className={"copy-btn"}>
                 <CopyButton text={address} />
                 {/* <ExplorerLink page={`accounts/${address}`} className="ml-2" /> */}
               </span>

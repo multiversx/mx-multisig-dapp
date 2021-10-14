@@ -154,18 +154,14 @@ const Index = () => {
                     onClick={onDeployClicked}
                   >
                     <FontAwesomeIcon icon={faPlus} size="lg" />
-                    <div className="navbar-address d-none d-lg-block">
-                      Create
-                    </div>
+                    <div className="navbar-address  d-lg-block">Create</div>
                   </button>
                   <button
                     className="btn address-btn btn-light d-flex flex-row align-items-center"
                     onClick={onAddMultisigClicked}
                   >
                     <FontAwesomeIcon icon={faWallet} size="lg" />
-                    <div className="navbar-address ml-2 d-none d-lg-block">
-                      Open
-                    </div>
+                    <div className="navbar-address ml-2 d-lg-block">Open</div>
                   </button>
                 </div>
               </div>

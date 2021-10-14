@@ -63,7 +63,7 @@ const Unlock = () => {
 
   return (
     <div className="unlock-page m-auto">
-      <div className="card unlock p-spacer text-center">
+      <div className="card unlock text-center">
         <UnlockTitle />
         {!window.elrondWallet && (
           <Link
@@ -132,7 +132,7 @@ const Unlock = () => {
         </button>
 
         <div className="mt-spacer">
-          <span className="text-secondary">New to Elrond?</span>
+          <span className="text">New to Elrond?</span>
         </div>
         <div className="mt-1">
           <a

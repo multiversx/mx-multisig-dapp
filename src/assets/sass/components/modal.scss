@@ -61,7 +61,7 @@
 .copy-address {
   margin-top: 32px;
   display: flex;
-  p {
+  .address {
     margin: 0;
     height: 66px;
     display: flex;
@@ -74,7 +74,7 @@
     word-wrap: break-word;
     hyphens: auto;
   }
-  span {
+  .copy-btn {
     display: flex;
     width: 66px;
     height: 66px;
