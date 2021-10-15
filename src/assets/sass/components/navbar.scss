@@ -154,3 +154,9 @@
     }
   }
 }
+
+@include media-breakpoint-down(sm) {
+  .elrond-logo {
+    width: 113px;
+  }
+}

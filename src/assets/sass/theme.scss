@@ -2,6 +2,7 @@
 -------------------------------------------------- */
 // Fonts
 @import "./fonts";
+@import "./variables";
 
 $headings-font-weight: 300 !important;
 $primary: #1b46c2;
@@ -60,8 +61,8 @@ a,
   padding: 5px;
   border-radius: 50%;
   background-color: $light;
-  width: 65px;
-  height: 65px;
+  width: toRem(65);
+  height: toRem(65);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,16 +114,11 @@ a,
 /* Navbar
 -------------------------------------------------- */
 
-.dapp-name {
-  font-size: 2rem;
-  margin-left: 1.6428571428571428rem;
-}
-
 .navbar {
   .dapp-name {
     display: flex;
     align-items: center;
-    font-size: 24px;
+    font-size: toRem(24);
     font-weight: 400;
     color: #9ba5b4;
     margin-left: 1.6428571428571428rem;
@@ -130,9 +126,9 @@ a,
       content: "";
       display: block;
       width: 1px;
-      height: 42px;
+      height: toRem(42);
       background-color: #9ba5b4;
-      margin-right: 24px;
+      margin-right: toRem(24);
     }
   }
 }

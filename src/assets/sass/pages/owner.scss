@@ -84,6 +84,13 @@
         @include media-breakpoint-down(md) {
           flex-flow: column;
         }
+        .title {
+          padding: 0;
+          margin: 0;
+          @include media-breakpoint-down(sm) {
+            margin-bottom: 1.5rem;
+          }
+        }
         .create-btns {
           gap: 16px;
           button {
@@ -112,6 +119,9 @@
         justify-content: center;
         gap: 24px;
         margin-top: 50px;
+        @include media-breakpoint-down(sm) {
+          gap: 45px;
+        }
         button {
           position: relative;
           flex: 1;
