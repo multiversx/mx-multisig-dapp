@@ -17,19 +17,19 @@ const Home = () => {
     <div className="main flex-fill align-items-center container">
       <div className="row w-100">
         <div className="connect col-lg-6 col-sm-6 border-0 d-flex align-items-center">
-          <div className="cart-connect">
+          <div className="card-connect">
             <figure>
               <img src={shield} alt="shield-icon" width="64" height="64" />
             </figure>
-            <h2 className="mb-3 t-shadow " data-testid="title">
+            <h2 className="mb-3" data-testid="title">
               Security designed to
               <br /> fit your needs.
             </h2>
-            <p className="mb-3 t-shadow">
+            <p className="mb-3">
               Elrond Multisig is an ideal balance between security
               <br /> and accessibility.
             </p>
-            <p className="mb-3 t-shadow ">
+            <p className="mb-3">
               Enabling clients to move assets seamlessly
               <br /> and reliably, protected by multi-signature security.
             </p>
@@ -40,15 +40,16 @@ const Home = () => {
                   className="btn primary mt-3"
                   data-testid="loginBtn"
                 >
-                  <span>
+                  <span className="icon">
                     <Union />
                   </span>
-                  Connect now
+
+                  <span className="name">Connect now</span>
                 </Link>
               </div>
               <Link
                 to={routeNames.unlock}
-                className="d-flex align-items-center mt-3 info t-shadow "
+                className="d-flex align-items-center mt-3 info"
                 data-testid="loginBtn"
               >
                 What is multisig?

@@ -1,5 +1,7 @@
 .navbar {
   height: 6.071428571428571rem;
+  border: 1px solid #ffffff;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.06);
 
   .navbar-toggler {
     display: block;
@@ -40,6 +42,7 @@
       }
     }
   }
+
   .navbar-buttons .btn {
     padding-left: 0.8rem;
     padding-right: 0.8rem;
@@ -61,6 +64,9 @@
     @include media-breakpoint-down(md) {
       width: 48px;
       min-width: unset;
+    }
+    .hide {
+      display: none;
     }
     .disconnect {
       display: none;
@@ -85,15 +91,16 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        svg {
-          color: #fff;
-        }
       }
       .address {
         display: none;
       }
       > svg {
         display: none;
+      }
+      .hide {
+        color: #fff;
+        display: block;
       }
     }
 
@@ -129,6 +136,19 @@
         flex-grow: 1;
         .nav-link {
           min-width: auto;
+        }
+      }
+    }
+  }
+}
+
+.navbar-nav {
+  .connect-btns {
+    .btn {
+      @include media-breakpoint-down(sm) {
+        width: 48px;
+        .name {
+          display: none;
         }
       }
     }

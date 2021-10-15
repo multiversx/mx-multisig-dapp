@@ -18,10 +18,10 @@ const ReceiveModal = ({ address }: { address?: string }) => {
   return (
     <>
       <button onClick={handleOpenModal} className="btn btn-primary">
-        <span>
+        <span className="icon">
           <FontAwesomeIcon icon={faQrcode} />
         </span>
-        Receive
+        <span className="name">Deposit</span>
       </button>
       <Modal
         show={showModal}

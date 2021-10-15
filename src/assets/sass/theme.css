@@ -1,5 +1,6 @@
 /* Bootstrap overrides
 -------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,500;0,600;0,700;0,800;1,300&display=swap");
 /* Do not move the imports from here. 
 Override Bootstrap variables only above.
 -------------------------------------------------- */
@@ -10859,7 +10860,7 @@ p,
 span,
 a,
 div {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 a,
@@ -10935,7 +10936,7 @@ a,
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  min-width: 149px;
+  width: 149px;
   height: 48px;
   -webkit-box-pack: center;
       -ms-flex-pack: center;

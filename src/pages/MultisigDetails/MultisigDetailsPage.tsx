@@ -338,32 +338,32 @@ const MultisigDetailsPage = () => {
           <div className="flex-column d-flex align-items-center">
             <WalletLogo className="wallet-logo " />
             <div className="w-100 user-profile">
-              <div className="d-flex justify-content-between wallet">
-                <div className="meta user-role">
-                  <p>
+              <div className="d-flex profile-meta">
+                <div className="user-role">
+                  <p className="icon">
                     <FontAwesomeIcon icon={faUser} />
-                    Role: <span>{t(userRoleAsString())}</span>
+                    Role: <span className="text">{t(userRoleAsString())}</span>
                   </p>
                 </div>
-                <div className="wallet-name text-center position-relative">
-                  <h3 className="mb-0 text-center">{multisigName} </h3>
+                <div className="wallet-name position-relative">
+                  <h3 className="mb-0">{multisigName} </h3>
                 </div>
-                <div className="meta date d-flex justify-content-end">
-                  <p>
-                    <FontAwesomeIcon icon={faCalendarAlt} /> Created:{" "}
-                    <span>12/10/2021</span>
+                <div className="created d-flex">
+                  <p className="time">
+                    <FontAwesomeIcon icon={faCalendarAlt} className="icon" />{" "}
+                    Created: <span className="text">12/10/2021</span>
                   </p>
                 </div>
               </div>
               {currentMultisigAddress && (
-                <div className="px-spacer address text-center d-flex align-items-center justify-content-center">
+                <div className="address text-center d-flex align-items-center justify-content-center">
                   <TrustedBadge contractAddress={multisigAddressParam} />
                   <Ui.Trim text={currentMultisigAddress.bech32()} />
                   <a
                     href={`${explorerAddress}accounts/${currentMultisigAddress.bech32()}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="link-style ml-2 mt-n1"
+                    className="link-style ml-2"
                   >
                     <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
                   </a>
@@ -398,10 +398,11 @@ const MultisigDetailsPage = () => {
               <div className="d-flex justify-content-center actions-btns">
                 {isProposer && (
                   <button onClick={onSendEgld} className="btn btn-primarygit ">
-                    <span>
+                    <span className="icon">
                       <FontAwesomeIcon icon={faHandPaper} />
                     </span>
-                    Propose
+
+                    <span className="name">Propose</span>
                   </button>
                 )}
                 <ReceiveModal address={currentMultisigAddress?.bech32()} />

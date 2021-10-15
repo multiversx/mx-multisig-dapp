@@ -16,28 +16,51 @@
     .user-profile {
       border-bottom: 1px solid #e6e8ec;
       padding: 24px 0 40px;
-      .wallet {
+      .profile-meta {
         padding: 0 40px;
-        p {
+        @include media-breakpoint-down(sm) {
+          flex-flow: column;
+        }
+        .icon {
           color: #a0a9bc;
           svg {
             font-size: 13px;
             margin-right: 8px;
           }
-          span {
-            color: #000;
+        }
+        .user-role {
+          display: flex;
+          @include media-breakpoint-down(sm) {
+            order: 2;
           }
         }
         .wallet-name {
           margin-top: 40px;
           margin-bottom: 10px;
+          text-align: center;
+          @include media-breakpoint-down(sm) {
+            order: 1;
+            margin-top: 40px;
+            text-align: start;
+          }
         }
         div {
           flex: 1;
         }
+        .created {
+          justify-content: flex-end;
+          color: #a0a9bc;
+          @include media-breakpoint-down(sm) {
+            order: 3;
+            justify-content: flex-start;
+          }
+        }
+        .text {
+          color: #000;
+        }
       }
       .address {
-        color: #a0a9bc;
+        padding: 0 40px;
         svg {
           color: #a0a9bc;
         }
@@ -65,14 +88,15 @@
           &:hover {
             background: #1390ff;
             color: #fff;
-            span {
+            .icon {
               background: #fff;
               svg {
                 color: #1390ff;
               }
             }
           }
-          span {
+          .icon {
+            flex: 1;
             width: 48px;
             height: 48px;
             color: #fff;
@@ -81,11 +105,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 12px 0 4px;
+            margin-left: 4px;
             svg {
               width: 16px;
               height: 18px;
             }
+          }
+          .name {
+            flex: 2;
+            display: flex;
+            justify-content: center;
           }
         }
       }
@@ -135,6 +164,7 @@
           align-items: center;
           padding: 15px 20px 15px 16px;
           border-radius: 6px;
+          gap: 10px;
         }
         .sign {
           color: #16d296;

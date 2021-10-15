@@ -58,6 +58,7 @@ const Account = () => {
         onClick={onDisconnectClick}
       >
         <FontAwesomeIcon icon={faUserCircle} size="lg" />
+        <FontAwesomeIcon icon={faPowerOff} size="lg" className="hide" />
         <div className="navbar-address d-none d-lg-block">
           <span className="address">
             {username ? (
@@ -66,10 +67,7 @@ const Account = () => {
               <Trim text={address} />
             )}
           </span>
-          <span className="disconnect">
-            <FontAwesomeIcon icon={faPowerOff} size="lg" />
-            Disconnect
-          </span>
+          <span className="disconnect">Disconnect</span>
         </div>
       </button>
     </div>
