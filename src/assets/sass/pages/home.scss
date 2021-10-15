@@ -30,9 +30,6 @@
 }
 
 .connect {
-  .card-connect {
-    padding-top: 63px;
-  }
   h2 {
     color: #3d5170;
     font-size: 36px;
@@ -46,6 +43,12 @@
     color: #3d5170;
   }
 }
-.card-image {
-  padding-top: 63px;
+
+@include media-breakpoint-down(sm) {
+  .card-connect {
+    padding-top: 63px;
+  }
+  .card-image {
+    padding-top: 63px;
+  }
 }
