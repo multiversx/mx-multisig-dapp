@@ -5,7 +5,7 @@ import { dAppName } from "config";
 import { routeNames } from "routes";
 import { ReactComponent as Hero } from "assets/img/home-img-multisig.svg";
 import { ReactComponent as Union } from "assets/img/Union.svg";
-import shield from "assets/img/shield.svg";
+import shield from "assets/img/shield-icon.svg";
 
 const Home = () => {
   const { loggedIn } = Dapp.useContext();
