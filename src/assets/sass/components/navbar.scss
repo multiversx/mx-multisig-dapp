@@ -77,16 +77,15 @@
     svg {
       color: #4aa8ff;
       font-size: 16px;
-      margin-right: 10px;
-      @include media-breakpoint-down(md) {
-        margin-right: 0;
-      }
     }
     &:hover {
       color: #fff;
       background-color: #1392ff;
       border: 1px solid #007ded !important;
       background-image: unset;
+      .navbar-address {
+        width: auto;
+      }
       .disconnect {
         display: flex;
         justify-content: center;
