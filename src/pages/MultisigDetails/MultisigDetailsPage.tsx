@@ -5,23 +5,19 @@ import { Address, Balance } from "@elrondnetwork/erdjs";
 import {
   faUser,
   faCalendarAlt,
-  faArrowCircleLeft,
   faCircleNotch,
-  faQrcode,
   faHandPaper,
   faExternalLinkAlt,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import { ReactComponent as WalletLogo } from "assets/img/elrond-wallet-icon.svg";
 import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
 import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
 import PerformActionModal from "components/PerformActionModal";
 import ReceiveModal from "components/ReceiveModal";
-import StatCard from "components/StatCard";
 import State from "components/State";
 import TrustedBadge from "components/TrustedBadge";
 import { denomination, decimals } from "config";
@@ -48,6 +44,7 @@ import {
 } from "redux/slices/multisigContractsSlice";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import { ProposalsTypes } from "../../types/Proposals";
+import MultisigDetailsAccordion from "./MultisigDetailsAccordion";
 import ProposeModal from "./Propose/ProposeModal";
 
 interface MultisigDetailsPageParams {
@@ -62,21 +59,12 @@ export interface ContractInfo {
   allActions: MultisigActionDetailed[];
   multisigBalance: Balance;
   multisigName: string;
+  boardMembersAddresses?: Address[];
+  proposersAddresses?: Address[];
 }
 
 const MultisigDetailsPage = () => {
-  const [
-    {
-      totalBoardMembers,
-      totalProposers,
-      quorumSize,
-      userRole,
-      allActions,
-      multisigBalance,
-      multisigName,
-    },
-    setContractInfo,
-  ] = useState<ContractInfo>({
+  const [contractInfo, setContractInfo] = useState<ContractInfo>({
     totalBoardMembers: 0,
     totalProposers: 0,
     quorumSize: 0,
@@ -84,7 +72,18 @@ const MultisigDetailsPage = () => {
     multisigBalance: Balance.fromString("0"),
     multisigName: "",
     allActions: [],
+    boardMembersAddresses: [],
+    proposersAddresses: [],
   });
+
+  const {
+    totalBoardMembers,
+    quorumSize,
+    userRole,
+    allActions,
+    multisigBalance,
+    multisigName,
+  } = contractInfo;
 
   const contractsFetched = useSelector(multisigContractsFetchedSelector);
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
@@ -99,6 +98,8 @@ const MultisigDetailsPage = () => {
     queryAllActions,
     queryActionValidSignerCount,
     mutateDiscardAction,
+    queryBoardMemberAddresses,
+    queryProposerAddresses,
   } = useMultisigContract();
   const { queryContractName } = useManagerContract();
   const dispatch = useDispatch();
@@ -132,6 +133,8 @@ const MultisigDetailsPage = () => {
         newAllActions,
         contractName,
         account,
+        boardMembersAddresses,
+        proposersAddresses,
       ] = await Promise.all([
         queryBoardMembersCount(),
         queryProposersCount(),
@@ -140,8 +143,10 @@ const MultisigDetailsPage = () => {
         queryAllActions(),
         queryContractName(currentMultisigAddress!),
         dapp.proxy.getAccount(currentMultisigAddress!),
+        queryBoardMemberAddresses(),
+        queryProposerAddresses(),
       ]);
-      const contractInfo: ContractInfo = {
+      const newContractInfo: ContractInfo = {
         totalBoardMembers: newTotalBoardMembers,
         totalProposers: newTotalProposers,
         quorumSize: newQuorumSize,
@@ -149,9 +154,11 @@ const MultisigDetailsPage = () => {
         allActions: newAllActions,
         multisigBalance: account.balance,
         multisigName: contractName,
+        boardMembersAddresses,
+        proposersAddresses,
       };
 
-      setContractInfo(contractInfo);
+      setContractInfo(newContractInfo);
     } catch (error) {
       console.error(error);
     } finally {
@@ -276,22 +283,25 @@ const MultisigDetailsPage = () => {
   };
 
   const onSendEgld = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.send_egld));
+    dispatch(
+      setProposeModalSelectedOption({
+        option: ProposalsTypes.send_egld,
+      }),
+    );
 
   const onIssueToken = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.issue_token));
+    dispatch(
+      setProposeModalSelectedOption({
+        option: ProposalsTypes.issue_token,
+      }),
+    );
 
   const onSendToken = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.send_token));
-
-  const onAddBoardMember = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.add_board_member));
-  const onAddProposers = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.add_proposer));
-  const onRemoveUser = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.remove_user));
-  const onChangeQuorum = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.change_quorum));
+    dispatch(
+      setProposeModalSelectedOption({
+        option: ProposalsTypes.send_token,
+      }),
+    );
 
   React.useEffect(() => {
     tryParseUrlParams();
@@ -410,32 +420,7 @@ const MultisigDetailsPage = () => {
             </div>
           </div>
 
-          <div className="cards d-flex flex-wrap ">
-            <StatCard
-              title={t("Board Members")}
-              value={totalBoardMembers.toString()}
-              color="orange"
-              svg=""
-              onRemoveAction={onRemoveUser}
-              onAddAction={onAddBoardMember}
-            />
-            <StatCard
-              title={t("Proposers")}
-              value={totalProposers.toString()}
-              valueUnit=""
-              color="orange"
-              svg="clipboard-list.svg"
-              onAddAction={onAddProposers}
-            />
-            <StatCard
-              title={t("Quorum Size")}
-              value={`${quorumSize.toString()} / ${totalBoardMembers} `}
-              valueUnit=""
-              color="orange"
-              onEditAction={onChangeQuorum}
-              svg="quorum.svg"
-            />
-          </div>
+          <MultisigDetailsAccordion contractInfo={contractInfo} />
 
           <div className="card-body">
             {!contractsFetched ? (

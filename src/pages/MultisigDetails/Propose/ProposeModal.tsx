@@ -1,23 +1,27 @@
 import React, { useState } from "react";
 import { Address } from "@elrondnetwork/erdjs/out";
+import { faTimes, faHandPaper } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useMultisigContract } from "contracts/MultisigContract";
 import { proposeModalSelectedOptionSelector } from "redux/selectors/modalsSelector";
+import {
+  SelectedOptionType,
+  setProposeModalSelectedOption,
+} from "redux/slices/modalsSlice";
 import { MultisigAction } from "types/MultisigAction";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
 import { MultisigSendToken } from "types/MultisigSendToken";
-import { setProposeModalSelectedOption } from "../../../redux/slices/modalsSlice";
-import { ProposalsTypes } from "../../../types/Proposals";
+import { ProposalsTypes } from "types/Proposals";
 import ProposeChangeQuorum from "./ProposeChangeQuorum";
 import ProposeInputAddressType from "./ProposeInputAddress";
 import ProposeIssueToken from "./ProposeIssueToken";
+import ProposeRemoveUser from "./ProposeRemoveUser";
 import ProposeSendEgld from "./ProposeSendEgld";
 import ProposeSendToken from "./ProposeSendToken";
-import { faTimes, faHandPaper } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const titles = {
   [ProposalsTypes.send_egld]: "send egld",
@@ -41,13 +45,16 @@ const ProposeModal = () => {
   } = useMultisigContract();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const selectedOption = useSelector(proposeModalSelectedOptionSelector);
+  const selectedOption: SelectedOptionType = useSelector(
+    proposeModalSelectedOptionSelector,
+  );
   const [selectedNumericParam, setSelectedNumericParam] = useState(1);
   const [selectedAddressParam, setSelectedAddressParam] = useState(
     new Address(),
   );
   const [selectedProposal, setSelectedProposal] =
     useState<MultisigAction | null>(null);
+
   const onProposeClicked = () => {
     if (selectedProposal instanceof MultisigSendEgld) {
       mutateSendEgld(
@@ -64,17 +71,17 @@ const ProposeModal = () => {
       return;
     }
 
-    switch (selectedOption) {
-      case "change_quorum":
+    switch (selectedOption?.option) {
+      case ProposalsTypes.change_quorum:
         mutateProposeChangeQuorum(selectedNumericParam);
         break;
-      case "add_proposer":
+      case ProposalsTypes.add_proposer:
         mutateProposeAddProposer(selectedAddressParam);
         break;
-      case "add_board_member":
+      case ProposalsTypes.add_board_member:
         mutateProposeAddBoardMember(selectedAddressParam);
         break;
-      case "remove_user":
+      case ProposalsTypes.remove_user:
         mutateProposeRemoveUser(selectedAddressParam);
         break;
       default:
@@ -102,6 +109,36 @@ const ProposeModal = () => {
   if (selectedOption == null) {
     return null;
   }
+
+  const getModalContent = () => {
+    switch (selectedOption?.option) {
+      case ProposalsTypes.change_quorum: {
+        return (
+          <ProposeChangeQuorum handleParamsChange={handleNumericParamChange} />
+        );
+      }
+      case ProposalsTypes.add_proposer:
+      case ProposalsTypes.add_board_member:
+        return (
+          <ProposeInputAddressType
+            handleParamsChange={handleAddressParamChange}
+          />
+        );
+      case ProposalsTypes.remove_user:
+        return (
+          <ProposeRemoveUser
+            handleSetAddress={handleAddressParamChange}
+            selectedOption={selectedOption}
+          />
+        );
+      case ProposalsTypes.send_egld:
+        return <ProposeSendEgld handleChange={handleProposalChange} />;
+      case ProposalsTypes.issue_token:
+        return <ProposeIssueToken handleChange={handleProposalChange} />;
+      case ProposalsTypes.send_token:
+        return <ProposeSendToken handleChange={handleProposalChange} />;
+    }
+  };
   return (
     <Modal
       show
@@ -118,23 +155,7 @@ const ProposeModal = () => {
           </p>
 
           <div className="">
-            {selectedOption === "change_quorum" ? (
-              <ProposeChangeQuorum
-                handleParamsChange={handleNumericParamChange}
-              />
-            ) : selectedOption === "add_proposer" ||
-              selectedOption === "add_board_member" ||
-              selectedOption === "remove_user" ? (
-              <ProposeInputAddressType
-                handleParamsChange={handleAddressParamChange}
-              />
-            ) : selectedOption === "send_egld" ? (
-              <ProposeSendEgld handleChange={handleProposalChange} />
-            ) : selectedOption === "issue_token" ? (
-              <ProposeIssueToken handleChange={handleProposalChange} />
-            ) : selectedOption === "send_token" ? (
-              <ProposeSendToken handleChange={handleProposalChange} />
-            ) : null}
+            {getModalContent()}
             <div className="modal-action-btns">
               <button
                 onClick={handleClose}

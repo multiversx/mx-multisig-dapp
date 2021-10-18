@@ -19,8 +19,23 @@ interface PerformActionModal {
   selectedActionId: number | null;
 }
 
+export interface RemoveUserOptionType {
+  option: ProposalsTypes.remove_user;
+  address: string;
+}
+
+interface SimpleSelectedOptionType {
+  option: ProposalsTypes;
+}
+
+export type SelectedOptionType =
+  | SimpleSelectedOptionType
+  | RemoveUserOptionType
+  | null
+  | undefined;
+
 interface ProposeModal {
-  selectedOption?: ProposalsTypes | null;
+  selectedOption?: SelectedOptionType;
 }
 
 export interface ModalsSliceState {
@@ -63,7 +78,7 @@ export const modalsSlice = createSlice({
     },
     setProposeModalSelectedOption: (
       state: ModalsSliceState,
-      action: PayloadAction<ProposalsTypes | null>,
+      action: PayloadAction<SelectedOptionType | null>,
     ) => {
       state.proposeModal.selectedOption = action.payload;
     },

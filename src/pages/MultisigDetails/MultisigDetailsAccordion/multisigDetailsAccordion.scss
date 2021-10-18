@@ -1,0 +1,25 @@
+.multisig-details-accordion {
+position:relative;
+
+  .expand-icon {
+    position:absolute;
+    left: 50%;
+    bottom: -1rem;
+    z-index: 100;
+    pointer-events: none;
+
+    svg {
+      pointer-events: none;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  .cards-collapse-content {
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+}
