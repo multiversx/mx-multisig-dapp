@@ -70,7 +70,7 @@ const MultisigProposalCard = ({
     mutateDiscardAction(actionId);
   };
   return (
-    <div className="statcard shadow-sm text-black py-3 px-4 mb-spacer">
+    <div className="statcard text-black py-3 px-4 mb-spacer">
       <div className="d-flex align-items-center justify-content-between proposal">
         <div className="meta">
           <p className="h5 mb-0">
