@@ -3,10 +3,13 @@ import { Address } from "@elrondnetwork/erdjs";
 import {
   faMinus,
   faPlus,
+  faPencilAlt,
+  faExternalLinkAlt,
   faChevronCircleDown,
   faChevronCircleUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
 import { Accordion, Card } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
@@ -68,10 +71,18 @@ const MultisigDetailsAccordion = ({
   const renderAddress = (address: Address) => (
     <Card.Header key={address.bech32()}>
       <div className="user-item">
-        <span className="address d-flex">
+        <span className="address text d-flex">
           <Ui.Trim text={address.bech32()} />
         </span>
-        <CopyButton text={address.bech32()} />
+        {/* <CopyButton text={address.bech32()} /> */}
+        <a
+          href="#"
+          target="_blank"
+          rel="noreferrer"
+          className="link-style ml-2"
+        >
+          <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
+        </a>
       </div>
       <div className="btns">
         <button
@@ -101,7 +112,7 @@ const MultisigDetailsAccordion = ({
             onClick={onChangeQuorum}
             className={"btn action-add action unsign"}
           >
-            <FontAwesomeIcon icon={faMinus} />
+            <FontAwesomeIcon icon={faPencilAlt} />
             <span className="name">Edit quorum</span>
           </button>
         </div>
@@ -125,8 +136,16 @@ const MultisigDetailsAccordion = ({
           </button>
         </div>
       </Card.Header>
-
-      <Card.Body>{proposersAddresses.map(renderAddress)}</Card.Body>
+      {Object.keys(proposersAddresses).length > 0 ? (
+        <Card.Body></Card.Body>
+      ) : (
+        <div className=" w-100 no-active-proposals">
+          <p className="d-flex flex-column align-items-center mb-3">
+            <NoPoposalsIcon className=" " />
+            {t("Currently there are no proposers.")}
+          </p>
+        </div>
+      )}
     </div>
   );
   return (

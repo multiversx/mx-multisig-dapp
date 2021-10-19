@@ -63,7 +63,7 @@ const StatCard = ({
         </div> */}
         <div>{children}</div>
       </div>
-      <h5 className="title">{title}</h5>
+      <span className="h5 title">{title}</span>
 
       <small className="opacity-5">
         {percentage}

@@ -135,6 +135,7 @@
       }
     }
   }
+
   .owner-actions {
     .card {
       border: none;
@@ -149,7 +150,6 @@
           padding: 1rem 0;
         }
         .card-header {
-          margin-bottom: 20px;
           .user-item {
             display: flex;
             .side-action {
@@ -165,6 +165,12 @@
         }
         .card-body {
           padding: 8px 0;
+        }
+        button {
+          padding: 8px 20px 8px 16px;
+          svg {
+            font-size: 12px;
+          }
         }
         @include media-breakpoint-down(sm) {
           button {
@@ -183,18 +189,6 @@
   }
 
   .proposals-list {
-    .no-active-proposals {
-      padding: 40px 0;
-      svg {
-        margin-bottom: 16px;
-      }
-      p {
-        color: #9dabbd;
-      }
-      a {
-        text-decoration: underline;
-      }
-    }
     .proposal {
       width: 100%;
       gap: 20px;
@@ -212,6 +206,18 @@
         flex: 1;
         justify-content: center;
       }
+    }
+  }
+  .no-active-proposals {
+    padding: 40px 0;
+    svg {
+      margin-bottom: 16px;
+    }
+    p {
+      color: #9dabbd;
+    }
+    a {
+      text-decoration: underline;
     }
   }
 }
