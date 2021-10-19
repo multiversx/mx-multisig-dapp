@@ -141,7 +141,7 @@
       border: none;
       border-radius: unset;
       border-bottom: 1px solid #f1f1f1 !important;
-
+      background-color: #fafafa;
       .actions-card {
         padding: 0 40px;
         .card-header,
@@ -189,6 +189,9 @@
   }
 
   .proposals-list {
+    .statcard {
+      border-radius: 10px;
+    }
     .proposal {
       width: 100%;
       gap: 20px;
