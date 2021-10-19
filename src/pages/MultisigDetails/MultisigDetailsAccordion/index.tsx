@@ -180,7 +180,7 @@ const MultisigDetailsAccordion = ({
         />
         <StatCard
           title={t("Quorum Size")}
-          value={`${quorumSize.toString()} / ${totalBoardMembers} `}
+          value={`${quorumSize.toString()}/${totalBoardMembers} `}
           valueUnit=""
           color="orange"
           svg="quorum.svg"
