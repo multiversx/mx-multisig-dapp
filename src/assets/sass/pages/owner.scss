@@ -116,10 +116,11 @@
         display: flex;
         flex-flow: row;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 24px;
-        margin-top: 50px;
+        margin-top: 27px;
         @include media-breakpoint-down(sm) {
+          justify-content: center;
           gap: 45px;
         }
         button {
@@ -130,6 +131,7 @@
           border: 1px solid #f1f1f1;
           border-radius: 10px;
           padding: 30px 21px;
+          margin-top: 33px;
           &:hover {
             border: 1px solid #1390ff;
             box-shadow: 0px 6px 8px rgba(19, 146, 255, 0.12) !important;
