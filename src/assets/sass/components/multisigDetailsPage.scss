@@ -150,6 +150,18 @@
         }
         .card-header {
           margin-bottom: 20px;
+          .user-item {
+            display: flex;
+            .side-action {
+              color: #9dabbd;
+              padding-left: 0.5rem;
+              &:hover {
+                svg {
+                  color: #1390ff;
+                }
+              }
+            }
+          }
         }
         .card-body {
           padding: 8px 0;

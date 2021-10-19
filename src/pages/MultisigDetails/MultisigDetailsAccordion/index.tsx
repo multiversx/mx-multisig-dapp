@@ -68,10 +68,10 @@ const MultisigDetailsAccordion = ({
   const renderAddress = (address: Address) => (
     <Card.Header key={address.bech32()}>
       <div className="user-item">
-        <span className="address text d-flex">
+        <span className="address d-flex">
           <Ui.Trim text={address.bech32()} />
         </span>
-        {/* <CopyButton text={address.bech32()} /> */}
+        <CopyButton text={address.bech32()} />
       </div>
       <div className="btns">
         <button
