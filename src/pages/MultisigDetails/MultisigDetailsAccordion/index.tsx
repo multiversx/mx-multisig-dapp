@@ -79,7 +79,7 @@ const MultisigDetailsAccordion = ({
           href="#"
           target="_blank"
           rel="noreferrer"
-          className="link-style ml-2"
+          className="link-second-style  ml-2"
         >
           <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
         </a>
@@ -118,7 +118,16 @@ const MultisigDetailsAccordion = ({
         </div>
       </Card.Header>
 
-      <Card.Body>{boardMembersAddresses.map(renderAddress)}</Card.Body>
+      {Object.keys(boardMembersAddresses).length > 0 ? (
+        <Card.Body>{boardMembersAddresses.map(renderAddress)}</Card.Body>
+      ) : (
+        <div className=" w-100 no-active-proposals">
+          <p className="d-flex flex-column align-items-center mb-3">
+            <NoPoposalsIcon className=" " />
+            {t("Currently there are no proposers.")}
+          </p>
+        </div>
+      )}
     </div>
   );
 

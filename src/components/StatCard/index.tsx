@@ -42,8 +42,8 @@ const StatCard = ({
 }: StatCardType) => {
   return (
     <div className={"statcard text-black"}>
-      <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
-        {/* <div className="icon my-1 statcard-item ">
+      {/* <div className="d-flex align-items-center mt-1 mb-2">
+        <div className="icon my-1 statcard-item ">
           {svg === "clipboard-check.svg" ? (
             <BoardMember style={{ width: 32, height: 32 }} />
           ) : svg === "clipboard-list.svg" ? (
@@ -60,9 +60,9 @@ const StatCard = ({
               className="text-black"
             ></SVG>
           )}
-        </div> */}
+        </div>
         <div>{children}</div>
-      </div>
+      </div> */}
       <span className="h5 title">{title}</span>
 
       <small className="opacity-5">

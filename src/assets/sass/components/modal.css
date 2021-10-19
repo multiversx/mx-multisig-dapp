@@ -46,6 +46,10 @@
   margin-bottom: 32px;
 }
 
+.modal-control-container .center {
+  margin: 32px auto;
+}
+
 .modal-control-container .form-check-label {
   font-size: 16px;
   font-weight: 300;

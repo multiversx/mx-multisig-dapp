@@ -61,6 +61,7 @@
       }
       .address {
         padding: 0 40px;
+        gap: 12px;
         svg {
           color: #a0a9bc;
         }
@@ -147,7 +148,7 @@
         .card-header,
         .card-body {
           background: unset;
-          padding: 1rem 0;
+          padding: 1rem 6px;
         }
         .card-header {
           .user-item {
@@ -201,11 +202,10 @@
         flex-flow: wrap;
       }
       .meta {
-        flex: 2;
+        flex: 3;
       }
       .deadline {
         flex: 1;
-        text-align: center;
       }
       .action-btns {
         flex: 1;
