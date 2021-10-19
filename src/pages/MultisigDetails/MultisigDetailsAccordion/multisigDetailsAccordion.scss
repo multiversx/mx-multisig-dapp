@@ -1,9 +1,9 @@
 .multisig-details-accordion {
-position:relative;
+  position: relative;
 
   .expand-icon {
-    position:absolute;
-    left: 50%;
+    position: absolute;
+    left: calc(50% - 11px);
     bottom: -1rem;
     z-index: 100;
     pointer-events: none;

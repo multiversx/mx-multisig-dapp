@@ -1,0 +1,30 @@
+.multisig-details-accordion {
+  position: relative;
+}
+
+.multisig-details-accordion .expand-icon {
+  position: absolute;
+  left: calc(50% - 11px);
+  bottom: -1rem;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.multisig-details-accordion .expand-icon svg {
+  pointer-events: none;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.multisig-details-accordion .cards-collapse-content .card-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+/*# sourceMappingURL=multisigDetailsAccordion.css.map */
