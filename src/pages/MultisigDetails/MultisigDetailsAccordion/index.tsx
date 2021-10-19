@@ -70,25 +70,38 @@ const MultisigDetailsAccordion = ({
         {address.bech32()}
         <CopyButton text={address.bech32()} />
       </div>
-      <button
-        onClick={() => onRemoveUser(address)}
-        className={"action-remove m-lg-1 order-1"}
-      >
-        <FontAwesomeIcon icon={faMinus} />
-      </button>
+      <div className="btns">
+        <button
+          onClick={() => onRemoveUser(address)}
+          className={"action-remove action remove"}
+        >
+          <FontAwesomeIcon icon={faMinus} />
+          <span className="name">Remove</span>
+        </button>
+      </div>
     </Card.Header>
   );
 
   const boardMembersContent = boardMembersAddresses != null && (
-    <div className={"boards-members-content"}>
+    <div className={"actions-card boards-members-content"}>
       <Card.Header>
-        <span>Board Members</span>
-        <button
-          onClick={onAddBoardMember}
-          className={"action-add m-lg-1 order-3"}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
+        <span className="h5">Board Members</span>
+        <div className="btns">
+          <button
+            onClick={onAddBoardMember}
+            className={"btn action-add action unsign"}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            <span className="name">Add member</span>
+          </button>
+          <button
+            onClick={onChangeQuorum}
+            className={"btn action-add action unsign"}
+          >
+            <FontAwesomeIcon icon={faMinus} />
+            <span className="name">Edit quorum</span>
+          </button>
+        </div>
       </Card.Header>
 
       <Card.Body>{boardMembersAddresses.map(renderAddress)}</Card.Body>
@@ -96,15 +109,18 @@ const MultisigDetailsAccordion = ({
   );
 
   const proposersContent = proposersAddresses != null && (
-    <div className={"boards-members-content"}>
+    <div className={"actions-card proposals-content"}>
       <Card.Header>
-        <span>Proposers</span>
-        <button
-          onClick={onAddProposers}
-          className={"action-add m-lg-1 order-3"}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
+        <span className="h5">Proposers</span>
+        <div className="btns">
+          <button
+            onClick={onAddProposers}
+            className={"action-add action unsign"}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            <span className="name">Add proposer</span>
+          </button>
+        </div>
       </Card.Header>
 
       <Card.Body>{proposersAddresses.map(renderAddress)}</Card.Body>
@@ -136,7 +152,6 @@ const MultisigDetailsAccordion = ({
           value={`${quorumSize.toString()} / ${totalBoardMembers} `}
           valueUnit=""
           color="orange"
-          onEditAction={onChangeQuorum}
           svg="quorum.svg"
         />
       </Accordion.Toggle>
@@ -146,12 +161,16 @@ const MultisigDetailsAccordion = ({
         />
       </div>
       <Card>
-        <Accordion.Collapse eventKey="0">
-          <div className={"cards-collapse-content"}>{boardMembersContent}</div>
-        </Accordion.Collapse>
-        <Accordion.Collapse eventKey="0">
-          <div className={"cards-collapse-content"}>{proposersContent}</div>
-        </Accordion.Collapse>
+        <div className="collapse-wrapper owner-actions">
+          <Accordion.Collapse eventKey="0">
+            <div className={"cards-collapse-content"}>
+              {boardMembersContent}
+            </div>
+          </Accordion.Collapse>
+          <Accordion.Collapse eventKey="0">
+            <div className={"cards-collapse-content"}>{proposersContent}</div>
+          </Accordion.Collapse>
+        </div>
       </Card>
     </Accordion>
   );

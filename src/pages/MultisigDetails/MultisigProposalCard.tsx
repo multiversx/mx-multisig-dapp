@@ -93,7 +93,7 @@ const MultisigProposalCard = ({
           <p className="text text-center mb-0">2</p>
         </div>
 
-        <div className="d-flex align-items-center action-btns">
+        <div className="d-flex align-items-center btns action-btns">
           {canSign && (
             <button onClick={sign} className="btn action sign">
               <FontAwesomeIcon icon={faThumbsUp} />
