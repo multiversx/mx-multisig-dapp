@@ -81,7 +81,7 @@ const StatCard = ({
           </OverlayTrigger>
         )}
       </small>
-      <div className={"d-flex justify-content-end actions"}>
+      <div className={"d-flex justify-content-center actions"}>
         <p className="h5 mb-0 order-2 centering value">
           {value} {valueUnit}
         </p>

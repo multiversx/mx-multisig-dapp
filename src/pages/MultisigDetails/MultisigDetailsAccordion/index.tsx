@@ -17,6 +17,7 @@ import { ProposalsTypes } from "types/Proposals";
 
 import { ContractInfo } from "../MultisigDetailsPage";
 import "./multisigDetailsAccordion.scss";
+import { Ui, operations } from "@elrondnetwork/dapp-utils";
 
 const MultisigDetailsAccordion = ({
   contractInfo,
@@ -66,9 +67,11 @@ const MultisigDetailsAccordion = ({
 
   const renderAddress = (address: Address) => (
     <Card.Header key={address.bech32()}>
-      <div>
-        {address.bech32()}
-        <CopyButton text={address.bech32()} />
+      <div className="user-item">
+        <span className="address text d-flex">
+          <Ui.Trim text={address.bech32()} />
+        </span>
+        {/* <CopyButton text={address.bech32()} /> */}
       </div>
       <div className="btns">
         <button
@@ -132,7 +135,7 @@ const MultisigDetailsAccordion = ({
         onClick={handleToggleExpanded}
         as={Card}
         eventKey="0"
-        className="cards d-flex flex-wrap "
+        className="cards d-flex flex-wrap border-n"
       >
         <StatCard
           title={t("Board Members")}
@@ -160,18 +163,20 @@ const MultisigDetailsAccordion = ({
           icon={expanded ? faChevronCircleUp : faChevronCircleDown}
         />
       </div>
-      <Card>
-        <div className="collapse-wrapper owner-actions">
+      <div className="owner-actions">
+        <Card>
           <Accordion.Collapse eventKey="0">
-            <div className={"cards-collapse-content"}>
-              {boardMembersContent}
+            <div className="inset-shadow">
+              <div className={"cards-collapse-content "}>
+                {boardMembersContent}
+              </div>
             </div>
           </Accordion.Collapse>
           <Accordion.Collapse eventKey="0">
             <div className={"cards-collapse-content"}>{proposersContent}</div>
           </Accordion.Collapse>
-        </div>
-      </Card>
+        </Card>
+      </div>
     </Accordion>
   );
 };
