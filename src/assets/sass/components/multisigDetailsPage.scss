@@ -154,7 +154,16 @@
       @include media-breakpoint-between(xs, sm) {
         flex-flow: wrap;
       }
+      .meta {
+        flex: 2;
+      }
+      .deadline {
+        flex: 1;
+        text-align: center;
+      }
       .action-btns {
+        flex: 1;
+        justify-content: center;
         .action {
           width: 112px;
           display: flex;
