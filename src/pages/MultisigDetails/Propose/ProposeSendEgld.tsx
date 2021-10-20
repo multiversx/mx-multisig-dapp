@@ -118,10 +118,6 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
     return true;
   }
 
-  const onSetMaxAmount = () => {
-    formik.setFieldValue("amount", denominatedValue);
-  };
-
   const { touched, errors } = formik;
 
   const receiverError = touched.receiver && errors.receiver;
@@ -161,7 +157,6 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
             onBlur={formik.handleBlur}
             value={formik.values.amount}
           />
-          <span onClick={onSetMaxAmount}>Max</span>
 
           {amountError != null && (
             <Form.Control.Feedback type={"invalid"}>
