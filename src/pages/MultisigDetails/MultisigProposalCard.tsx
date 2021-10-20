@@ -6,23 +6,15 @@ import {
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
-import { ReactComponent as AddUser } from "assets/img/add-user.svg";
-import { ReactComponent as Circle } from "assets/img/circle.svg";
-import { ReactComponent as DeleteUser } from "assets/img/delete-user.svg";
-import { ReactComponent as Done } from "assets/img/done.svg";
-import { ReactComponent as Logo } from "assets/img/logo.svg";
-import { ReactComponent as Quorum } from "assets/img/quorum.svg";
-import { ReactComponent as Token } from "assets/img/token.svg";
-import MultisigDetailsContext from "context/MultisigDetailsContext";
-import { useMultisigContract } from "contracts/MultisigContract";
-import { MultisigActionType } from "types/MultisigActionType";
-import { setSelectedPerformedActionId } from "../../redux/slices/modalsSlice";
 import {
   CircularProgressbarWithChildren,
   buildStyles,
 } from "react-circular-progressbar";
+import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import MultisigDetailsContext from "context/MultisigDetailsContext";
+import { useMultisigContract } from "contracts/MultisigContract";
+import { setSelectedPerformedActionId } from "../../redux/slices/modalsSlice";
 
 export interface MultisigProposalCardType {
   type: number;
@@ -34,12 +26,14 @@ export interface MultisigProposalCardType {
   canUnsign?: boolean;
   canPerformAction?: boolean;
   canDiscardAction?: boolean;
+  data: string;
   signers: Address[];
 }
 
 const MultisigProposalCard = ({
   type = 0,
   actionId = 0,
+  data = "N/A",
   tooltip = "",
   title = "",
   value = "0",
@@ -90,7 +84,7 @@ const MultisigProposalCard = ({
         </div>
         <div className="deadline">
           <p className="mb-0">Data</p>
-          <p className="text mb-0">2</p>
+          <p className="text mb-0">{data}</p>
         </div>
 
         <div className="d-flex align-items-center btns action-btns">
