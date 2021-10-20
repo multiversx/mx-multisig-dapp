@@ -41,7 +41,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
       .min(-1, "Too Short!")
       .required("Required")
       .test(validateAccount),
-    data: Yup.string().required("Required"),
+    data: Yup.string(),
   });
 
   const formik = useFormik({
@@ -177,6 +177,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
           id="data"
           name="data"
           type="data"
+          onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.data}
         />
