@@ -98,7 +98,7 @@ const MultisigProposalCard = ({
           )}
           {canUnsign && (
             <button onClick={unsign} className="btn  action unsign ">
-              <FontAwesomeIcon icon={faThumbsDown} />
+              <FontAwesomeIcon icon={faTimes} />
               <span>{t("Withdraw")}</span>
             </button>
           )}
