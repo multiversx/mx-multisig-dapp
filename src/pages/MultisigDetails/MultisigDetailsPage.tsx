@@ -359,8 +359,10 @@ const MultisigDetailsPage = () => {
                 )}
               </div>
               {currentMultisigAddress && (
-                <div className="address text-center d-flex align-items-center justify-content-center">
-                  <TrustedBadge contractAddress={multisigAddressParam} />
+                <div className="address text-center d-flex align-items-center">
+                  <div className="trust-badge">
+                    <TrustedBadge contractAddress={multisigAddressParam} />
+                  </div>
                   <Ui.Trim text={currentMultisigAddress.bech32()} />
                   <a
                     href={`${explorerAddress}accounts/${currentMultisigAddress.bech32()}`}

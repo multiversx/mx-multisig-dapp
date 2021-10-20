@@ -5,6 +5,8 @@ import i18next from "i18next";
 import ExplorerLink from "components/ExplorerLink";
 import { MultisigAction } from "./MultisigAction";
 import { MultisigActionType } from "./MultisigActionType";
+import { faExternalLinkAlt } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export class MultisigAddProposer extends MultisigAction {
   address: Address;
@@ -20,14 +22,16 @@ export class MultisigAddProposer extends MultisigAction {
 
   description() {
     return (
-      <ExplorerLink
-        page={`accounts/${this.address.bech32()}`}
-        text={
-          <div className="address">
-            <Ui.Trim text={this.address.bech32()} />
-          </div>
-        }
-      />
+      <>
+        <div className="address">
+          <Ui.Trim text={this.address.bech32()} />
+          <ExplorerLink
+            page={`accounts/${this.address.bech32()}`}
+            text={<FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />}
+            className="link-second-style"
+          />
+        </div>
+      </>
     );
   }
 

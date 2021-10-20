@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, useAccordionToggle, Card } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
+import { ReactComponent as EmptyStateIcon } from "assets/img/empty-state-icon.svg";
 import StatCard from "components/StatCard";
 import { setProposeModalSelectedOption } from "redux/slices/modalsSlice";
 import { ProposalsTypes } from "types/Proposals";
@@ -123,7 +123,7 @@ const MultisigDetailsAccordion = ({
       ) : (
         <div className=" w-100 no-active-proposals">
           <p className="d-flex flex-column align-items-center mb-3">
-            <NoPoposalsIcon className=" " />
+            <EmptyStateIcon className=" " />
             {t("Currently there are no proposers.")}
           </p>
         </div>
@@ -150,7 +150,7 @@ const MultisigDetailsAccordion = ({
       ) : (
         <div className=" w-100 no-active-proposals">
           <p className="d-flex flex-column align-items-center mb-3">
-            <NoPoposalsIcon className=" " />
+            <EmptyStateIcon className=" " />
             {t("Currently there are no proposers.")}
           </p>
         </div>
