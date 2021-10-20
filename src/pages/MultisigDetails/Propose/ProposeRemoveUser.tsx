@@ -1,6 +1,7 @@
 import React from "react";
 import { Address } from "@elrondnetwork/erdjs";
 import { useTranslation } from "react-i18next";
+import CopyButton from "components/CopyButton";
 import { SelectedOptionType } from "redux/slices/modalsSlice";
 
 interface ProposeRemoveUserType {
@@ -27,13 +28,13 @@ const ProposeRemoveUser = ({
   return (
     <div className="modal-control-container">
       <label>{t("Address")} </label>
-      <input
-        type="text"
-        className="form-control"
-        value={address}
-        autoComplete="off"
-        disabled={true}
-      />
+      <div className="h6 mb-spacer copy-address" data-testid="delegateSubTitle">
+        <p className="address"> {address} </p>
+        <span className={"copy-btn"}>
+          <CopyButton text={address} />
+          {/* <ExplorerLink page={`accounts/${address}`} className="ml-2" /> */}
+        </span>
+      </div>
     </div>
   );
 };
