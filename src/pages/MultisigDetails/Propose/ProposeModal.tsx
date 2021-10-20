@@ -63,31 +63,28 @@ const ProposeModal = () => {
           selectedProposal.amount,
           selectedProposal.data,
         );
-        return;
       } else if (selectedProposal instanceof MultisigIssueToken) {
         mutateEsdtIssueToken(selectedProposal as MultisigIssueToken);
-        return;
       } else if (selectedProposal instanceof MultisigSendToken) {
         mutateEsdtSendToken(selectedProposal as MultisigSendToken);
-        return;
-      }
-
-      switch (selectedOption?.option) {
-        case ProposalsTypes.change_quorum:
-          mutateProposeChangeQuorum(selectedNumericParam);
-          break;
-        case ProposalsTypes.add_proposer:
-          mutateProposeAddProposer(selectedAddressParam);
-          break;
-        case ProposalsTypes.add_board_member:
-          mutateProposeAddBoardMember(selectedAddressParam);
-          break;
-        case ProposalsTypes.remove_user:
-          mutateProposeRemoveUser(selectedAddressParam);
-          break;
-        default:
-          console.error(`Unrecognized option ${selectedOption}`);
-          break;
+      } else {
+        switch (selectedOption?.option) {
+          case ProposalsTypes.change_quorum:
+            mutateProposeChangeQuorum(selectedNumericParam);
+            break;
+          case ProposalsTypes.add_proposer:
+            mutateProposeAddProposer(selectedAddressParam);
+            break;
+          case ProposalsTypes.add_board_member:
+            mutateProposeAddBoardMember(selectedAddressParam);
+            break;
+          case ProposalsTypes.remove_user:
+            mutateProposeRemoveUser(selectedAddressParam);
+            break;
+          default:
+            console.error(`Unrecognized option ${selectedOption}`);
+            break;
+        }
       }
       handleClose();
     } catch (err) {}

@@ -30,16 +30,22 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
   );
 
   const getProposal = (): MultisigSendEgld | null => {
-    const addressParam = new Address(address);
+    try {
+      const addressParam = new Address(address);
 
-    const amountNumeric = Number(amount);
-    if (isNaN(amountNumeric)) {
+      const amountNumeric = Number(amount);
+      if (isNaN(amountNumeric)) {
+        return null;
+      }
+
+      const amountParam = new BigUIntValue(
+        Balance.egld(amountNumeric).valueOf(),
+      );
+
+      return new MultisigSendEgld(addressParam, amountParam, data);
+    } catch (err) {
       return null;
     }
-
-    const amountParam = new BigUIntValue(Balance.egld(amountNumeric).valueOf());
-
-    return new MultisigSendEgld(addressParam, amountParam, data);
   };
 
   const refreshProposal = () => {

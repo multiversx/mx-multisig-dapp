@@ -15,21 +15,24 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
   const [amount, setAmount] = useState("");
 
   const getProposal = (): MultisigSendToken | null => {
-    const amountNumeric = Number(amount);
-    if (isNaN(amountNumeric)) {
+    try {
+      const amountNumeric = Number(amount);
+      if (isNaN(amountNumeric)) {
+        return null;
+      }
+      console.log("getting");
+      const parsedAddress = new Address(address);
+
+      return new MultisigSendToken(parsedAddress, identifier, amountNumeric);
+    } catch (err) {
       return null;
     }
-
-    return new MultisigSendToken(
-      new Address(address),
-      identifier,
-      amountNumeric,
-    );
   };
 
   const refreshProposal = () => {
     setTimeout(() => {
       const proposal = getProposal();
+
       if (proposal !== null) {
         handleChange(proposal);
       }
