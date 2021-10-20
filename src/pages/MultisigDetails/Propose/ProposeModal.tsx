@@ -139,6 +139,8 @@ const ProposeModal = () => {
         return <ProposeSendToken handleChange={handleProposalChange} />;
     }
   };
+
+  const actionTitle = `: ${titles[selectedOption.option]}` ?? "";
   return (
     <Modal
       show
@@ -151,7 +153,7 @@ const ProposeModal = () => {
       <div className="card">
         <div className="card-body">
           <p className="h3 mb-spacer text-center" data-testid="delegateTitle">
-            {`${t("Make a proposal")}`}
+            {`${t("Make a proposal")}${actionTitle}`}
           </p>
 
           <div className="">
