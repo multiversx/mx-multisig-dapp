@@ -74,7 +74,7 @@ export function useMultisigContract() {
   }
 
   function mutateDiscardAction(actionId: number) {
-    return sendTransaction("discard", gasLimit, new U32Value(actionId));
+    return sendTransaction("discardAction", gasLimit, new U32Value(actionId));
   }
 
   function mutateProposeChangeQuorum(quorumSize: number) {

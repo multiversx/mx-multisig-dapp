@@ -41,7 +41,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
       .min(-1, "Too Short!")
       .required("Required")
       .test(validateAccount),
-    data: Yup.string().required("Required"),
+    data: Yup.string(),
   });
 
   const formik = useFormik({
@@ -118,10 +118,6 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
     return true;
   }
 
-  const onSetMaxAmount = () => {
-    formik.setFieldValue("amount", denominatedValue);
-  };
-
   const { touched, errors } = formik;
 
   const receiverError = touched.receiver && errors.receiver;
@@ -161,7 +157,6 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
             onBlur={formik.handleBlur}
             value={formik.values.amount}
           />
-          <span onClick={onSetMaxAmount}>Max</span>
 
           {amountError != null && (
             <Form.Control.Feedback type={"invalid"}>
@@ -177,6 +172,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
           id="data"
           name="data"
           type="data"
+          onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.data}
         />
