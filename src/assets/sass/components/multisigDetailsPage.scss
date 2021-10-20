@@ -245,6 +245,7 @@
     padding: 15px 20px 15px 16px;
     border-radius: 6px;
     gap: 10px;
+    width: 8rem;
   }
   .sign {
     color: #16d296;
@@ -273,6 +274,15 @@
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
     &:hover {
       background-image: linear-gradient(rgba(220, 53, 69, 0.1) 0 0);
+    }
+  }
+  .perform {
+    color: #16d296;
+    background: #f3fdfa;
+    border: 1px solid #ddf9f0;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
+    &:hover {
+      background-image: linear-gradient(rgba(22, 210, 150, 0.1) 0 0);
     }
   }
 }

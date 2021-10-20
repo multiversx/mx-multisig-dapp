@@ -4,6 +4,8 @@ import {
   faInfoCircle,
   faTimes,
   faThumbsUp,
+  faThumbsDown,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -96,25 +98,28 @@ const MultisigProposalCard = ({
           )}
           {canUnsign && (
             <button onClick={unsign} className="btn  action unsign ">
-              <FontAwesomeIcon icon={faTimes} /> <span>{t("Withdraw")}</span>
+              <FontAwesomeIcon icon={faThumbsDown} />
+              <span>{t("Withdraw")}</span>
             </button>
           )}
           {canPerformAction && (
             <button
               style={{ whiteSpace: "nowrap" }}
               onClick={performAction}
-              className="btn btn-primary mb-3 mr-2"
+              className="btn action perform "
             >
-              {t("Perform Action")}
+              <FontAwesomeIcon icon={faCheck} />
+              {t("Perform")}
             </button>
           )}
           {canDiscardAction && (
             <button
               style={{ whiteSpace: "nowrap" }}
               onClick={discardAction}
-              className="btn btn-primary mb-3 mr-2"
+              className="btn action remove"
             >
-              {t("Discard Action")}
+              <FontAwesomeIcon icon={faTimes} />
+              {t("Discard")}
             </button>
           )}
         </div>
