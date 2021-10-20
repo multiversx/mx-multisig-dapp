@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { faTimes, faHandPaper } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface DeployStepsModalType {
   show: boolean;
@@ -30,15 +32,14 @@ const DeployStepsModal = ({
       centered
     >
       <div className="card">
-        <div className="card-body p-spacer text-center">
-          <p className="h6 mb-spacer" data-testid="delegateTitle">
+        <div className="card-body p-spacer ">
+          <p className="h3 text-center" data-testid="delegateTitle">
             {t("Multisig Deployment")}
           </p>
 
-          <div className="modal-control-container pb-3">
-            <span>{t("Name")}: </span>
+          <div className="modal-control-container">
+            <label>{t("Name")}: </label>
             <input
-              style={{ width: 280 }}
               type="text"
               className="form-control"
               value={name}
@@ -47,7 +48,14 @@ const DeployStepsModal = ({
             />
           </div>
 
-          <div>
+          <div className="modal-action-btns">
+            <button
+              onClick={handleClose}
+              className="btn btn-primary btn-light "
+            >
+              <FontAwesomeIcon icon={faTimes} />
+              {t("Cancel")}
+            </button>
             <button onClick={onConfirmClicked} className="btn btn-primary mb-3">
               Sign and Deploy
             </button>

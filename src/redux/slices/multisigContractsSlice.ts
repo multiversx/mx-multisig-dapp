@@ -6,14 +6,14 @@ import {
 import { logoutAction } from "../commonActions";
 
 interface StateType {
-  loading: boolean;
+  fetched: boolean;
   multisigContracts: MultisigContractInfoType[];
   currentMultisigAddress?: PlainMultisigAddressType;
 }
 
 const initialState: StateType = {
   multisigContracts: [],
-  loading: true,
+  fetched: false,
   currentMultisigAddress: undefined,
 };
 
@@ -25,13 +25,14 @@ export const multisigContractsSlice = createSlice({
       state: StateType,
       action: PayloadAction<boolean>,
     ) => {
-      state.loading = action.payload;
+      state.fetched = action.payload;
     },
     setMultisigContracts: (
       state: StateType,
       action: PayloadAction<MultisigContractInfoType[]>,
     ) => {
       state.multisigContracts = action.payload;
+      state.fetched = true;
     },
     setCurrentMultisigAddress: (
       state: StateType,

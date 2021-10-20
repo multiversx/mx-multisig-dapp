@@ -20,27 +20,11 @@ body.modal-open .layout {
 }
 
 textarea {
-  min-height: 8rem;
+  min-height: 6.8rem;
 }
 
 .overflow-x-hidden {
-  overflow-x: hidden
-}
-
-.btn {
-  &:hover {
-    background: rgba(0, 0, 0, 0.4);
-  }
-  border: none !important;
-  box-shadow: 0 0.6rem 0.6rem 0 rgba(27, 70, 194, 0.1);
-  border: rgba(255, 255, 255, 0.3);
-  &:hover {
-    background: rgba(0, 0, 0, 0.2);
-  }
-  &:not(:disabled):not(.disabled):active,
-  &:not(:disabled):not(.disabled).active {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
+  overflow-x: hidden;
 }
 
 .table {
@@ -61,8 +45,7 @@ textarea {
     padding-top: 0;
     padding-bottom: 0.875rem;
   }
-  td {
-  }
+
   .trim {
     max-width: 10rem;
     @include media-breakpoint-up(sm) {

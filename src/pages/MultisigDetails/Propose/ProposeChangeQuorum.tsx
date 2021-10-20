@@ -32,12 +32,12 @@ const ProposeChangeQuorum = ({
 
   return (
     <div className="d-flex flex-column modal-control-container">
-      <span>{t("Quorum Size")}: </span>
+      <label>{t("Quorum Size")}: </label>
       <input
         style={{ width: 250 }}
         type="number"
         min={1}
-        className="form-control"
+        className="form-control center"
         value={newQuorumSize}
         autoComplete="off"
         onChange={handleNewQuorumSizeChanged}

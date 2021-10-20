@@ -2,12 +2,13 @@ import { MultisigActionType } from "./MultisigActionType";
 
 export abstract class MultisigAction {
   type: MultisigActionType = MultisigActionType.Nothing;
+  data?: string;
 
   constructor(type: MultisigActionType) {
     this.type = type;
   }
 
-  abstract title(): string;
-  abstract description(): string;
-  abstract tooltip(): string;
+  abstract title(): any;
+  abstract description(): any;
+  abstract tooltip(): any;
 }

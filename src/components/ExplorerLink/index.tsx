@@ -3,7 +3,15 @@ import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ExplorerLink = ({ page, text }: { page: string; text?: string }) => {
+const ExplorerLink = ({
+  page,
+  text,
+  className,
+}: {
+  page: string;
+  text?: any;
+  className?: string;
+}) => {
   const { explorerAddress } = useDappContext();
   return (
     <a
@@ -11,7 +19,7 @@ const ExplorerLink = ({ page, text }: { page: string; text?: string }) => {
       {...{
         target: "_blank",
       }}
-      className="link-style ml-2"
+      className={`link-style ${className}`}
     >
       {text ? (
         <>{text}</>

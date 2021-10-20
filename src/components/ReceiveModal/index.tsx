@@ -3,7 +3,8 @@ import QrCode from "qrcode.react";
 import { Modal } from "react-bootstrap";
 import CopyButton from "../CopyButton";
 import ExplorerLink from "../ExplorerLink";
-
+import { faQrcode } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const ReceiveModal = ({ address }: { address?: string }) => {
   const [showModal, setShowModal] = React.useState(false);
 
@@ -16,35 +17,42 @@ const ReceiveModal = ({ address }: { address?: string }) => {
 
   return (
     <>
-      <button onClick={handleOpenModal} className="btn btn-primary mb-3">
-        Receive
+      <button onClick={handleOpenModal} className="btn btn-primary">
+        <span className="icon">
+          <FontAwesomeIcon icon={faQrcode} />
+        </span>
+        <span className="name">Deposit</span>
       </button>
       <Modal
         show={showModal}
+        size="lg"
         onHide={handleCloseModal}
         className="modal-container"
         animation={false}
         centered
       >
         <div className="card">
-          <div className="card-body p-spacer text-center">
-            <p className="h6 " data-testid="delegateTitle">
-              Receive
+          <div className="card-body text-center receive">
+            <p className="h3 mb-spacer title" data-testid="delegateTitle">
+              Deposit
             </p>
-            <p className="h6 mb-spacer" data-testid="delegateSubTitle">
-              Here is the QR code and your wallet address.
-            </p>
-            <QrCode value={address} />
-            <p className="h6 mb-spacer" data-testid="delegateSubTitle">
-              {address}
-              <div className={"mx-3"}>
+
+            <QrCode value={address} size={256} />
+            <div
+              className="h6 mb-spacer copy-address"
+              data-testid="delegateSubTitle"
+            >
+              <p className="address"> {address} </p>
+              <span className={"copy-btn"}>
                 <CopyButton text={address} />
-                <ExplorerLink page={`accounts/${address}`} />
-              </div>
-            </p>
-            <button onClick={handleCloseModal} className="btn btn-primary mb-3">
-              Done
-            </button>
+                {/* <ExplorerLink page={`accounts/${address}`} className="ml-2" /> */}
+              </span>
+            </div>
+            <div className="modal-action-btns">
+              <button onClick={handleCloseModal} className="btn btn-primary">
+                Done
+              </button>
+            </div>
           </div>
         </div>
       </Modal>

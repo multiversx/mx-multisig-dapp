@@ -1,19 +1,19 @@
 import React from "react";
 import { Address } from "@elrondnetwork/erdjs/out";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faInfoCircle,
+  faTimes,
+  faThumbsUp,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { ReactComponent as AddUser } from "assets/img/add-user.svg";
-import { ReactComponent as Circle } from "assets/img/circle.svg";
-import { ReactComponent as DeleteUser } from "assets/img/delete-user.svg";
-import { ReactComponent as Done } from "assets/img/done.svg";
-import { ReactComponent as Logo } from "assets/img/logo.svg";
-import { ReactComponent as Quorum } from "assets/img/quorum.svg";
-import { ReactComponent as Token } from "assets/img/token.svg";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { useMultisigContract } from "contracts/MultisigContract";
-import { MultisigActionType } from "types/MultisigActionType";
 import { setSelectedPerformedActionId } from "../../redux/slices/modalsSlice";
 
 export interface MultisigProposalCardType {
@@ -26,12 +26,14 @@ export interface MultisigProposalCardType {
   canUnsign?: boolean;
   canPerformAction?: boolean;
   canDiscardAction?: boolean;
+  data: string;
   signers: Address[];
 }
 
 const MultisigProposalCard = ({
   type = 0,
   actionId = 0,
+  data = "N/A",
   tooltip = "",
   title = "",
   value = "0",
@@ -62,44 +64,9 @@ const MultisigProposalCard = ({
     mutateDiscardAction(actionId);
   };
   return (
-    <div className="statcard card-bg-grey text-black py-3 px-4 mb-spacer rounded">
-      <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
-        <div className="icon my-1 fill-dark">
-          {type === MultisigActionType.AddBoardMember ||
-          type === MultisigActionType.AddProposer ? (
-            <AddUser />
-          ) : type === MultisigActionType.RemoveUser ? (
-            <DeleteUser />
-          ) : type === MultisigActionType.ChangeQuorum ? (
-            <Quorum />
-          ) : type === MultisigActionType.SCCall ? (
-            <Token />
-          ) : type === MultisigActionType.SendEgld ? (
-            <Logo style={{ width: 20, height: 20 }} />
-          ) : null}
-        </div>
-        <div>
-          {signers.map((_, index) => (
-            <Done
-              className={"done-icon"}
-              key={index}
-              style={{
-                marginRight: index === signers.length - 1 ? 4 : 8,
-              }}
-            />
-          ))}
-
-          {quorumSize > 0 &&
-            [...Array(quorumSize - signers.length)].map((index) => (
-              <Circle
-                key={index + signers.length}
-                style={{ width: 30, height: 30 }}
-              />
-            ))}
-        </div>
-      </div>
-      <div className="d-flex align-items-center justify-content-between">
-        <div>
+    <div className="statcard text-black py-3 px-4 mb-spacer">
+      <div className="d-flex align-items-center justify-content-between proposal">
+        <div className="meta">
           <p className="h5 mb-0">
             {title}
             {tooltip !== "" ? (
@@ -113,42 +80,38 @@ const MultisigProposalCard = ({
               />
             ) : null}
           </p>
-          <span className="opacity-6">{value}</span>
+          <span className="text">{value}</span>
         </div>
-        <p>{`signers: ${signers.length} / ${quorumSize}`}</p>
+        <div className="deadline">
+          <p className="mb-0">Data</p>
+          <p className="text mb-0">{data}</p>
+        </div>
 
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center btns action-btns">
           {canSign && (
-            <button onClick={sign} className="btn btn-primary mb-3 mr-2">
-              {t("Sign")}
+            <button onClick={sign} className="btn action sign">
+              <FontAwesomeIcon icon={faThumbsUp} />
+              <span>{t("Approve")} </span>
             </button>
           )}
-
           {canUnsign && (
-            <button onClick={unsign} className="btn btn-primary mb-3 mr-2">
-              {t("Unsign")}
+            <button onClick={unsign} className="btn  action unsign ">
+              <FontAwesomeIcon icon={faTimes} /> <span>{t("Withdraw")}</span>
             </button>
           )}
-
-          {canPerformAction && (
-            <button
-              style={{ whiteSpace: "nowrap" }}
-              onClick={performAction}
-              className="btn btn-primary mb-3 mr-2"
-            >
-              {t("Perform Action")}
-            </button>
-          )}
-
-          {canDiscardAction && (
-            <button
-              style={{ whiteSpace: "nowrap" }}
-              onClick={discardAction}
-              className="btn btn-primary mb-3 mr-2"
-            >
-              {t("Discard Action")}
-            </button>
-          )}
+        </div>
+        <div style={{ width: 72, height: 72 }} className="">
+          <CircularProgressbarWithChildren
+            value={signers.length}
+            maxValue={quorumSize}
+            strokeWidth={10}
+            styles={buildStyles({
+              strokeLinecap: "butt",
+              pathColor: "#16D296",
+            })}
+          >
+            <div>{`${signers.length} / ${quorumSize}`}</div>
+          </CircularProgressbarWithChildren>
         </div>
       </div>
     </div>

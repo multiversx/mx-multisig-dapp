@@ -55,7 +55,9 @@ const TxDetails = ({
             <Trim text={hash} />
           </span>
           <CopyButton text={hash} />
-          {!status.isPending && <ExplorerLink page={`transactions/${hash}`} />}
+          {!status.isPending && (
+            <ExplorerLink page={`transactions/${hash}`} className="ml-2" />
+          )}
         </div>
       ))}
     </>

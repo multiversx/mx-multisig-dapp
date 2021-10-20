@@ -3,6 +3,8 @@ import { Address } from "@elrondnetwork/erdjs/out";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import ProposeInputAddress from "../MultisigDetails/Propose/ProposeInputAddress";
+import { faTimes, faHandPaper } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface AddMultisigModalType {
   show: boolean;
@@ -37,16 +39,23 @@ const AddMultisigModal = ({
       centered
     >
       <div className="card">
-        <div className="card-body p-spacer text-center">
-          <p className="h6 mb-spacer" data-testid="delegateTitle">
+        <div className="card-body ">
+          <p className="h3 text-center" data-testid="delegateTitle">
             {t("Add Multisig")}
           </p>
 
-          <div className="p-spacer">
+          <div className="">
             <ProposeInputAddress handleParamsChange={onAddressParamChange} />
           </div>
 
-          <div>
+          <div className="modal-action-btns">
+            <button
+              onClick={handleClose}
+              className="btn btn-primary btn-light "
+            >
+              <FontAwesomeIcon icon={faTimes} />
+              {t("Cancel")}
+            </button>
             <button onClick={onAddClicked} className="btn btn-primary mb-3">
               {t("Add")}
             </button>

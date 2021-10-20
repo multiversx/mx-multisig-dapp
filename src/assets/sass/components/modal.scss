@@ -1,17 +1,45 @@
 .modal-control-container {
-  display: flex;
-  align-items: center;
-}
-
-.modal-control-container span {
-  margin-right: 1rem;
-  margin-bottom: 0.7rem;
-  min-width: 120px;
-  text-align: right;
-}
-
-.modal-control-container input {
-  margin-bottom: 0.7rem;
+  display: block;
+  label {
+    display: block !important;
+    color: #9dabbd;
+    font-size: 18px;
+    line-height: 21px;
+  }
+  .input-wrraper {
+    position: relative;
+    input {
+      margin-bottom: 5px !important;
+    }
+    span {
+      position: absolute;
+      color: #1390ff;
+      top: calc(50% - 10px);
+      right: 19px;
+      margin: 0;
+      cursor: pointer;
+    }
+  }
+  input {
+    font-size: 18px;
+    height: 48px;
+    border-radius: 8px;
+    line-height: 21px;
+    margin-bottom: 32px;
+  }
+  textarea {
+    font-size: 18px;
+    border-radius: 8px;
+    line-height: 21px;
+  }
+  span {
+    display: block;
+    color: #9dabbd;
+    margin-bottom: 32px;
+  }
+  .center {
+    margin: 32px auto;
+  }
 }
 
 .modal-control-container .form-check-label {
@@ -24,4 +52,44 @@
   height: 20px;
   margin-bottom: 2px;
   margin-right: 8px;
+}
+
+.receive canvas {
+  padding: 11px;
+  border: 1px solid #f1f1f1;
+  box-shadow: 0px 4px 4px rgba(150, 160, 181, 0.08);
+  border-radius: 10px;
+}
+
+.copy-address {
+  margin-top: 32px;
+  display: flex;
+  .address {
+    margin: 0;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    padding: 0 26px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 8px 0px 0px 8px;
+    border-right: none;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+  .copy-btn {
+    display: flex;
+    width: 66px;
+    height: 66px;
+    justify-content: center;
+    align-items: center;
+    background: #f3f9ff;
+    border: 1px solid #ddeeff;
+    border-radius: 0px 8px 8px 0px;
+    cursor: pointer;
+  }
+  svg {
+    font-size: 16px;
+    color: #1392ff;
+  }
 }

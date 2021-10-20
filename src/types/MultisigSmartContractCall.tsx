@@ -1,3 +1,5 @@
+import React from "react";
+import { Ui } from "@elrondnetwork/dapp-utils";
 import { Address, Balance, BinaryCodec } from "@elrondnetwork/erdjs/out";
 import {
   BigUIntType,
@@ -6,6 +8,7 @@ import {
   U32Type,
   U32Value,
 } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import ExplorerLink from "components/ExplorerLink";
 import i18next from "i18next";
 import { MultisigAction } from "./MultisigAction";
 import { MultisigActionType } from "./MultisigActionType";
@@ -48,9 +51,29 @@ export class MultisigSmartContractCall extends MultisigAction {
         return this.getSendTokenDescription();
     }
 
-    return `${this.endpointName}: ${Balance.fromString(
-      this.amount.valueOf().toString(),
-    ).toCurrencyString()} to ${this.address.bech32()}`;
+    return (
+      <>
+        <div className="d-flex flex-wrap font-weight-bold text-body">
+          <span>{this.endpointName}:</span>
+          <span className="mx-1">
+            <Ui.Denominate
+              value={this.amount.valueOf().toString()}
+              showLastNonZeroDecimal
+              showLabel
+            />
+          </span>
+          <span className="mr-1">{i18next.t("to")}</span>
+          <ExplorerLink
+            page={`accounts/${this.address.bech32()}`}
+            text={
+              <div className="address">
+                <Ui.Trim text={this.address.bech32()} />
+              </div>
+            }
+          />
+        </div>
+      </>
+    );
   }
 
   tooltip() {

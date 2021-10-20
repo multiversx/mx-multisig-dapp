@@ -53,7 +53,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
   return (
     <div>
       <div className="modal-control-container">
-        <span>{t("Address")}: </span>
+        <label>{t("Send to")} </label>
         <input
           type="text"
           className="form-control"
@@ -63,19 +63,22 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>{t("Amount")}: </span>
-        <input
-          type="text"
-          className="form-control"
-          value={amount}
-          autoComplete="off"
-          onChange={onAmountChanged}
-        />
+        <label>{t("Amount")} </label>
+        <div className="input-wrraper">
+          <input
+            type="text"
+            className="form-control"
+            value={amount}
+            autoComplete="off"
+            onChange={onAmountChanged}
+          />
+          <span>Max</span>
+        </div>
+        <span>Balance: 14.5454 EGLD </span>
       </div>
       <div className="modal-control-container">
-        <span>{t("Data")}: </span>
-        <input
-          type="text"
+        <label>{t("Data")} </label>
+        <textarea
           className="form-control"
           value={data}
           autoComplete="off"

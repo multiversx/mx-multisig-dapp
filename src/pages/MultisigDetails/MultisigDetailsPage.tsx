@@ -1,19 +1,26 @@
 import React, { useState } from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
+import { Ui, operations } from "@elrondnetwork/dapp-utils";
 import { Address, Balance } from "@elrondnetwork/erdjs";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-import { faArrowCircleLeft } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faUser,
+  faCalendarAlt,
+  faCircleNotch,
+  faHandPaper,
+  faExternalLinkAlt,
+} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
+import { ReactComponent as WalletLogo } from "assets/img/elrond-wallet-icon.svg";
+import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
 import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
 import PerformActionModal from "components/PerformActionModal";
 import ReceiveModal from "components/ReceiveModal";
-import StatCard from "components/StatCard";
 import State from "components/State";
 import TrustedBadge from "components/TrustedBadge";
+import { denomination, decimals } from "config";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { useManagerContract } from "contracts/ManagerContract";
 import { useMultisigContract } from "contracts/MultisigContract";
@@ -21,6 +28,7 @@ import { hexToNumber, hexToString } from "helpers/converters";
 import { PlainAddress } from "helpers/plainObjects";
 import { tryParseTransactionParameter } from "helpers/urlparameters";
 import MultisigProposalCard from "pages/MultisigDetails/MultisigProposalCard";
+import { priceSelector } from "redux/selectors/economicsSelector";
 import {
   currentMultisigAddressSelector,
   multisigContractsFetchedSelector,
@@ -36,6 +44,7 @@ import {
 } from "redux/slices/multisigContractsSlice";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import { ProposalsTypes } from "../../types/Proposals";
+import MultisigDetailsAccordion from "./MultisigDetailsAccordion";
 import ProposeModal from "./Propose/ProposeModal";
 
 interface MultisigDetailsPageParams {
@@ -50,21 +59,12 @@ export interface ContractInfo {
   allActions: MultisigActionDetailed[];
   multisigBalance: Balance;
   multisigName: string;
+  boardMembersAddresses?: Address[];
+  proposersAddresses?: Address[];
 }
 
 const MultisigDetailsPage = () => {
-  const [
-    {
-      totalBoardMembers,
-      totalProposers,
-      quorumSize,
-      userRole,
-      allActions,
-      multisigBalance,
-      multisigName,
-    },
-    setContractInfo,
-  ] = useState<ContractInfo>({
+  const [contractInfo, setContractInfo] = useState<ContractInfo>({
     totalBoardMembers: 0,
     totalProposers: 0,
     quorumSize: 0,
@@ -72,12 +72,24 @@ const MultisigDetailsPage = () => {
     multisigBalance: Balance.fromString("0"),
     multisigName: "",
     allActions: [],
+    boardMembersAddresses: [],
+    proposersAddresses: [],
   });
+
+  const {
+    totalBoardMembers,
+    quorumSize,
+    userRole,
+    allActions,
+    multisigBalance,
+    multisigName,
+  } = contractInfo;
 
   const contractsFetched = useSelector(multisigContractsFetchedSelector);
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
 
-  const { address, apiAddress, dapp, egldLabel } = useDappContext();
+  const { address, apiAddress, dapp, egldLabel, explorerAddress } =
+    useDappContext();
   const {
     queryBoardMembersCount,
     queryProposersCount,
@@ -86,12 +98,15 @@ const MultisigDetailsPage = () => {
     queryAllActions,
     queryActionValidSignerCount,
     mutateDiscardAction,
+    queryBoardMemberAddresses,
+    queryProposerAddresses,
   } = useMultisigContract();
   const { queryContractName } = useManagerContract();
   const dispatch = useDispatch();
   const { multisigAddressParam } = useParams<MultisigDetailsPageParams>();
   const confirmModal = useConfirmModal();
   const refetch = useSelector(refetchSelector);
+  const egldPrice = useSelector(priceSelector);
   const { t } = useTranslation();
   const isProposer = userRole !== 0;
   const isBoardMember = userRole === 2;
@@ -118,6 +133,8 @@ const MultisigDetailsPage = () => {
         newAllActions,
         contractName,
         account,
+        boardMembersAddresses,
+        proposersAddresses,
       ] = await Promise.all([
         queryBoardMembersCount(),
         queryProposersCount(),
@@ -126,8 +143,10 @@ const MultisigDetailsPage = () => {
         queryAllActions(),
         queryContractName(currentMultisigAddress!),
         dapp.proxy.getAccount(currentMultisigAddress!),
+        queryBoardMemberAddresses(),
+        queryProposerAddresses(),
       ]);
-      const contractInfo: ContractInfo = {
+      const newContractInfo: ContractInfo = {
         totalBoardMembers: newTotalBoardMembers,
         totalProposers: newTotalProposers,
         quorumSize: newQuorumSize,
@@ -135,9 +154,11 @@ const MultisigDetailsPage = () => {
         allActions: newAllActions,
         multisigBalance: account.balance,
         multisigName: contractName,
+        boardMembersAddresses,
+        proposersAddresses,
       };
 
-      setContractInfo(contractInfo);
+      setContractInfo(newContractInfo);
     } catch (error) {
       console.error(error);
     } finally {
@@ -262,22 +283,25 @@ const MultisigDetailsPage = () => {
   };
 
   const onSendEgld = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.send_egld));
+    dispatch(
+      setProposeModalSelectedOption({
+        option: ProposalsTypes.send_egld,
+      }),
+    );
 
   const onIssueToken = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.issue_token));
+    dispatch(
+      setProposeModalSelectedOption({
+        option: ProposalsTypes.issue_token,
+      }),
+    );
 
   const onSendToken = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.send_token));
-
-  const onAddBoardMember = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.add_board_member));
-  const onAddProposers = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.add_proposer));
-  const onRemoveUser = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.remove_user));
-  const onChangeQuorum = () =>
-    dispatch(setProposeModalSelectedOption(ProposalsTypes.change_quorum));
+    dispatch(
+      setProposeModalSelectedOption({
+        option: ProposalsTypes.send_token,
+      }),
+    );
 
   React.useEffect(() => {
     tryParseUrlParams();
@@ -306,138 +330,130 @@ const MultisigDetailsPage = () => {
     }
   }, [currentMultisigAddress?.hex(), refetch, address]);
 
-  if (address === null) {
-    return <Redirect to="/" />;
-  }
-
   if (!parseMultisigAddress()) {
     return <Redirect to="/multisig" />;
   }
+
+  console.log("---multisigBalance", multisigBalance.toString());
+
   return (
     <MultisigDetailsContext.Provider
       value={{ quorumSize, totalBoardMembers, isProposer, multisigBalance }}
     >
       <div className="dashboard w-100">
-        <div className="card border-0">
-          <div className="header card-header flex-column d-flex align-items-center border-0 justify-content-between px-spacer">
-            <div className="d-flex align-self-lg-start ">
-              <Link to="/multisig" className="btn btn-primary btn-sm">
-                <FontAwesomeIcon icon={faArrowCircleLeft} />
-              </Link>
-            </div>
-            <div className="py-spacer text-truncate">
-              <div className="d-flex justify-content-start align-items-center">
-                <p className="opacity-6 mb-0">{multisigName} </p>{" "}
-                <div className="px-3">
-                  <TrustedBadge contractAddress={multisigAddressParam} />
+        {/* <Link to="/multisig" className="btn btn-primary btn-sm d-block">
+          <FontAwesomeIcon icon={faArrowCircleLeft} />
+        </Link> */}
+        <div className="card shadow-lg border-0">
+          <div className="flex-column d-flex align-items-center">
+            <WalletLogo className="wallet-logo " />
+            <div className="w-100 user-profile">
+              <div className="d-flex profile-meta">
+                <div className="user-role">
+                  <p className="icon">
+                    <FontAwesomeIcon icon={faUser} />
+                    Role: <span className="text">{t(userRoleAsString())}</span>
+                  </p>
+                </div>
+                <div className="wallet-name position-relative">
+                  <h3 className="mb-0">{multisigName} </h3>
+                </div>
+                <div className="created d-flex">
+                  <p className="time">
+                    <FontAwesomeIcon icon={faCalendarAlt} className="icon" />{" "}
+                    Created: <span className="text">12/10/2021</span>
+                  </p>
                 </div>
               </div>
-              <span className="text-truncate">
-                {currentMultisigAddress?.bech32()}
-              </span>
+              {currentMultisigAddress && (
+                <div className="address text-center d-flex align-items-center justify-content-center">
+                  <TrustedBadge contractAddress={multisigAddressParam} />
+                  <Ui.Trim text={currentMultisigAddress.bech32()} />
+                  <a
+                    href={`${explorerAddress}accounts/${currentMultisigAddress.bech32()}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="link-style"
+                  >
+                    <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
+                  </a>
+                </div>
+              )}
             </div>
-            <div className={"d-flex"}>
-              <div className={"d-flex flex-column mx-5"}>
+            <div className="d-flex flex-column action-panel w-100">
+              <div className="balance">
+                <h2 className="text-center">
+                  {operations.denominate({
+                    input: multisigBalance.toString(),
+                    denomination,
+                    decimals,
+                    showLastNonZeroDecimal: true,
+                  })}{" "}
+                  {egldLabel}
+                </h2>
+                <h5 className="ex-currency text-center">
+                  <Ui.UsdValue
+                    amount={operations.denominate({
+                      input: multisigBalance.toString(),
+                      denomination,
+                      decimals,
+                      showLastNonZeroDecimal: true,
+                      addCommas: false,
+                    })}
+                    usd={egldPrice}
+                  />{" "}
+                  USD
+                </h5>
+              </div>
+              <div className="d-flex justify-content-center actions-btns">
                 {isProposer && (
-                  <button onClick={onSendEgld} className="btn btn-primary mb-3">
-                    Send
+                  <button onClick={onSendEgld} className="btn btn-primarygit ">
+                    <span className="icon">
+                      <FontAwesomeIcon icon={faHandPaper} />
+                    </span>
+
+                    <span className="name">Propose</span>
                   </button>
                 )}
                 <ReceiveModal address={currentMultisigAddress?.bech32()} />
               </div>
-              <div className={"d-flex flex-column"}>
-                {isProposer && (
-                  <button
-                    onClick={onIssueToken}
-                    className="btn btn-primary mb-3"
-                  >
-                    Issue Token
-                  </button>
-                )}
-                {isProposer && (
-                  <button
-                    onClick={onSendToken}
-                    className="btn btn-primary mb-3"
-                  >
-                    Send Token
-                  </button>
-                )}
-              </div>
             </div>
           </div>
 
-          <div className="cards d-flex flex-wrap mr-spacer">
-            <StatCard
-              title={t("Balance")}
-              value={multisigBalance
-                .toDenominated()
-                .toString()
-                .slice(
-                  0,
-                  multisigBalance.toDenominated().toString().length - 16,
-                )}
-              valueUnit={egldLabel}
-              color="orange"
-              svg="money.svg"
-            />
-            <StatCard
-              title={t("Board Members")}
-              value={totalBoardMembers.toString()}
-              color="orange"
-              svg="clipboard-check.svg"
-              onRemoveAction={onRemoveUser}
-              onAddAction={onAddBoardMember}
-            />
-            <StatCard
-              title={t("Proposers")}
-              value={totalProposers.toString()}
-              valueUnit=""
-              color="orange"
-              svg="clipboard-list.svg"
-              onAddAction={onAddProposers}
-            />
-            <StatCard
-              title={t("Quorum Size")}
-              value={`${quorumSize.toString()} / ${totalBoardMembers} `}
-              valueUnit=""
-              color="orange"
-              onEditAction={onChangeQuorum}
-              svg="quorum.svg"
-            />
-            <StatCard
-              title={t("User Role")}
-              value={t(userRoleAsString())}
-              valueUnit=""
-              color="orange"
-              svg="user.svg"
-            />
-          </div>
+          <MultisigDetailsAccordion contractInfo={contractInfo} />
 
-          <div className="card-body pt-0 px-spacer pb-spacer">
+          <div className="card-body">
             {!contractsFetched ? (
               <State icon={faCircleNotch} iconClass="fa-spin text-primary" />
             ) : (
-              <div className="card mt-spacer">
-                <div className="card-body p-spacer">
-                  <div className="d-flex flex-wrap align-items-center justify-content-between">
-                    <p className="h6 mb-3">{t("Proposals")}</p>
-                  </div>
-
-                  {allActions.map((action) => (
-                    <MultisigProposalCard
-                      key={action.actionId}
-                      type={action.typeNumber()}
-                      actionId={action.actionId}
-                      title={action.title()}
-                      tooltip={action.tooltip()}
-                      value={action.description()}
-                      canSign={canSign(action)}
-                      canUnsign={canUnsign(action)}
-                      canPerformAction={canPerformAction(action)}
-                      canDiscardAction={canDiscardAction(action)}
-                      signers={action.signers}
-                    />
-                  ))}
+              <div className="proposals-list">
+                <div className="d-flex flex-wrap align-items-center justify-content-between">
+                  {Object.keys(allActions).length === 0 ? (
+                    <div className="d-flex flex-column align-items-center w-100 no-active-proposals">
+                      <NoPoposalsIcon className=" " />
+                      <p className="mb-3">
+                        {t("Currently there are no active proposals.")}
+                      </p>
+                      <a href="3">Make a proposal</a>
+                    </div>
+                  ) : (
+                    allActions.map((action) => (
+                      <MultisigProposalCard
+                        key={action.actionId}
+                        type={action.typeNumber()}
+                        actionId={action.actionId}
+                        title={action.title()}
+                        tooltip={action.tooltip()}
+                        value={action.description()}
+                        data={action.data()}
+                        canSign={canSign(action)}
+                        canUnsign={canUnsign(action)}
+                        canPerformAction={canPerformAction(action)}
+                        canDiscardAction={canDiscardAction(action)}
+                        signers={action.signers}
+                      />
+                    ))
+                  )}
                 </div>
               </div>
             )}

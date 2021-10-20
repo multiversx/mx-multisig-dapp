@@ -1,11 +1,57 @@
 .statcard {
-  min-height: 8.8rem;
-  min-width: 10rem;
-  flex-basis: 0;
-  flex-grow: 1;
-  font-size: 0.85rem;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-items: center;
+  border-right: 1px solid #f1f1f1;
+  padding: 0 24px;
+  &:last-of-type {
+    border-right: none;
+  }
+
   @include media-breakpoint-only(lg) {
     min-width: 13rem;
+  }
+  .title {
+    color: #9dabbd;
+    margin: 0;
+    padding: 0;
+  }
+  .actions {
+    margin: 0;
+    gap: 16px;
+  }
+  .address {
+    width: 12rem;
+  }
+  .action-add,
+  .action-remove,
+  .action-edit {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1390ff;
+    background: #f3f9ff;
+    border: 1px solid #ddeeff;
+    box-sizing: border-box;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    &:hover {
+      background: #1390ff;
+      color: #fff;
+    }
+    svg {
+      height: 10px;
+      width: 10px;
+    }
+  }
+  .value {
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 38px;
   }
   .icon {
     height: 1.5rem;
