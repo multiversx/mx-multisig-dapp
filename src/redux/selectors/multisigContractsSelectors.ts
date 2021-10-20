@@ -6,7 +6,7 @@ const mainSelector = (state: RootState) => state.multisigContracts;
 
 export const multisigContractsFetchedSelector = createDeepEqualSelector(
   mainSelector,
-  (state) => state.loading,
+  (state) => state.fetched,
 );
 
 export const multisigContractsSelector = createDeepEqualSelector(

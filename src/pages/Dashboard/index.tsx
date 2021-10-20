@@ -2,35 +2,37 @@ import React from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 
 import { Address } from "@elrondnetwork/erdjs";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import {
-  CircularProgressbarWithChildren,
-  buildStyles,
-} from "react-circular-progressbar";
-import { useTranslation } from "react-i18next";
-
-import { useDispatch, useSelector } from "react-redux";
-import { useManagerContract } from "contracts/ManagerContract";
-import MultisigListItem from "pages/Dashboard/MultisigListItem";
-import { multisigContractsSelector } from "redux/selectors/multisigContractsSelectors";
-import { refetchSelector } from "redux/selectors/toastSelector";
-import { setMultisigContracts } from "redux/slices/multisigContractsSlice";
-import getProviderType from "../../components/SignTransactions/helpers/getProviderType";
-import { providerTypes } from "../../helpers/constants";
-import AddMultisigModal from "./AddMultisigModal";
-import DeployStepsModal from "./DeployMultisigModal";
-import wawe from "assets/img/wawe.svg";
-import CreateWallet from "assets/img/create-wallet.svg";
-import OpenWallet from "assets/img/open-wallet.svg";
 import {
   faWallet,
   faPlus,
   faArrowRight,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+
+import { useDispatch, useSelector } from "react-redux";
+import CreateWallet from "assets/img/create-wallet.svg";
+import OpenWallet from "assets/img/open-wallet.svg";
+import wawe from "assets/img/wawe.svg";
+import { useManagerContract } from "contracts/ManagerContract";
+import MultisigListItem from "pages/Dashboard/MultisigListItem";
+import {
+  multisigContractsFetchedSelector,
+  multisigContractsSelector,
+} from "redux/selectors/multisigContractsSelectors";
+import { refetchSelector } from "redux/selectors/toastSelector";
+import { setMultisigContracts } from "redux/slices/multisigContractsSlice";
+import getProviderType from "../../components/SignTransactions/helpers/getProviderType";
+import { providerTypes } from "../../helpers/constants";
+import AddMultisigModal from "./AddMultisigModal";
+import DeployStepsModal from "./DeployMultisigModal";
 
 const Index = () => {
   const multisigContracts = useSelector(multisigContractsSelector);
+  const multisigContractsFetched = useSelector(
+    multisigContractsFetchedSelector,
+  );
   const { dapp, address } = useDappContext();
   const dispatch = useDispatch();
   const refetch = useSelector(refetchSelector);
@@ -111,6 +113,10 @@ const Index = () => {
   ) : (
     deployButton
   );
+
+  if (!multisigContractsFetched) {
+    return null;
+  }
 
   return (
     <>
