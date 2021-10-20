@@ -10,6 +10,7 @@ import {
   faExternalLinkAlt,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect, useParams } from "react-router-dom";
@@ -43,6 +44,7 @@ import {
   setMultisigContractsFetched,
 } from "redux/slices/multisigContractsSlice";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
+import { getAccountData } from "../../apiCalls/accountCalls";
 import { ProposalsTypes } from "../../types/Proposals";
 import MultisigDetailsAccordion from "./MultisigDetailsAccordion";
 import ProposeModal from "./Propose/ProposeModal";
@@ -55,6 +57,7 @@ export interface ContractInfo {
   totalBoardMembers: number;
   totalProposers: number;
   quorumSize: number;
+  deployedAt?: string;
   userRole: number;
   allActions: MultisigActionDetailed[];
   multisigBalance: Balance;
@@ -81,6 +84,7 @@ const MultisigDetailsPage = () => {
     quorumSize,
     userRole,
     allActions,
+    deployedAt,
     multisigBalance,
     multisigName,
   } = contractInfo;
@@ -120,7 +124,7 @@ const MultisigDetailsPage = () => {
   };
 
   const getDashboardInfo = async () => {
-    if (currentMultisigAddress === null) {
+    if (currentMultisigAddress == null) {
       return;
     }
 
@@ -146,11 +150,13 @@ const MultisigDetailsPage = () => {
         queryBoardMemberAddresses(),
         queryProposerAddresses(),
       ]);
+      const accountInfo = await getAccountData(currentMultisigAddress.bech32());
       const newContractInfo: ContractInfo = {
         totalBoardMembers: newTotalBoardMembers,
         totalProposers: newTotalProposers,
         quorumSize: newQuorumSize,
         userRole: newUserRole,
+        deployedAt: moment.unix(accountInfo.deployedAt).format("DD/MM/YYYY"),
         allActions: newAllActions,
         multisigBalance: account.balance,
         multisigName: contractName,
@@ -289,20 +295,6 @@ const MultisigDetailsPage = () => {
       }),
     );
 
-  const onIssueToken = () =>
-    dispatch(
-      setProposeModalSelectedOption({
-        option: ProposalsTypes.issue_token,
-      }),
-    );
-
-  const onSendToken = () =>
-    dispatch(
-      setProposeModalSelectedOption({
-        option: ProposalsTypes.send_token,
-      }),
-    );
-
   React.useEffect(() => {
     tryParseUrlParams();
 
@@ -334,8 +326,6 @@ const MultisigDetailsPage = () => {
     return <Redirect to="/multisig" />;
   }
 
-  console.log("---multisigBalance", multisigBalance.toString());
-
   return (
     <MultisigDetailsContext.Provider
       value={{ quorumSize, totalBoardMembers, isProposer, multisigBalance }}
@@ -358,12 +348,14 @@ const MultisigDetailsPage = () => {
                 <div className="wallet-name position-relative">
                   <h3 className="mb-0">{multisigName} </h3>
                 </div>
-                <div className="created d-flex">
-                  <p className="time">
-                    <FontAwesomeIcon icon={faCalendarAlt} className="icon" />{" "}
-                    Created: <span className="text">12/10/2021</span>
-                  </p>
-                </div>
+                {deployedAt != null && (
+                  <div className="created d-flex">
+                    <p className="time">
+                      <FontAwesomeIcon icon={faCalendarAlt} className="icon" />{" "}
+                      Created: <span className="text">{deployedAt}</span>
+                    </p>
+                  </div>
+                )}
               </div>
               {currentMultisigAddress && (
                 <div className="address text-center d-flex align-items-center justify-content-center">
@@ -434,7 +426,6 @@ const MultisigDetailsPage = () => {
                       <p className="mb-3">
                         {t("Currently there are no active proposals.")}
                       </p>
-                      <a href="3">Make a proposal</a>
                     </div>
                   ) : (
                     allActions.map((action) => (
