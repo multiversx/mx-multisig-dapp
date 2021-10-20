@@ -13,7 +13,7 @@ const Navbar = () => {
   const history = useHistory();
 
   const handleRedirectToHome = () => {
-    history.push("/dashboard");
+    history.push("/");
   };
 
   return (
