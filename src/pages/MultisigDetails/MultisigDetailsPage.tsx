@@ -30,10 +30,7 @@ import { PlainAddress } from "helpers/plainObjects";
 import { tryParseTransactionParameter } from "helpers/urlparameters";
 import MultisigProposalCard from "pages/MultisigDetails/MultisigProposalCard";
 import { priceSelector } from "redux/selectors/economicsSelector";
-import {
-  currentMultisigAddressSelector,
-  multisigContractsFetchedSelector,
-} from "redux/selectors/multisigContractsSelectors";
+import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
 import { refetchSelector } from "redux/selectors/toastSelector";
 import {
   setProposeModalSelectedOption,
@@ -78,6 +75,7 @@ const MultisigDetailsPage = () => {
     boardMembersAddresses: [],
     proposersAddresses: [],
   });
+  const [dataFetched, setDataFetched] = useState(false);
 
   const {
     totalBoardMembers,
@@ -89,7 +87,6 @@ const MultisigDetailsPage = () => {
     multisigName,
   } = contractInfo;
 
-  const contractsFetched = useSelector(multisigContractsFetchedSelector);
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
 
   const { address, apiAddress, dapp, egldLabel, explorerAddress } =
@@ -168,7 +165,7 @@ const MultisigDetailsPage = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      dispatch(setMultisigContractsFetched(true));
+      setDataFetched(true);
     }
   };
 
@@ -326,6 +323,10 @@ const MultisigDetailsPage = () => {
     return <Redirect to="/multisig" />;
   }
 
+  if (!dataFetched) {
+    return null;
+  }
+
   return (
     <MultisigDetailsContext.Provider
       value={{ quorumSize, totalBoardMembers, isProposer, multisigBalance }}
@@ -415,7 +416,7 @@ const MultisigDetailsPage = () => {
           <MultisigDetailsAccordion contractInfo={contractInfo} />
 
           <div className="card-body">
-            {!contractsFetched ? (
+            {!dataFetched ? (
               <State icon={faCircleNotch} iconClass="fa-spin text-primary" />
             ) : (
               <div className="proposals-list">

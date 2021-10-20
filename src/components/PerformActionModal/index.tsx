@@ -57,6 +57,7 @@ const PerformActionModal = () => {
       <div className="card">
         <div className="card-body p-spacer text-center">
           <div className="p-spacer">
+            <h1>Perform</h1>
             <span>Select gas limit</span>
             <Form.Control
               type="number"
