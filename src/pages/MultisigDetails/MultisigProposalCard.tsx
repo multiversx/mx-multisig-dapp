@@ -99,6 +99,24 @@ const MultisigProposalCard = ({
               <FontAwesomeIcon icon={faTimes} /> <span>{t("Withdraw")}</span>
             </button>
           )}
+          {canPerformAction && (
+            <button
+              style={{ whiteSpace: "nowrap" }}
+              onClick={performAction}
+              className="btn btn-primary mb-3 mr-2"
+            >
+              {t("Perform Action")}
+            </button>
+          )}
+          {canDiscardAction && (
+            <button
+              style={{ whiteSpace: "nowrap" }}
+              onClick={discardAction}
+              className="btn btn-primary mb-3 mr-2"
+            >
+              {t("Discard Action")}
+            </button>
+          )}
         </div>
         <div style={{ width: 72, height: 72 }} className="">
           <CircularProgressbarWithChildren

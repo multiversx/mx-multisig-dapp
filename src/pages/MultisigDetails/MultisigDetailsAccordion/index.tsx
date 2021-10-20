@@ -9,18 +9,17 @@ import {
   faChevronCircleUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
-import { Accordion, Card } from "react-bootstrap";
+import { Accordion, useAccordionToggle, Card } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import CopyButton from "components/CopyButton";
+import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
 import StatCard from "components/StatCard";
 import { setProposeModalSelectedOption } from "redux/slices/modalsSlice";
 import { ProposalsTypes } from "types/Proposals";
 
 import { ContractInfo } from "../MultisigDetailsPage";
 import "./multisigDetailsAccordion.scss";
-import { Ui, operations } from "@elrondnetwork/dapp-utils";
+import { Ui } from "@elrondnetwork/dapp-utils";
 
 const MultisigDetailsAccordion = ({
   contractInfo,
@@ -38,9 +37,10 @@ const MultisigDetailsAccordion = ({
   const [expanded, setExpanded] = React.useState(false);
 
   const handleToggleExpanded = () => setExpanded((prev) => !prev);
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  const decoratedOnClick = useAccordionToggle("0", handleToggleExpanded);
 
   const onAddBoardMember = () =>
     dispatch(
@@ -160,7 +160,7 @@ const MultisigDetailsAccordion = ({
   return (
     <Accordion className={"multisig-details-accordion"}>
       <Accordion.Toggle
-        onClick={handleToggleExpanded}
+        onClick={decoratedOnClick}
         as={Card}
         eventKey="0"
         className="cards d-flex flex-wrap border-n"
@@ -186,7 +186,7 @@ const MultisigDetailsAccordion = ({
           svg="quorum.svg"
         />
       </Accordion.Toggle>
-      <div className={"expand-icon"}>
+      <div onClick={decoratedOnClick} className={"expand-icon"}>
         <FontAwesomeIcon
           icon={expanded ? faChevronCircleUp : faChevronCircleDown}
         />
