@@ -5,6 +5,8 @@ import { gasLimit, maxGasLimit } from "config";
 import { useMultisigContract } from "contracts/MultisigContract";
 import { selectedPerformedActionId } from "redux/selectors/modalsSelector";
 import { setSelectedPerformedActionId } from "redux/slices/modalsSlice";
+import { faTimes, faCheck } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const PerformActionModal = () => {
   const selectedActionId = useSelector(selectedPerformedActionId);
@@ -55,29 +57,41 @@ const PerformActionModal = () => {
       centered
     >
       <div className="card">
-        <div className="card-body p-spacer text-center">
-          <div className="p-spacer">
-            <h1>Perform</h1>
-            <span>Select gas limit</span>
-            <Form.Control
-              type="number"
-              className="form-control"
-              value={selectedGasLimit}
-              autoComplete="off"
-              isInvalid={error != null}
-              onChange={handleChangeGasLimit}
-            />
-            {error != null && (
-              <Form.Control.Feedback type={"invalid"}>
-                {error}
-              </Form.Control.Feedback>
-            )}
+        <div className="card-body">
+          <div className="modal-control-container">
+            <p className="h3 mb-spacer text-center">Perform</p>
+            <div className="group-center ">
+              <label>Select gas limit:</label>
+              <Form.Control
+                type="number"
+                className="form-control"
+                value={selectedGasLimit}
+                autoComplete="off"
+                isInvalid={error != null}
+                onChange={handleChangeGasLimit}
+              />
+              {error != null && (
+                <Form.Control.Feedback type={"invalid"}>
+                  {error}
+                </Form.Control.Feedback>
+              )}
+            </div>
           </div>
-
           <div>
-            <button onClick={onPerformAction} className="btn btn-primary mb-3">
-              Perform
-            </button>
+            <div className="modal-action-btns">
+              <button
+                onClick={handleClose}
+                className="btn btn-primary btn-light "
+              >
+                <FontAwesomeIcon icon={faTimes} />
+                Cancel
+              </button>
+
+              <button onClick={onPerformAction} className="btn btn-primary">
+                <FontAwesomeIcon icon={faCheck} />
+                Perform
+              </button>
+            </div>
           </div>
         </div>
       </div>

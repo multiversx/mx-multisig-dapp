@@ -46,6 +46,9 @@ a,
   color: #9dabbd !important;
   &:hover {
     color: #1392ff !important;
+    svg {
+      color: #1392ff !important;
+    }
   }
 }
 
@@ -112,6 +115,10 @@ a,
     color: #1392ff;
     margin-left: 48px;
   }
+}
+
+.btn {
+  transition: none !important;
 }
 /* Navbar
 -------------------------------------------------- */

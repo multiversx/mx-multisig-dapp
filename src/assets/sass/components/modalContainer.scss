@@ -1,13 +1,27 @@
 .modal-container {
   .modal-dialog {
-    border-radius: 12px !important;
     .modal-content {
+      border-radius: 12px !important;
       border: none;
       .card {
-        border-radius: 12px !important;
+        border: none;
+        background: none;
+        box-shadow: unset;
       }
       .card-body {
         padding: 40px !important;
+      }
+      .btn-close-link {
+        width: 8rem;
+        background: #f3f9ff;
+        padding: 13px 20px 15px 13px;
+        border: 1px solid #ddeeff;
+        box-sizing: border-box;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
+
+        &:hover {
+          background-image: linear-gradient(rgba(77, 169, 255, 0.1) 0 0);
+        }
       }
     }
 

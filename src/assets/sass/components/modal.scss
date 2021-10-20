@@ -1,5 +1,9 @@
 .modal-control-container {
   display: block;
+  .group-center {
+    width: 250px;
+    margin: 0 auto;
+  }
   label {
     display: block !important;
     color: #9dabbd;

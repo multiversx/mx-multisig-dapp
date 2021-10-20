@@ -32,21 +32,23 @@ const ProposeChangeQuorum = ({
 
   return (
     <div className="d-flex flex-column modal-control-container">
-      <label>{t("Quorum Size")}: </label>
-      <input
-        style={{ width: 250 }}
-        type="number"
-        min={1}
-        className="form-control center"
-        value={newQuorumSize}
-        autoComplete="off"
-        onChange={handleNewQuorumSizeChanged}
-      />
-      {error && (
-        <p className="text-danger">
-          {t("Quorum cannot be bigger than the number of board members")}
-        </p>
-      )}
+      <div className="group-center">
+        <label>{t("Quorum Size")}: </label>
+        <input
+          style={{ width: 250 }}
+          type="number"
+          min={1}
+          className="form-control"
+          value={newQuorumSize}
+          autoComplete="off"
+          onChange={handleNewQuorumSizeChanged}
+        />
+        {error && (
+          <p className="text-danger">
+            {t("Quorum cannot be bigger than the number of board members")}
+          </p>
+        )}
+      </div>
     </div>
   );
 };

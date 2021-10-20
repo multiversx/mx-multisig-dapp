@@ -366,7 +366,7 @@ const MultisigDetailsPage = () => {
                     href={`${explorerAddress}accounts/${currentMultisigAddress.bech32()}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="link-style"
+                    className="link-second-style"
                   >
                     <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
                   </a>
