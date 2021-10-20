@@ -186,11 +186,16 @@ const MultisigDetailsAccordion = ({
           svg="quorum.svg"
         />
       </Accordion.Toggle>
-      <div onClick={decoratedOnClick} className={"expand-icon"}>
+
+      <Accordion.Toggle
+        eventKey={"0"}
+        onClick={decoratedOnClick}
+        className={"expand-icon"}
+      >
         <FontAwesomeIcon
           icon={expanded ? faChevronCircleUp : faChevronCircleDown}
         />
-      </div>
+      </Accordion.Toggle>
       <div className="owner-actions">
         <Card>
           <Accordion.Collapse eventKey="0">

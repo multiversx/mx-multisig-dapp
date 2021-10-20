@@ -21,6 +21,8 @@
     bottom: -1rem;
     z-index: 100;
     cursor: pointer;
+    border: none;
+    background: transparent;
 
     svg {
       pointer-events: none;
