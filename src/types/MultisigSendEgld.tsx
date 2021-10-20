@@ -39,12 +39,12 @@ export class MultisigSendEgld extends MultisigAction {
           <span className="mr-1">{i18next.t("to")}</span>
           <div className="address">
             <Ui.Trim text={this.address.bech32()} />
+            <ExplorerLink
+              page={`accounts/${this.address.bech32()}`}
+              text={<FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />}
+              className="link-second-style"
+            />
           </div>
-          <ExplorerLink
-            page={`accounts/${this.address.bech32()}`}
-            text={<FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />}
-            className="link-second-style"
-          />
         </div>
         {/* {this.data !== "" && (
           <div>
