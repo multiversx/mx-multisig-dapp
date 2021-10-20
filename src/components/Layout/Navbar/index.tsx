@@ -1,21 +1,28 @@
 import React from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { Navbar as BsNavbar, NavItem, Nav } from "react-bootstrap";
-import { Link, Redirect } from "react-router-dom";
-import { routeNames } from "routes";
+import { Link, useHistory } from "react-router-dom";
 import { ReactComponent as ElrondLogo } from "assets/img/elrond.svg";
-import { dAppName } from "config";
-import Account from "./Account";
-import Settings from "./Settings";
 import { ReactComponent as Union } from "assets/img/Union.svg";
+import { dAppName } from "config";
+import { routeNames } from "routes";
+import Account from "./Account";
 
 const Navbar = () => {
   const { loggedIn } = useDappContext();
+  const history = useHistory();
+
+  const handleRedirectToHome = () => {
+    history.push("/dashboard");
+  };
 
   return (
     <BsNavbar className="bg-white px-4 py-3">
       <div className="container">
-        <NavItem className="d-flex align-items-center nav-logo">
+        <NavItem
+          onClick={handleRedirectToHome}
+          className="d-flex align-items-center nav-logo"
+        >
           <ElrondLogo className="elrond-logo" />
           <span className="dapp-name">{dAppName}</span>
         </NavItem>
