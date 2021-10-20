@@ -56,6 +56,7 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
             <a
               href={`${explorerAddress}accounts/${contract.address.bech32}`}
               target="_blank"
+              onClick={(e) => e.stopPropagation()}
               rel="noreferrer"
               className="link-second-style ml-2"
             >

@@ -10,14 +10,19 @@ const ProposeInputAddress = ({
   handleParamsChange,
 }: ProposeInputAddressType) => {
   const [address, setAddress] = useState("");
+  const [error, setError] = useState(false);
   const { t } = useTranslation();
 
   const handleAddressChanged = (event: any) => {
     try {
-      const newAddress = event.target.value;
+      const newAddress = String(event.target.value);
+      const parsedValue = new Address(newAddress);
+      setError(false);
       setAddress(newAddress);
-      handleParamsChange(new Address(newAddress));
-    } catch (err) {}
+      handleParamsChange(parsedValue);
+    } catch (err) {
+      setError(true);
+    }
   };
 
   return (
@@ -30,6 +35,7 @@ const ProposeInputAddress = ({
         autoComplete="off"
         onChange={handleAddressChanged}
       />
+      {error && <p className="text-danger">{t("Invalid address")}</p>}
     </div>
   );
 };
