@@ -82,6 +82,7 @@ Resources:
           AcmCertificateArn: "arn:aws:acm:us-east-1:777241893292:certificate/4fc48d4f-75c1-4bb9-983f-0c49b1fc44e1"
           MinimumProtocolVersion: TLSv1
           SslSupportMethod: sni-only
+        IPV6Enabled: false
         DefaultCacheBehavior:
           MaxTTL: 60
           DefaultTTL: 60
