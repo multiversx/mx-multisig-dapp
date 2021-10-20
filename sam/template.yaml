@@ -93,7 +93,7 @@ Resources:
           TargetOriginId: s3-static-site
           LambdaFunctionAssociations:
             - EventType: viewer-request
-              LambdaFunctionARN: !Ref PrivateEdgeRequestVersion1
+              LambdaFunctionARN: !Ref PrivateEdgeRequestVersion2
 
   EdgeRole:
     Type: AWS::IAM::Role
@@ -121,7 +121,7 @@ Resources:
       Timeout: 1
       Role: !GetAtt EdgeRole.Arn
 
-  PrivateEdgeRequestVersion1:
+  PrivateEdgeRequestVersion2:
     Type: AWS::Lambda::Version
     DeletionPolicy: Retain
     Properties:
