@@ -154,6 +154,8 @@
         .card-header {
           .user-item {
             display: flex;
+            justify-content: space-between;
+            width: 100%;
             .side-action {
               color: #9dabbd;
               padding-left: 0.5rem;
@@ -162,6 +164,9 @@
                   color: #1390ff;
                 }
               }
+            }
+            .address {
+              max-width: 75%;
             }
           }
         }
@@ -205,9 +210,14 @@
     }
     .proposal {
       width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      flex-flow: wrap;
       gap: 20px;
-      @include media-breakpoint-between(xs, sm) {
-        flex-flow: wrap;
+      @include media-breakpoint-down(sm) {
+        flex-flow: column;
+        align-items: flex-start;
+        gap: 10px;
       }
       .meta {
         flex: 3;
@@ -216,15 +226,31 @@
           color: #9dabbd;
           gap: 12px;
         }
+        @include media-breakpoint-down(sm) {
+          order: 1;
+        }
       }
       .deadline {
         flex: 1;
+        @include media-breakpoint-down(sm) {
+          order: 2;
+        }
       }
       .action-btns {
         flex: 1;
         justify-content: center;
         .btn {
           width: 8rem;
+        }
+        @include media-breakpoint-down(sm) {
+          order: 4;
+          align-self: center;
+        }
+      }
+      .circular-progress-bar {
+        @include media-breakpoint-down(sm) {
+          order: 3;
+          align-self: center;
         }
       }
     }
@@ -260,7 +286,7 @@
     align-items: center;
     padding: 15px 20px 15px 16px;
     border-radius: 6px;
-    gap: 10px;
+    gap: 15px;
   }
   .sign {
     color: #16d296;

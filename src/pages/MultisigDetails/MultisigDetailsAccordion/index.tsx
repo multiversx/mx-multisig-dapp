@@ -73,25 +73,25 @@ const MultisigDetailsAccordion = ({
       <div className="user-item">
         <span className="address text d-flex">
           <Ui.Trim text={address.bech32()} />
+          <a
+            href="#"
+            target="_blank"
+            rel="noreferrer"
+            className="link-second-style  ml-2"
+          >
+            <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
+          </a>
         </span>
-        {/* <CopyButton text={address.bech32()} /> */}
-        <a
-          href="#"
-          target="_blank"
-          rel="noreferrer"
-          className="link-second-style  ml-2"
-        >
-          <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
-        </a>
-      </div>
-      <div className="btns">
-        <button
-          onClick={() => onRemoveUser(address)}
-          className={"action-remove action remove"}
-        >
-          <FontAwesomeIcon icon={faMinus} />
-          <span className="name">Remove</span>
-        </button>
+
+        <div className="btns">
+          <button
+            onClick={() => onRemoveUser(address)}
+            className={"action-remove action remove"}
+          >
+            <FontAwesomeIcon icon={faMinus} />
+            <span className="name">Remove</span>
+          </button>
+        </div>
       </div>
     </Card.Header>
   );

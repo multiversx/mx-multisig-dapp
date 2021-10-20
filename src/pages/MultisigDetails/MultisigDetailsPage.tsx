@@ -347,7 +347,7 @@ const MultisigDetailsPage = () => {
                   </p>
                 </div>
                 <div className="wallet-name position-relative">
-                  <h3 className="mb-0">{multisigName} </h3>
+                  <h3 className="text-center mb-0">{multisigName} </h3>
                 </div>
                 {deployedAt != null && (
                   <div className="created d-flex">

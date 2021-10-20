@@ -28,7 +28,7 @@ export class MultisigSendEgld extends MultisigAction {
   description() {
     return (
       <>
-        <div className="d-flex flex-wrap">
+        <div className="d-flex flex-wrap transaction">
           <span className="mr-1 text-body">
             <Ui.Denominate
               value={this.amount.valueOf().toString()}

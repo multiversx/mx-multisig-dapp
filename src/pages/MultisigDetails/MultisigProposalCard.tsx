@@ -67,7 +67,7 @@ const MultisigProposalCard = ({
   };
   return (
     <div className="statcard text-black py-3 px-4 mb-spacer">
-      <div className="d-flex align-items-center justify-content-between proposal">
+      <div className="d-flex proposal">
         <div className="meta">
           <p className="h5 mb-0">
             {title}
@@ -123,18 +123,20 @@ const MultisigProposalCard = ({
             </button>
           )}
         </div>
-        <div style={{ width: 72, height: 72 }} className="">
-          <CircularProgressbarWithChildren
-            value={signers.length}
-            maxValue={quorumSize}
-            strokeWidth={10}
-            styles={buildStyles({
-              strokeLinecap: "butt",
-              pathColor: "#16D296",
-            })}
-          >
-            <div>{`${signers.length} / ${quorumSize}`}</div>
-          </CircularProgressbarWithChildren>
+        <div className="circular-progress-bar">
+          <div style={{ width: 72, height: 72 }} className="">
+            <CircularProgressbarWithChildren
+              value={signers.length}
+              maxValue={quorumSize}
+              strokeWidth={10}
+              styles={buildStyles({
+                strokeLinecap: "butt",
+                pathColor: "#16D296",
+              })}
+            >
+              <div>{`${signers.length} / ${quorumSize}`}</div>
+            </CircularProgressbarWithChildren>
+          </div>
         </div>
       </div>
     </div>
