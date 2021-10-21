@@ -42,7 +42,12 @@ const ReceiveModal = ({ address }: { address?: string }) => {
               className="h6 mb-spacer copy-address"
               data-testid="delegateSubTitle"
             >
-              <p className="address"> {address} </p>
+              <textarea
+                name="body"
+                className="address"
+                value={address}
+                readOnly
+              />
               <span className={"copy-btn"}>
                 <CopyButton text={address} />
                 {/* <ExplorerLink page={`accounts/${address}`} className="ml-2" /> */}
