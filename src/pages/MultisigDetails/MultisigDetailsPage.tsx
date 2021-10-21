@@ -418,7 +418,10 @@ const MultisigDetailsPage = () => {
             </div>
           </div>
 
-          <MultisigDetailsAccordion contractInfo={contractInfo} />
+          <MultisigDetailsAccordion
+            isProposer={isProposer}
+            contractInfo={contractInfo}
+          />
 
           <div className="card-body">
             {!dataFetched ? (
