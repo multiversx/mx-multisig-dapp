@@ -2,7 +2,7 @@ import React from "react";
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { Ui } from "@elrondnetwork/dapp-utils";
 import { Address } from "@elrondnetwork/erdjs/out";
-import { faExternalLinkAlt } from "@fortawesome/pro-solid-svg-icons";
+import { faExternalLinkAlt, faTimes } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
@@ -33,12 +33,20 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
     history.push("/multisig/" + contract.address.bech32);
   };
 
-  const onUnregisterClicked = async () => {
+  const onUnregisterClicked = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     await mutateUnregisterMultisigContract(new Address(contract.address.hex));
   };
 
   return (
-    <button onClick={onEnterClicked} className="shadow-sm bg-white">
+    <button onClick={onEnterClicked} className="shadow-sm  bg-white">
+      <div
+        onClick={onUnregisterClicked}
+        className={"position-absolute unregister-icon"}
+      >
+        <FontAwesomeIcon icon={faTimes} size="lg" />
+      </div>
       <div className="d-flex icon">
         <Wallet className="logo" />
       </div>

@@ -418,7 +418,10 @@ const MultisigDetailsPage = () => {
             </div>
           </div>
 
-          <MultisigDetailsAccordion contractInfo={contractInfo} />
+          <MultisigDetailsAccordion
+            isProposer={isProposer}
+            contractInfo={contractInfo}
+          />
 
           <div className="card-body">
             {!dataFetched ? (
@@ -436,6 +439,7 @@ const MultisigDetailsPage = () => {
                   ) : (
                     allActions.map((action) => (
                       <MultisigProposalCard
+                        boardMembers={contractInfo.boardMembersAddresses}
                         key={action.actionId}
                         type={action.typeNumber()}
                         actionId={action.actionId}

@@ -29,6 +29,7 @@ export interface MultisigProposalCardType {
   canDiscardAction?: boolean;
   data?: string;
   signers: Address[];
+  boardMembers?: Address[];
 }
 
 const MultisigProposalCard = ({
@@ -42,6 +43,7 @@ const MultisigProposalCard = ({
   canUnsign = false,
   canPerformAction = false,
   canDiscardAction = false,
+  boardMembers,
   signers = [],
 }: MultisigProposalCardType) => {
   const { mutateSign, mutateUnsign, mutateDiscardAction } =
@@ -49,6 +51,16 @@ const MultisigProposalCard = ({
   const { quorumSize } = React.useContext(MultisigDetailsContext);
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  const validatedSigners = React.useMemo(() => {
+    if (boardMembers == null) {
+      return signers;
+    }
+    return signers.filter((signer) =>
+      boardMembers.some((boardMember) => boardMember.equals(signer)),
+    );
+  }, [signers, boardMembers]);
+
   const sign = () => {
     mutateSign(actionId);
   };
@@ -129,7 +141,7 @@ const MultisigProposalCard = ({
         <div className="circular-progress-bar">
           <div style={{ width: 72, height: 72 }} className="">
             <CircularProgressbarWithChildren
-              value={signers.length}
+              value={validatedSigners.length}
               maxValue={quorumSize}
               strokeWidth={10}
               styles={buildStyles({
@@ -137,7 +149,7 @@ const MultisigProposalCard = ({
                 pathColor: "#16D296",
               })}
             >
-              <div>{`${signers.length} / ${quorumSize}`}</div>
+              <div>{`${validatedSigners.length} / ${quorumSize}`}</div>
             </CircularProgressbarWithChildren>
           </div>
         </div>
