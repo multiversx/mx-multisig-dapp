@@ -231,11 +231,15 @@
         @include media-breakpoint-down(sm) {
           order: 1;
         }
-      }
-      .deadline {
-        flex: 1;
-        @include media-breakpoint-down(sm) {
-          order: 2;
+        .data-textarea{
+          width: 85%;
+        }
+        .deadline {
+          margin-top: 0.5rem;
+          flex: 1;
+          @include media-breakpoint-down(sm) {
+            order: 2;
+          }
         }
       }
       .action-btns {

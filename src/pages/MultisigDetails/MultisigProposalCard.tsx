@@ -4,7 +4,6 @@ import {
   faInfoCircle,
   faTimes,
   faThumbsUp,
-  faThumbsDown,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,14 +27,14 @@ export interface MultisigProposalCardType {
   canUnsign?: boolean;
   canPerformAction?: boolean;
   canDiscardAction?: boolean;
-  data: string;
+  data?: string;
   signers: Address[];
 }
 
 const MultisigProposalCard = ({
   type = 0,
   actionId = 0,
-  data = "N/A",
+  data,
   tooltip = "",
   title = "",
   value = "0",
@@ -83,10 +82,14 @@ const MultisigProposalCard = ({
             ) : null}
           </p>
           <span className="text">{value}</span>
-        </div>
-        <div className="deadline">
-          <p className="mb-0">Data</p>
-          <p className="text mb-0">{data}</p>
+          {data != null && (
+            <div className="deadline">
+              <p className="mb-0">Data</p>
+              <textarea disabled className="data-textarea mb-0">
+                {data}
+              </textarea>
+            </div>
+          )}
         </div>
 
         <div className="d-flex align-items-center btns action-btns">

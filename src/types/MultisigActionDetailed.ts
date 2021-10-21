@@ -27,7 +27,7 @@ export class MultisigActionDetailed {
   typeNumber(): number {
     return this.action.type;
   }
-  data(): string {
-    return this.action?.data || "N/A";
+  data(): string | undefined {
+    return this.action?.data;
   }
 }
