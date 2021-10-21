@@ -114,6 +114,35 @@ const Index = () => {
     deployButton
   );
 
+  const deployButtonSecondary = (
+    <button
+      className="btn btn-light d-flex flex-row align-items-center"
+      onClick={onDeployClicked}
+      disabled={isWalletProvider}
+    >
+      <FontAwesomeIcon icon={faPlus} size="lg" />
+      <div className="navbar-address  d-lg-block">Create</div>
+    </button>
+  );
+
+  const deployButtonSecondaryContainer = isWalletProvider ? (
+    <OverlayTrigger
+      placement="top"
+      delay={{ show: 250, hide: 400 }}
+      overlay={(props) => {
+        return (
+          <Tooltip id="deploy-button-tooltip" {...props}>
+            {t("Please use another login method to deploy a contract")}
+          </Tooltip>
+        );
+      }}
+    >
+      <span className="d-inline-block">{deployButtonSecondary}</span>
+    </OverlayTrigger>
+  ) : (
+    deployButtonSecondary
+  );
+
   if (!multisigContractsFetched) {
     return null;
   }
@@ -155,13 +184,7 @@ const Index = () => {
               <div className="top-bar">
                 <h3 className="title">My wallets</h3>
                 <div className="create-btns d-flex">
-                  <button
-                    className="btn btn-light d-flex flex-row align-items-center"
-                    onClick={onDeployClicked}
-                  >
-                    <FontAwesomeIcon icon={faPlus} size="lg" />
-                    <div className="navbar-address  d-lg-block">Create</div>
-                  </button>
+                  {deployButtonSecondaryContainer}
                   <button
                     className="btn address-btn btn-light d-flex flex-row align-items-center"
                     onClick={onAddMultisigClicked}
