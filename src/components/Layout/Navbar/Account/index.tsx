@@ -50,7 +50,6 @@ const Account = () => {
     setIsLoggedIn(false);
     logOut();
   };
-
   return (
     <div className="connect-btns">
       <button
@@ -63,7 +62,7 @@ const Account = () => {
           <span className="name">
             {username ? (
               <span className="address hero-tag">
-                `@${username.replace(".elrond", "")}`
+                @{username.replace(".elrond", "")}
               </span>
             ) : (
               <span className="address">
