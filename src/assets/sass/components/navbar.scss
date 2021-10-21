@@ -48,8 +48,7 @@
   }
 
   .navbar-buttons .btn {
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
+    padding: 15px 20px 15px 16px;
     height: 2.475rem;
     svg {
       width: auto;
@@ -62,7 +61,6 @@
 
   .address-btn {
     background-color: #4aa8ff13;
-    width: 185px;
     justify-content: center;
     border: 1px solid #ddeeff !important;
     @include media-breakpoint-down(md) {
