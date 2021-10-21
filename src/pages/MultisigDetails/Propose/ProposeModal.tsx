@@ -17,7 +17,7 @@ import { MultisigSendEgld } from "types/MultisigSendEgld";
 import { MultisigSendToken } from "types/MultisigSendToken";
 import { ProposalsTypes } from "types/Proposals";
 import ProposeChangeQuorum from "./ProposeChangeQuorum";
-import ProposeInputAddressType from "./ProposeInputAddress";
+import ProposeInputAddress from "./ProposeInputAddress";
 import ProposeIssueToken from "./ProposeIssueToken";
 import ProposeRemoveUser from "./ProposeRemoveUser";
 import ProposeSendEgld from "./ProposeSendEgld";
@@ -48,6 +48,7 @@ const ProposeModal = () => {
   const selectedOption: SelectedOptionType = useSelector(
     proposeModalSelectedOptionSelector,
   );
+  const [submitDisabled, setSubmitDisabled] = useState(false);
   const [selectedNumericParam, setSelectedNumericParam] = useState(1);
   const [selectedAddressParam, setSelectedAddressParam] = useState(
     new Address(),
@@ -113,13 +114,17 @@ const ProposeModal = () => {
     switch (selectedOption?.option) {
       case ProposalsTypes.change_quorum: {
         return (
-          <ProposeChangeQuorum handleParamsChange={handleNumericParamChange} />
+          <ProposeChangeQuorum
+            setSubmitDisabled={setSubmitDisabled}
+            handleParamsChange={handleNumericParamChange}
+          />
         );
       }
       case ProposalsTypes.add_proposer:
       case ProposalsTypes.add_board_member:
         return (
-          <ProposeInputAddressType
+          <ProposeInputAddress
+            setSubmitDisabled={setSubmitDisabled}
             handleParamsChange={handleAddressParamChange}
           />
         );
@@ -131,7 +136,12 @@ const ProposeModal = () => {
           />
         );
       case ProposalsTypes.send_egld:
-        return <ProposeSendEgld handleChange={handleProposalChange} />;
+        return (
+          <ProposeSendEgld
+            setSubmitDisabled={setSubmitDisabled}
+            handleChange={handleProposalChange}
+          />
+        );
       case ProposalsTypes.issue_token:
         return <ProposeIssueToken handleChange={handleProposalChange} />;
       case ProposalsTypes.send_token:
@@ -165,7 +175,11 @@ const ProposeModal = () => {
                 <FontAwesomeIcon icon={faTimes} />
                 {t("Cancel")}
               </button>
-              <button onClick={onProposeClicked} className="btn btn-primary ">
+              <button
+                disabled={submitDisabled}
+                onClick={onProposeClicked}
+                className="btn btn-primary "
+              >
                 <FontAwesomeIcon icon={faHandPaper} />
                 {t("Propose")}
               </button>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Ui } from "@elrondnetwork/dapp-utils";
 import { Address } from "@elrondnetwork/erdjs";
 import {
   faMinus,
@@ -18,8 +19,8 @@ import { setProposeModalSelectedOption } from "redux/slices/modalsSlice";
 import { ProposalsTypes } from "types/Proposals";
 
 import { ContractInfo } from "../MultisigDetailsPage";
+
 import "./multisigDetailsAccordion.scss";
-import { Ui } from "@elrondnetwork/dapp-utils";
 
 const MultisigDetailsAccordion = ({
   contractInfo,
@@ -146,7 +147,7 @@ const MultisigDetailsAccordion = ({
         </div>
       </Card.Header>
       {Object.keys(proposersAddresses).length > 0 ? (
-        <Card.Body></Card.Body>
+        <Card.Body>{proposersAddresses.map(renderAddress)}</Card.Body>
       ) : (
         <div className=" w-100 no-active-proposals">
           <p className="d-flex flex-column align-items-center mb-3">

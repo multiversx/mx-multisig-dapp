@@ -4,26 +4,38 @@ import MultisigDetailsContext from "context/MultisigDetailsContext";
 
 interface ProposeChangeQuorumType {
   handleParamsChange: (params: number) => void;
+  setSubmitDisabled: (value: boolean) => void;
 }
+
+const errors = {
+  invalid: "Invalid value",
+  tooBig: "Quorum cannot be bigger than the number of board members",
+};
 
 const ProposeChangeQuorum = ({
   handleParamsChange,
+  setSubmitDisabled,
 }: ProposeChangeQuorumType) => {
   const { quorumSize, totalBoardMembers } = useContext(MultisigDetailsContext);
   const { t } = useTranslation();
 
   const [newQuorumSize, setNewQuorumSize] = useState(1);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleNewQuorumSizeChanged = (event: any) => {
     const newQuorum = Number(event.target.value);
-    if (newQuorum > totalBoardMembers || newQuorum < 1) {
-      setError(true);
-      return;
+    if (Number.isNaN(newQuorum) || newQuorum < 1) {
+      setError(errors.invalid);
+      setSubmitDisabled(true);
+    } else if (newQuorum > totalBoardMembers || newQuorum < 1) {
+      setError(errors.tooBig);
+      setSubmitDisabled(true);
+    } else {
+      setError(null);
+      handleParamsChange(newQuorum);
+      setSubmitDisabled(false);
     }
-    setError(false);
     setNewQuorumSize(newQuorum);
-    handleParamsChange(newQuorum);
   };
 
   useEffect(() => {
@@ -36,18 +48,12 @@ const ProposeChangeQuorum = ({
         <label>{t("Quorum Size")}: </label>
         <input
           style={{ width: 250 }}
-          type="number"
-          min={1}
           className="form-control"
           value={newQuorumSize}
           autoComplete="off"
           onChange={handleNewQuorumSizeChanged}
         />
-        {error && (
-          <p className="text-danger">
-            {t("Quorum cannot be bigger than the number of board members")}
-          </p>
-        )}
+        {error != null && <p className="text-danger">{error}</p>}
       </div>
     </div>
   );

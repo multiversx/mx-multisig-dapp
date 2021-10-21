@@ -1,12 +1,12 @@
 import React from "react";
+import { faTimes, faCheck } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { gasLimit, maxGasLimit } from "config";
 import { useMultisigContract } from "contracts/MultisigContract";
 import { selectedPerformedActionId } from "redux/selectors/modalsSelector";
 import { setSelectedPerformedActionId } from "redux/slices/modalsSlice";
-import { faTimes, faCheck } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const PerformActionModal = () => {
   const selectedActionId = useSelector(selectedPerformedActionId);

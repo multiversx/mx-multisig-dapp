@@ -1,10 +1,10 @@
 import React from "react";
 import { Address } from "@elrondnetwork/erdjs/out";
+import { faTimes } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import ProposeInputAddress from "../MultisigDetails/Propose/ProposeInputAddress";
-import { faTimes, faHandPaper } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface AddMultisigModalType {
   show: boolean;
@@ -20,6 +20,7 @@ const AddMultisigModal = ({
   const { t } = useTranslation();
 
   const [address, setAddress] = React.useState(Address.Zero());
+  const [submitDisabled, setSubmitDisabled] = React.useState(false);
 
   const onAddressParamChange = (newAddress: Address) => {
     setAddress(newAddress);
@@ -45,7 +46,10 @@ const AddMultisigModal = ({
           </p>
 
           <div className="">
-            <ProposeInputAddress handleParamsChange={onAddressParamChange} />
+            <ProposeInputAddress
+              setSubmitDisabled={setSubmitDisabled}
+              handleParamsChange={onAddressParamChange}
+            />
           </div>
 
           <div className="modal-action-btns">
@@ -56,7 +60,11 @@ const AddMultisigModal = ({
               <FontAwesomeIcon icon={faTimes} />
               {t("Cancel")}
             </button>
-            <button onClick={onAddClicked} className="btn btn-primary mb-3">
+            <button
+              disabled={submitDisabled}
+              onClick={onAddClicked}
+              className="btn btn-primary mb-3"
+            >
               {t("Add")}
             </button>
           </div>

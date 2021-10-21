@@ -13,12 +13,20 @@ import { MultisigSendEgld } from "types/MultisigSendEgld";
 
 interface ProposeSendEgldType {
   handleChange: (proposal: MultisigSendEgld) => void;
+  setSubmitDisabled: (value: boolean) => void;
 }
 
-const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
+const ProposeSendEgld = ({
+  handleChange,
+  setSubmitDisabled,
+}: ProposeSendEgldType) => {
   const { multisigBalance } = React.useContext(MultisigDetailsContext);
 
   const { t } = useTranslation();
+
+  React.useEffect(() => {
+    setSubmitDisabled(true);
+  }, []);
 
   const denominatedValue = useMemo(
     () =>
@@ -37,10 +45,10 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
       .max(500, "Too Long!")
       .required("Required")
       .test(validateRecipient),
-    amount: Yup.number()
-      .min(-1, "Too Short!")
+    amount: Yup.string()
       .required("Required")
-      .test(validateAccount),
+      .transform((value) => value.replace(",", "."))
+      .test(validateAmount),
     data: Yup.string(),
   });
 
@@ -64,6 +72,7 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
 
       const amountNumeric = Number(formik.values.amount);
       if (isNaN(amountNumeric)) {
+        setSubmitDisabled(true);
         return null;
       }
 
@@ -77,16 +86,19 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
         formik.values.data,
       );
     } catch (err) {
+      setSubmitDisabled(true);
       return null;
     }
   };
 
   function refreshProposal() {
     if (Object.keys(formik.errors).length > 0) {
+      setSubmitDisabled(true);
       return;
     }
     const proposal = getProposal();
     if (proposal !== null) {
+      setSubmitDisabled(false);
       handleChange(proposal);
     }
   }
@@ -100,14 +112,23 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
     }
   }
 
-  function validateAccount(value?: number, testContext?: TestContext) {
+  function validateAmount(value?: string, testContext?: TestContext) {
     if (value == null) {
       return true;
     }
-    if (Number(value) < 0) {
+    const amount = Number(value);
+    if (Number.isNaN(amount)) {
+      return (
+        testContext?.createError({
+          message: "Invalid amount",
+        }) ?? false
+      );
+    }
+    if (amount < 0) {
       formik.setFieldValue("amount", 0);
     }
-    if (Number(value) > Number(multisigBalance.toDenominated())) {
+    if (amount > Number(multisigBalance.toDenominated())) {
+      setSubmitDisabled(true);
       return (
         testContext?.createError({
           message:
@@ -150,8 +171,6 @@ const ProposeSendEgld = ({ handleChange }: ProposeSendEgldType) => {
           <Form.Control
             id="amount"
             name="amount"
-            type="number"
-            min={0}
             isInvalid={amountError != null}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}

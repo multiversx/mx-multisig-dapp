@@ -4,10 +4,12 @@ import { useTranslation } from "react-i18next";
 
 interface ProposeInputAddressType {
   handleParamsChange: (params: Address) => void;
+  setSubmitDisabled: (value: boolean) => void;
 }
 
 const ProposeInputAddress = ({
   handleParamsChange,
+  setSubmitDisabled,
 }: ProposeInputAddressType) => {
   const [address, setAddress] = useState("");
   const [error, setError] = useState(false);
@@ -20,7 +22,9 @@ const ProposeInputAddress = ({
       setError(false);
       setAddress(newAddress);
       handleParamsChange(parsedValue);
+      setSubmitDisabled(false);
     } catch (err) {
+      setSubmitDisabled(true);
       setError(true);
     }
   };
