@@ -1,6 +1,7 @@
 import { faInfoCircle } from "@fortawesome/pro-solid-svg-icons/faInfoCircle";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ProposalsTypes } from "../../types/Proposals";
+import { MultisigActionType } from "types/MultisigActionType";
+import { ProposalsTypes } from "types/Proposals";
 import { logoutAction } from "../commonActions";
 
 interface TxSubmittedModal {
@@ -15,8 +16,12 @@ interface NotificationModal {
   description: string;
 }
 
+export interface SelectedActionToPerform {
+  id: number;
+  actionType?: MultisigActionType;
+}
 interface PerformActionModal {
-  selectedActionId: number | null;
+  selectedAction: SelectedActionToPerform | null;
 }
 
 export interface RemoveUserOptionType {
@@ -50,7 +55,7 @@ const initialState: ModalsSliceState = {
     selectedOption: null,
   },
   performActionModal: {
-    selectedActionId: null,
+    selectedAction: null,
   },
 };
 
@@ -82,11 +87,11 @@ export const modalsSlice = createSlice({
     ) => {
       state.proposeModal.selectedOption = action.payload;
     },
-    setSelectedPerformedActionId: (
+    setSelectedPerformedAction: (
       state: ModalsSliceState,
-      action: PayloadAction<number | null>,
+      action: PayloadAction<SelectedActionToPerform | null>,
     ) => {
-      state.performActionModal.selectedActionId = action.payload;
+      state.performActionModal.selectedAction = action.payload;
     },
   },
 
@@ -103,7 +108,7 @@ export const {
   clearTxSubmittedModal,
   clearNotificationModal,
   setProposeModalSelectedOption,
-  setSelectedPerformedActionId,
+  setSelectedPerformedAction,
 } = modalsSlice.actions;
 
 export default modalsSlice.reducer;

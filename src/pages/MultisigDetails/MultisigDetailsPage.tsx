@@ -14,6 +14,7 @@ import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect, useParams } from "react-router-dom";
+import { getAccountData } from "apiCalls/accountCalls";
 import { ReactComponent as WalletLogo } from "assets/img/elrond-wallet-icon.svg";
 import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
 import { useConfirmModal } from "components/ConfirmModal/ConfirmModalPayload";
@@ -30,19 +31,19 @@ import { PlainAddress } from "helpers/plainObjects";
 import { tryParseTransactionParameter } from "helpers/urlparameters";
 import MultisigProposalCard from "pages/MultisigDetails/MultisigProposalCard";
 import { priceSelector } from "redux/selectors/economicsSelector";
+import {
+  proposeModalSelectedOptionSelector,
+  selectedPerformedActionSelector,
+} from "redux/selectors/modalsSelector";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
 import { refetchSelector } from "redux/selectors/toastSelector";
 import {
   setProposeModalSelectedOption,
-  setSelectedPerformedActionId,
+  setSelectedPerformedAction,
 } from "redux/slices/modalsSlice";
-import {
-  setCurrentMultisigAddress,
-  setMultisigContractsFetched,
-} from "redux/slices/multisigContractsSlice";
+import { setCurrentMultisigAddress } from "redux/slices/multisigContractsSlice";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
-import { getAccountData } from "../../apiCalls/accountCalls";
-import { ProposalsTypes } from "../../types/Proposals";
+import { ProposalsTypes } from "types/Proposals";
 import MultisigDetailsAccordion from "./MultisigDetailsAccordion";
 import ProposeModal from "./Propose/ProposeModal";
 
@@ -76,6 +77,8 @@ const MultisigDetailsPage = () => {
     proposersAddresses: [],
   });
   const [dataFetched, setDataFetched] = useState(false);
+  const selectedAction = useSelector(selectedPerformedActionSelector);
+  const selectedOption = useSelector(proposeModalSelectedOptionSelector);
 
   const {
     totalBoardMembers,
@@ -265,7 +268,7 @@ const MultisigDetailsPage = () => {
         t("Perform Action"),
       );
       if (success) {
-        dispatch(setSelectedPerformedActionId(actionId));
+        dispatch(setSelectedPerformedAction({ id: actionId }));
       }
     }
   };
@@ -454,8 +457,12 @@ const MultisigDetailsPage = () => {
           </div>
         </div>
       </div>
-      <ProposeModal />
-      <PerformActionModal />
+      {selectedOption != null && (
+        <ProposeModal selectedOption={selectedOption} />
+      )}
+      {selectedAction != null && (
+        <PerformActionModal selectedAction={selectedAction} />
+      )}
     </MultisigDetailsContext.Provider>
   );
 };

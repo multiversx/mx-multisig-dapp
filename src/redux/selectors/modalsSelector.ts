@@ -28,7 +28,7 @@ export const performActionModalSelector = createDeepEqualSelector(
   (state) => state.performActionModal,
 );
 
-export const selectedPerformedActionId = createDeepEqualSelector(
+export const selectedPerformedActionSelector = createDeepEqualSelector(
   performActionModalSelector,
-  (state) => state.selectedActionId,
+  (state) => state.selectedAction,
 );

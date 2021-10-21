@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { useMultisigContract } from "contracts/MultisigContract";
-import { setSelectedPerformedActionId } from "../../redux/slices/modalsSlice";
+import { setSelectedPerformedAction } from "redux/slices/modalsSlice";
 
 export interface MultisigProposalCardType {
   type: number;
@@ -58,7 +58,7 @@ const MultisigProposalCard = ({
   };
 
   const performAction = () => {
-    dispatch(setSelectedPerformedActionId(actionId));
+    dispatch(setSelectedPerformedAction({ id: actionId, actionType: type }));
   };
 
   const discardAction = () => {

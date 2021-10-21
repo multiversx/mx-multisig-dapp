@@ -2,27 +2,51 @@ import React from "react";
 import { faTimes, faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal, Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { gasLimit, maxGasLimit } from "config";
+import { useDispatch } from "react-redux";
+import { gasLimit as defaultGasLimit, maxGasLimit } from "config";
 import { useMultisigContract } from "contracts/MultisigContract";
-import { selectedPerformedActionId } from "redux/selectors/modalsSelector";
-import { setSelectedPerformedActionId } from "redux/slices/modalsSlice";
+import {
+  SelectedActionToPerform,
+  setSelectedPerformedAction,
+} from "redux/slices/modalsSlice";
+import { MultisigActionType } from "types/MultisigActionType";
 
-const PerformActionModal = () => {
-  const selectedActionId = useSelector(selectedPerformedActionId);
+const gasLimits = {
+  [MultisigActionType.Nothing]: 60000000,
+  [MultisigActionType.AddBoardMember]: 60000001,
+  [MultisigActionType.AddProposer]: 600000002,
+  [MultisigActionType.RemoveUser]: 60000003,
+  [MultisigActionType.SCDeploy]: 60000004,
+  [MultisigActionType.SendEgld]: 60000005,
+  [MultisigActionType.ChangeQuorum]: 60000006,
+  [MultisigActionType.SCCall]: 60000007,
+};
+
+interface PerformActionModalPropsType {
+  selectedAction: SelectedActionToPerform;
+}
+
+const PerformActionModal = ({
+  selectedAction,
+}: PerformActionModalPropsType) => {
+  const gasLimit =
+    selectedAction?.actionType != null
+      ? gasLimits[selectedAction.actionType] ?? defaultGasLimit
+      : defaultGasLimit;
   const [selectedGasLimit, setSelectedGasLimit] = React.useState(gasLimit);
   const [error, setError] = React.useState<string | null>(null);
   const { mutatePerformAction } = useMultisigContract();
   const dispatch = useDispatch();
-  if (selectedActionId == null) {
+  if (selectedAction == null) {
     return null;
   }
+
   const handleClose = () => {
-    dispatch(setSelectedPerformedActionId(null));
+    dispatch(setSelectedPerformedAction(null));
   };
 
   const onPerformAction = () => {
-    mutatePerformAction(selectedActionId, selectedGasLimit);
+    mutatePerformAction(selectedAction.id, selectedGasLimit);
     handleClose();
   };
 
@@ -43,7 +67,7 @@ const PerformActionModal = () => {
     setSelectedGasLimit(newValue);
   };
 
-  if (selectedActionId == null) {
+  if (selectedAction == null) {
     return null;
   }
 

@@ -4,9 +4,8 @@ import { faTimes, faHandPaper } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useMultisigContract } from "contracts/MultisigContract";
-import { proposeModalSelectedOptionSelector } from "redux/selectors/modalsSelector";
 import {
   SelectedOptionType,
   setProposeModalSelectedOption,
@@ -33,7 +32,11 @@ const titles = {
   [ProposalsTypes.send_token]: "send token",
 };
 
-const ProposeModal = () => {
+interface ProposeModalPropsType {
+  selectedOption: SelectedOptionType;
+}
+
+const ProposeModal = ({ selectedOption }: ProposeModalPropsType) => {
   const {
     mutateSendEgld,
     mutateEsdtSendToken,
@@ -45,9 +48,7 @@ const ProposeModal = () => {
   } = useMultisigContract();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const selectedOption: SelectedOptionType = useSelector(
-    proposeModalSelectedOptionSelector,
-  );
+
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const [selectedNumericParam, setSelectedNumericParam] = useState(1);
   const [selectedAddressParam, setSelectedAddressParam] = useState(
