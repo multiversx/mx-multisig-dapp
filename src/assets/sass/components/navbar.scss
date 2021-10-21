@@ -80,7 +80,7 @@
     }
     svg {
       color: #4aa8ff;
-      font-size: 16px;
+      font-size: 15px;
     }
     &:hover {
       color: #fff;
@@ -94,7 +94,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        transform: translateY(-8px);
+        transform: translateY(-10px);
       }
       .address {
         visibility: hidden;
@@ -117,7 +117,6 @@
         .ellipsis,
         .trim .left span,
         .trim .right span {
-          font-size: 0.8rem;
           color: #4aa8ff;
         }
       }
