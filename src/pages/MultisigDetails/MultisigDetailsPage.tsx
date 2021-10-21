@@ -439,6 +439,7 @@ const MultisigDetailsPage = () => {
                   ) : (
                     allActions.map((action) => (
                       <MultisigProposalCard
+                        boardMembers={contractInfo.boardMembersAddresses}
                         key={action.actionId}
                         type={action.typeNumber()}
                         actionId={action.actionId}
