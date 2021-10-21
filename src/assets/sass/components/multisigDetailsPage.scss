@@ -231,14 +231,17 @@
         @include media-breakpoint-down(sm) {
           order: 1;
         }
-        .data-textarea{
-          width: 85%;
-        }
-        .deadline {
+
+        .data-field {
           margin-top: 0.5rem;
           flex: 1;
           @include media-breakpoint-down(sm) {
             order: 2;
+          }
+          .data-textarea {
+            width: 85%;
+            border: 1px solid #f1f1f1;
+            background-color: #fbfbfb;
           }
         }
       }

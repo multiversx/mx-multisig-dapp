@@ -156,7 +156,7 @@ const MultisigDetailsPage = () => {
         totalProposers: newTotalProposers,
         quorumSize: newQuorumSize,
         userRole: newUserRole,
-        deployedAt: moment.unix(accountInfo.deployedAt).format("DD/MM/YYYY"),
+        deployedAt: moment.unix(accountInfo.deployedAt).format("DD MMM YYYY"),
         allActions: newAllActions,
         multisigBalance: account.balance,
         multisigName: contractName,
