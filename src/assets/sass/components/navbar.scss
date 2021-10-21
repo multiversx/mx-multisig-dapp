@@ -159,8 +159,14 @@
     .btn {
       @include media-breakpoint-down(sm) {
         width: 48px;
+        .btn-name,
         .name {
           display: none;
+        }
+        &:hover {
+          .hide {
+            display: block;
+          }
         }
       }
     }
