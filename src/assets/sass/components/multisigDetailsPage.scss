@@ -249,7 +249,7 @@
         flex: 1;
         justify-content: center;
         .btn {
-          width: 8rem;
+          // width: 8rem;
           @include media-breakpoint-down(sm) {
             width: 100%;
           }
