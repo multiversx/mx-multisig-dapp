@@ -134,10 +134,13 @@
             box-shadow: 0px 6px 8px rgba(19, 146, 255, 0.12) !important;
           }
 
-          .unregister-icon{
+          .unregister-icon {
             top: 1rem;
-            right:1rem;
+            right: 1rem;
             z-index: 10;
+            svg {
+              font-size: 1rem;
+            }
           }
 
           .icon {

@@ -45,7 +45,11 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
         onClick={onUnregisterClicked}
         className={"position-absolute unregister-icon"}
       >
-        <FontAwesomeIcon icon={faTimes} size="lg" />
+        <FontAwesomeIcon
+          icon={faTimes}
+          size="lg"
+          className="link-second-style"
+        />
       </div>
       <div className="d-flex icon">
         <Wallet className="logo" />
