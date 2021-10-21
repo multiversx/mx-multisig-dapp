@@ -59,12 +59,16 @@ const Account = () => {
       >
         <FontAwesomeIcon icon={faUserCircle} size="lg" />
         <FontAwesomeIcon icon={faPowerOff} size="lg" className="hide" />
-        <div className="navbar-address d-none d-lg-block">
-          <span className="address">
+        <div className="btn-name d-none d-lg-block">
+          <span className="name">
             {username ? (
-              `@${username.replace(".elrond", "")}`
+              <span className="address hero-tag">
+                `@${username.replace(".elrond", "")}`
+              </span>
             ) : (
-              <Trim text={address} />
+              <span className="address">
+                <Trim text={address} />
+              </span>
             )}
           </span>
           <span className="disconnect">Disconnect</span>

@@ -73,7 +73,7 @@
     .disconnect {
       display: none;
     }
-    .address {
+    .name {
       display: flex;
       color: #4aa8ff;
     }
@@ -106,7 +106,7 @@
       }
     }
 
-    .navbar-address {
+    .address {
       width: 7rem;
       .ellipsis,
       .trim .left span,
@@ -114,6 +114,9 @@
         font-size: 0.8rem;
         color: #4aa8ff;
       }
+    }
+    .hero-tag {
+      width: unset;
     }
   }
 

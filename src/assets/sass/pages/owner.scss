@@ -66,9 +66,6 @@
       }
     }
     .wallets-section {
-      @include media-breakpoint-up(lg) {
-        min-width: 1140px;
-      }
       max-width: 1140px;
       width: 100%;
       min-height: 327px;
