@@ -40,7 +40,7 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
   };
 
   return (
-    <button onClick={onEnterClicked} className="shadow-sm  bg-white">
+    <button onClick={onEnterClicked} className="bg-white">
       <div
         onClick={onUnregisterClicked}
         className={"position-absolute unregister-icon"}
