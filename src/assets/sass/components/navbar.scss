@@ -105,18 +105,20 @@
         display: block;
       }
     }
-
-    .address {
-      width: 7rem;
-      .ellipsis,
-      .trim .left span,
-      .trim .right span {
-        font-size: 0.8rem;
-        color: #4aa8ff;
+    .btn-name {
+      color: #4aa8ff;
+      .address {
+        width: 7rem;
+        .ellipsis,
+        .trim .left span,
+        .trim .right span {
+          font-size: 0.8rem;
+          color: #4aa8ff;
+        }
       }
-    }
-    .hero-tag {
-      width: unset;
+      .hero-tag {
+        width: unset;
+      }
     }
   }
 
