@@ -97,9 +97,11 @@ const MultisigProposalCard = ({
           {data != null && (
             <div className="data-field">
               <p className="mb-0">Data</p>
-              <textarea disabled className="form-control data-textarea mb-0">
-                {data}
-              </textarea>
+              <textarea
+                disabled
+                value={data}
+                className="form-control data-textarea mb-0"
+              />
             </div>
           )}
         </div>

@@ -71,11 +71,12 @@
       display: none;
     }
     .disconnect {
-      display: none;
+      visibility: hidden;
     }
     .name {
       display: flex;
       color: #4aa8ff;
+      transform: translateY(10px);
     }
     svg {
       color: #4aa8ff;
@@ -93,16 +94,21 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        transform: translateY(-8px);
       }
       .address {
-        display: none;
+        visibility: hidden;
       }
       > svg {
+        color: #fff;
         display: none;
       }
       .hide {
-        color: #fff;
         display: block;
+      }
+      .disconnect {
+        color: #fff;
+        visibility: visible;
       }
     }
     .btn-name {

@@ -58,7 +58,7 @@ const Account = () => {
       >
         <FontAwesomeIcon icon={faUserCircle} size="lg" />
         <FontAwesomeIcon icon={faPowerOff} size="lg" className="hide" />
-        <div className="btn-name d-none d-lg-block">
+        <div className="btn-name ">
           <span className="name">
             {username ? (
               <span className="address hero-tag">
