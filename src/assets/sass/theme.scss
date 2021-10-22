@@ -97,12 +97,12 @@ a,
 .connect-btns {
   .btn {
     display: flex;
-    width: 149px;
     height: 48px;
     justify-content: center;
     align-items: center;
     color: #fff !important;
     background-color: #1392ff;
+    padding: 15px 20px 15px 16px;
     border-radius: 6px;
     gap: 8px;
     &:hover {

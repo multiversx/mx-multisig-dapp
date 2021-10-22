@@ -66,9 +66,6 @@
       }
     }
     .wallets-section {
-      @include media-breakpoint-up(lg) {
-        min-width: 1140px;
-      }
       max-width: 1140px;
       width: 100%;
       min-height: 327px;
@@ -132,10 +129,21 @@
           border-radius: 10px;
           padding: 30px 21px;
           margin-top: 33px;
+          box-shadow: 0px 4px 4px rgba(150, 160, 181, 0.08);
           &:hover {
             border: 1px solid #1390ff;
             box-shadow: 0px 6px 8px rgba(19, 146, 255, 0.12) !important;
           }
+
+          .unregister-icon {
+            top: 0.5rem;
+            right: 1rem;
+            z-index: 10;
+            svg {
+              font-size: 1rem;
+            }
+          }
+
           .icon {
             width: 100%;
             justify-content: center;

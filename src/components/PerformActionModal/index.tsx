@@ -16,10 +16,10 @@ const gasLimits = {
   [MultisigActionType.AddBoardMember]: 60000001,
   [MultisigActionType.AddProposer]: 600000002,
   [MultisigActionType.RemoveUser]: 60000003,
-  [MultisigActionType.SCDeploy]: 60000004,
+  [MultisigActionType.SCDeploy]: 120000004,
   [MultisigActionType.SendEgld]: 60000005,
   [MultisigActionType.ChangeQuorum]: 60000006,
-  [MultisigActionType.SCCall]: 60000007,
+  [MultisigActionType.SCCall]: 120000007,
 };
 
 interface PerformActionModalPropsType {

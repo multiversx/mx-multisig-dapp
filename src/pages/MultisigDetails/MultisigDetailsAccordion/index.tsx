@@ -22,11 +22,15 @@ import { ContractInfo } from "../MultisigDetailsPage";
 
 import "./multisigDetailsAccordion.scss";
 
+interface MultisigDetailsAccordionPropsType {
+  contractInfo: ContractInfo;
+  isProposer: boolean;
+}
+
 const MultisigDetailsAccordion = ({
   contractInfo,
-}: {
-  contractInfo: ContractInfo;
-}) => {
+  isProposer,
+}: MultisigDetailsAccordionPropsType) => {
   const {
     totalBoardMembers,
     totalProposers,
@@ -84,15 +88,17 @@ const MultisigDetailsAccordion = ({
           </a>
         </span>
 
-        <div className="btns">
-          <button
-            onClick={() => onRemoveUser(address)}
-            className={"action-remove action remove"}
-          >
-            <FontAwesomeIcon icon={faMinus} />
-            <span className="name">Remove</span>
-          </button>
-        </div>
+        {isProposer && (
+          <div className="btns">
+            <button
+              onClick={() => onRemoveUser(address)}
+              className={"action-remove action remove"}
+            >
+              <FontAwesomeIcon icon={faMinus} />
+              <span className="name">Remove</span>
+            </button>
+          </div>
+        )}
       </div>
     </Card.Header>
   );
@@ -101,22 +107,24 @@ const MultisigDetailsAccordion = ({
     <div className={"actions-card boards-members-content"}>
       <Card.Header>
         <span className="h5">Board Members</span>
-        <div className="btns">
-          <button
-            onClick={onAddBoardMember}
-            className={"btn action-add action unsign"}
-          >
-            <FontAwesomeIcon icon={faPlus} />
-            <span className="name">Add member</span>
-          </button>
-          <button
-            onClick={onChangeQuorum}
-            className={"btn action-add action unsign"}
-          >
-            <FontAwesomeIcon icon={faPencilAlt} />
-            <span className="name">Edit quorum</span>
-          </button>
-        </div>
+        {isProposer && (
+          <div className="btns">
+            <button
+              onClick={onAddBoardMember}
+              className={"btn action-add action unsign"}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              <span className="name">Add member</span>
+            </button>
+            <button
+              onClick={onChangeQuorum}
+              className={"btn action-add action unsign"}
+            >
+              <FontAwesomeIcon icon={faPencilAlt} />
+              <span className="name">Edit quorum</span>
+            </button>
+          </div>
+        )}
       </Card.Header>
 
       {Object.keys(boardMembersAddresses).length > 0 ? (
@@ -136,15 +144,17 @@ const MultisigDetailsAccordion = ({
     <div className={"actions-card proposals-content"}>
       <Card.Header>
         <span className="h5">Proposers</span>
-        <div className="btns">
-          <button
-            onClick={onAddProposers}
-            className={"action-add action unsign"}
-          >
-            <FontAwesomeIcon icon={faPlus} />
-            <span className="name">Add proposer</span>
-          </button>
-        </div>
+        {isProposer && (
+          <div className="btns">
+            <button
+              onClick={onAddProposers}
+              className={"action-add action unsign"}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              <span className="name">Add proposer</span>
+            </button>
+          </div>
+        )}
       </Card.Header>
       {Object.keys(proposersAddresses).length > 0 ? (
         <Card.Body>{proposersAddresses.map(renderAddress)}</Card.Body>

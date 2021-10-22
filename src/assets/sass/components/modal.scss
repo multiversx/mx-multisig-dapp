@@ -69,17 +69,20 @@
   margin-top: 32px;
   display: flex;
   .address {
-    margin: 0;
-    height: 66px;
     display: flex;
-    align-items: center;
-    padding: 0 26px;
+    width: 100%;
+    padding: 15px 24px;
+    margin: 0;
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     border-radius: 8px 0px 0px 8px;
     border-right: none;
-    word-wrap: break-word;
-    hyphens: auto;
+    resize: none;
+    line-height: 17px;
+    text-align: center;
+    outline: none;
+
+    color: #9dabbd;
   }
   .copy-btn {
     display: flex;
