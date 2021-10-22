@@ -46,25 +46,36 @@ const PerformActionModal = ({
   };
 
   const onPerformAction = () => {
-    mutatePerformAction(selectedAction.id, selectedGasLimit);
-    handleClose();
+    const isGasLimitValid = validateGasLimit();
+    if (isGasLimitValid) {
+      mutatePerformAction(selectedAction.id, selectedGasLimit);
+      handleClose();
+    }
   };
 
   const handleChangeGasLimit = (e: any) => {
     const newValue = Number(e.target.value);
-    if (newValue < gasLimit) {
-      setError(`Gas limit must be greater or equal to ${gasLimit}`);
-      setSelectedGasLimit(gasLimit);
-      return;
-    }
-    if (newValue > maxGasLimit) {
-      setError(`Gas limit must be lower or equal to ${maxGasLimit}`);
-      setSelectedGasLimit(maxGasLimit);
-
-      return;
+    if (Number.isNaN(newValue)) {
+      setError("Invalid number");
+      return false;
     }
     setError(null);
     setSelectedGasLimit(newValue);
+  };
+
+  const validateGasLimit = () => {
+    if (selectedGasLimit < gasLimit) {
+      setError(`Gas limit must be greater or equal to ${gasLimit}`);
+      setSelectedGasLimit(gasLimit);
+      return false;
+    }
+    if (selectedGasLimit > maxGasLimit) {
+      setError(`Gas limit must be lower or equal to ${maxGasLimit}`);
+      setSelectedGasLimit(maxGasLimit);
+
+      return false;
+    }
+    return true;
   };
 
   if (selectedAction == null) {
@@ -87,7 +98,6 @@ const PerformActionModal = ({
             <div className="group-center ">
               <label>Select gas limit:</label>
               <Form.Control
-                type="number"
                 className="form-control"
                 value={selectedGasLimit}
                 autoComplete="off"
@@ -111,7 +121,11 @@ const PerformActionModal = ({
                 Cancel
               </button>
 
-              <button onClick={onPerformAction} className="btn btn-primary">
+              <button
+                onClick={onPerformAction}
+                disabled={error != null}
+                className="btn btn-primary"
+              >
                 <FontAwesomeIcon icon={faCheck} />
                 Perform
               </button>
