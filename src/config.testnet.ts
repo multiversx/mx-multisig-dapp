@@ -20,7 +20,7 @@ export const contractAddress =
   "erd1qqqqqqqqqqqqqpgqp699jngundfqw07d8jzkepucvpzush6k3wvqyc44rx";
 
 export const multisigManagerContract =
-  "erd1qqqqqqqqqqqqqpgq4wxs8k5060eph7ehdkx4wmm9s4qgdj70ermspyr7pq";
+  "erd1qqqqqqqqqqqqqpgqev0zge8f4yhaxartkk0jdpnqzq3j97knermshpz6k7";
 
 export const network: NetworkType = {
   id: "testnet",
