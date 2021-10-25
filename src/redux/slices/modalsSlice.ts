@@ -1,7 +1,7 @@
 import { faInfoCircle } from "@fortawesome/pro-solid-svg-icons/faInfoCircle";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { MultisigActionType } from "types/MultisigActionType";
-import { ProposalsTypes } from "types/Proposals";
+import { SelectedOptionType } from "types/Proposals";
 import { logoutAction } from "../commonActions";
 
 interface TxSubmittedModal {
@@ -24,22 +24,11 @@ interface PerformActionModal {
   selectedAction: SelectedActionToPerform | null;
 }
 
-export interface RemoveUserOptionType {
-  option: ProposalsTypes.remove_user;
-  address: string;
-}
-
-interface SimpleSelectedOptionType {
-  option: ProposalsTypes;
-}
-
-export type SelectedOptionType =
-  | SimpleSelectedOptionType
-  | RemoveUserOptionType
-  | null
-  | undefined;
-
 interface ProposeModal {
+  selectedOption?: SelectedOptionType;
+}
+
+interface ProposeMultiselectModal {
   selectedOption?: SelectedOptionType;
 }
 
@@ -47,11 +36,15 @@ export interface ModalsSliceState {
   txSubmittedModal?: TxSubmittedModal;
   notificationModal?: NotificationModal;
   proposeModal: ProposeModal;
+  proposeMultiselectModal: ProposeMultiselectModal;
   performActionModal: PerformActionModal;
 }
 
 const initialState: ModalsSliceState = {
   proposeModal: {
+    selectedOption: null,
+  },
+  proposeMultiselectModal: {
     selectedOption: null,
   },
   performActionModal: {
@@ -87,6 +80,12 @@ export const modalsSlice = createSlice({
     ) => {
       state.proposeModal.selectedOption = action.payload;
     },
+    setProposeMultiselectSelectedOption: (
+      state: ModalsSliceState,
+      action: PayloadAction<SelectedOptionType | null>,
+    ) => {
+      state.proposeMultiselectModal.selectedOption = action.payload;
+    },
     setSelectedPerformedAction: (
       state: ModalsSliceState,
       action: PayloadAction<SelectedActionToPerform | null>,
@@ -105,6 +104,7 @@ export const modalsSlice = createSlice({
 export const {
   setTxSubmittedModal,
   setNotificationModal,
+  setProposeMultiselectSelectedOption,
   clearTxSubmittedModal,
   clearNotificationModal,
   setProposeModalSelectedOption,

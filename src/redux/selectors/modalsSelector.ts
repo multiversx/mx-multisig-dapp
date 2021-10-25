@@ -18,10 +18,21 @@ export const proposeModalSelector = createDeepEqualSelector(
   (state) => state.proposeModal,
 );
 
+export const proposeMultiselectModalSelector = createDeepEqualSelector(
+  modalsSliceSelector,
+  (state) => state.proposeMultiselectModal,
+);
+
 export const proposeModalSelectedOptionSelector = createDeepEqualSelector(
   proposeModalSelector,
   (state) => state.selectedOption,
 );
+
+export const proposeMultiselectModalSelectedOptionSelector =
+  createDeepEqualSelector(
+    proposeMultiselectModalSelector,
+    (state) => state.selectedOption,
+  );
 
 export const performActionModalSelector = createDeepEqualSelector(
   modalsSliceSelector,

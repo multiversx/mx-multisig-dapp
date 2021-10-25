@@ -1,6 +1,9 @@
 import React, { useMemo } from "react";
 import { Address, Balance } from "@elrondnetwork/erdjs/out";
-import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import {
+  BigUIntValue,
+  BytesValue,
+} from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import { useFormik } from "formik";
 import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
@@ -9,24 +12,20 @@ import { TestContext } from "yup";
 import denominate from "components/Denominate/denominate";
 import { denomination } from "config";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
-import { MultisigSendEgld } from "types/MultisigSendEgld";
+import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
 
-interface ProposeSendEgldType {
-  handleChange: (proposal: MultisigSendEgld) => void;
+interface ProposeSmartContractCallType {
+  handleChange: (proposal: MultisigSmartContractCall) => void;
   setSubmitDisabled: (value: boolean) => void;
 }
 
-const ProposeSendEgld = ({
+const ProposeSmartContractCall = ({
   handleChange,
   setSubmitDisabled,
-}: ProposeSendEgldType) => {
+}: ProposeSmartContractCallType) => {
   const { multisigBalance } = React.useContext(MultisigDetailsContext);
 
   const { t } = useTranslation();
-
-  React.useEffect(() => {
-    setSubmitDisabled(true);
-  }, []);
 
   const denominatedValue = useMemo(
     () =>
@@ -49,7 +48,7 @@ const ProposeSendEgld = ({
       .required("Required")
       .transform((value) => value.replace(",", "."))
       .test(validateAmount),
-    data: Yup.string(),
+    data: Yup.string().required().test(validateData),
   });
 
   const formik = useFormik({
@@ -63,10 +62,13 @@ const ProposeSendEgld = ({
     },
     validationSchema,
     validateOnChange: true,
-    validate: refreshProposal,
   });
 
-  const getProposal = (): MultisigSendEgld | null => {
+  React.useEffect(() => {
+    refreshProposal();
+  }, [formik.values]);
+
+  const getProposal = (): MultisigSmartContractCall | null => {
     try {
       const addressParam = new Address(formik.values.receiver);
 
@@ -80,19 +82,33 @@ const ProposeSendEgld = ({
         Balance.egld(amountNumeric).valueOf(),
       );
 
-      return new MultisigSendEgld(
-        addressParam,
-        amountParam,
-        formik.values.data,
-      );
+      try {
+        const [endpointName, ...dataArgs] = formik.values.data.split("@");
+        if (endpointName == null || dataArgs.length < 1) {
+          throw new Error("endpoint is required");
+        }
+        const args = dataArgs.map((arg) => BytesValue.fromHex(arg));
+        setSubmitDisabled(false);
+        return new MultisigSmartContractCall(
+          addressParam,
+          amountParam,
+          endpointName,
+          args,
+        );
+      } catch (error) {
+        formik.setFieldError("data", "Invalid data");
+        throw error;
+      }
     } catch (err) {
+      console.log("caught");
       setSubmitDisabled(true);
+      console.error(err);
       return null;
     }
   };
 
   function refreshProposal() {
-    if (Object.keys(formik.errors).length > 0) {
+    if (Object.keys(formik.errors).length > 0 || !formik.dirty) {
       setSubmitDisabled(true);
       return;
     }
@@ -100,6 +116,19 @@ const ProposeSendEgld = ({
     if (proposal !== null) {
       setSubmitDisabled(false);
       handleChange(proposal);
+    }
+  }
+
+  function validateData() {
+    try {
+      const [endpointName, ...dataArgs] = formik.values.data.split("@");
+      if (endpointName == null || dataArgs.length < 1) {
+        return false;
+      }
+      dataArgs.map((arg) => BytesValue.fromHex(arg));
+      return true;
+    } catch (err) {
+      return false;
     }
   }
 
@@ -143,6 +172,8 @@ const ProposeSendEgld = ({
 
   const receiverError = touched.receiver && errors.receiver;
   const amountError = touched.amount && errors.amount;
+  const dataError = touched.data && errors.data;
+  console.log(dataError);
 
   return (
     <div>
@@ -187,17 +218,24 @@ const ProposeSendEgld = ({
       </div>
       <div className="modal-control-container">
         <label>{t("Data")} </label>
-        <Form.Control
-          id="data"
-          name="data"
-          type="data"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.data}
-        />
+        <div className="input-wrraper">
+          <Form.Control
+            id="data"
+            name="data"
+            type="data"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.data}
+          />
+          {dataError != null && (
+            <Form.Control.Feedback type={"invalid"}>
+              {dataError}
+            </Form.Control.Feedback>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default ProposeSendEgld;
+export default ProposeSmartContractCall;

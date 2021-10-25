@@ -33,19 +33,21 @@ import MultisigProposalCard from "pages/MultisigDetails/MultisigProposalCard";
 import { priceSelector } from "redux/selectors/economicsSelector";
 import {
   proposeModalSelectedOptionSelector,
+  proposeMultiselectModalSelectedOptionSelector,
   selectedPerformedActionSelector,
 } from "redux/selectors/modalsSelector";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
 import { refetchSelector } from "redux/selectors/toastSelector";
 import {
-  setProposeModalSelectedOption,
+  setProposeMultiselectSelectedOption,
   setSelectedPerformedAction,
 } from "redux/slices/modalsSlice";
 import { setCurrentMultisigAddress } from "redux/slices/multisigContractsSlice";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import { ProposalsTypes } from "types/Proposals";
 import MultisigDetailsAccordion from "./MultisigDetailsAccordion";
-import ProposeModal from "./Propose/ProposeModal";
+import ProposeModal from "./ProposeModal/ProposeModal";
+import ProposeMultiselectModal from "./ProposeMultiselectModal/ProposeMultiselectModal";
 
 interface MultisigDetailsPageParams {
   multisigAddressParam: string;
@@ -79,6 +81,9 @@ const MultisigDetailsPage = () => {
   const [dataFetched, setDataFetched] = useState(false);
   const selectedAction = useSelector(selectedPerformedActionSelector);
   const selectedOption = useSelector(proposeModalSelectedOptionSelector);
+  const selectedMultiselectOption = useSelector(
+    proposeMultiselectModalSelectedOptionSelector,
+  );
 
   const {
     totalBoardMembers,
@@ -290,8 +295,8 @@ const MultisigDetailsPage = () => {
 
   const onSendEgld = () =>
     dispatch(
-      setProposeModalSelectedOption({
-        option: ProposalsTypes.send_egld,
+      setProposeMultiselectSelectedOption({
+        option: ProposalsTypes.multiselect_proposal_options,
       }),
     );
 
@@ -461,6 +466,10 @@ const MultisigDetailsPage = () => {
           </div>
         </div>
       </div>
+      {/*this will make sure to wipe out the whole state when the modal closes*/}
+      {selectedMultiselectOption != null && (
+        <ProposeMultiselectModal selectedOption={selectedMultiselectOption} />
+      )}
       {selectedOption != null && (
         <ProposeModal selectedOption={selectedOption} />
       )}

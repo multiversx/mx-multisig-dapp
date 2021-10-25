@@ -4,7 +4,7 @@ import { faTimes } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import ProposeInputAddress from "../MultisigDetails/Propose/ProposeInputAddress";
+import ProposeInputAddress from "../MultisigDetails/ProposeModal/ProposeInputAddress";
 
 interface AddMultisigModalType {
   show: boolean;
