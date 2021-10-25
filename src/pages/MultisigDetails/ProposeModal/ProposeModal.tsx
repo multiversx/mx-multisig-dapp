@@ -99,7 +99,8 @@ const ProposeModal = ({ selectedOption }: ProposeModalPropsType) => {
     }
   };
 
-  const actionTitle = `: ${titles[selectedOption?.option]}` ?? "";
+  const actionTitle =
+    selectedOption?.option != null ? `: ${titles[selectedOption?.option]}` : "";
   return (
     <Modal
       show

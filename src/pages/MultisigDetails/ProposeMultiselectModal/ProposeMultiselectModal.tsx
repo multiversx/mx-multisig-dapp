@@ -140,7 +140,8 @@ const ProposeMultiselectModal = ({
       ? goBackButton
       : closeButton;
 
-  const actionTitle = `: ${titles[selectedOption?.option]}` ?? "";
+  const actionTitle =
+    selectedOption?.option != null ? `: ${titles[selectedOption?.option]}` : "";
 
   return (
     <Modal
