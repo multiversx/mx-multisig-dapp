@@ -28,6 +28,6 @@ export class MultisigActionDetailed {
     return this.action.type;
   }
   data(): string | undefined {
-    return this.action?.data;
+    return this.action?.data || this.action?.code;
   }
 }
