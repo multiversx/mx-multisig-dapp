@@ -125,6 +125,7 @@ const ProposeDeployContract = ({
             id="code"
             name="code"
             type="text"
+            as="textarea"
             isInvalid={codeError != null}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
