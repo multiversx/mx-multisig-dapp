@@ -105,7 +105,8 @@ a,
     padding: 15px 20px 15px 16px;
     border-radius: 6px;
     gap: 8px;
-    &:hover {
+    &:hover,
+    &:active {
       background-color: #1392ff;
       background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0 0);
     }
