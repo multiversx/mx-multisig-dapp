@@ -90,7 +90,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
 
   return (
     <div>
-      <div className="modal-control-container">
+      <div className="modal-control-container ">
         <label>{t("Name")}: </label>
         <input
           type="text"
@@ -100,7 +100,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
           onChange={onNameChanged}
         />
       </div>
-      <div className="modal-control-container">
+      <div className="modal-control-container my-2">
         <label>{t("Identifier")}: </label>
         <input
           type="text"
@@ -110,7 +110,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
           onChange={onIdentifierChanged}
         />
       </div>
-      <div className="modal-control-container">
+      <div className="modal-control-container my-2">
         <label>{t("Mint Amount")}: </label>
         <input
           type="number"
@@ -120,7 +120,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
           onChange={onAmountChanged}
         />
       </div>
-      <div className="modal-control-container">
+      <div className="modal-control-container my-2">
         <label>{t("Decimals")}: </label>
         <input
           type="number"
@@ -130,8 +130,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
           onChange={onDecimalsChanged}
         />
       </div>
-      <div className="modal-control-container">
-        <span></span>
+      <div className="modal-control-container my-2">
         <div className="form-check form-check-inline">
           <input
             className="form-check-input"
@@ -146,7 +145,6 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
         </div>
       </div>
       <div className="modal-control-container">
-        <span></span>
         <div className="form-check form-check-inline">
           <input
             className="form-check-input"
@@ -160,8 +158,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
           </label>
         </div>
       </div>
-      <div className="modal-control-container">
-        <span></span>
+      <div className="modal-control-container my-2">
         <div className="form-check form-check-inline">
           <input
             className="form-check-input"
@@ -175,8 +172,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
           </label>
         </div>
       </div>
-      <div className="modal-control-container">
-        <span></span>
+      <div className="modal-control-container my-2">
         <div className="form-check form-check-inline">
           <input
             className="form-check-input"
@@ -190,8 +186,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
           </label>
         </div>
       </div>
-      <div className="modal-control-container">
-        <span></span>
+      <div className="modal-control-container my-2">
         <div className="form-check form-check-inline">
           <input
             className="form-check-input"
@@ -205,8 +200,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
           </label>
         </div>
       </div>
-      <div className="modal-control-container">
-        <span></span>
+      <div className="modal-control-container my-2">
         <div className="form-check form-check-inline">
           <input
             className="form-check-input"
@@ -220,8 +214,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
           </label>
         </div>
       </div>
-      <div className="modal-control-container">
-        <span></span>
+      <div className="modal-control-container my-2">
         <div className="form-check form-check-inline">
           <input
             className="form-check-input"
