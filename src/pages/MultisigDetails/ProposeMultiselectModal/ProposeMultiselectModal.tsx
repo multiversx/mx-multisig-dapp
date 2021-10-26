@@ -25,6 +25,10 @@ import ProposeSmartContractCall from "./ProposeSmartContractCall";
 import SelectOption from "./SelectOption";
 
 import "./proposeMultiselectModal.scss";
+import ProposeDeployContract from "./ProposeDeployContract";
+import { MultisigDeployContract } from "../../../types/MultisigDeployContract";
+import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import { Balance } from "@elrondnetwork/erdjs/out";
 
 interface ProposeMultiselectModalPropsType {
   selectedOption: SelectedOptionType;
@@ -36,6 +40,7 @@ const ProposeMultiselectModal = ({
   const {
     mutateSmartContractCall,
     mutateSendEgld,
+    mutateDeployContract,
     mutateEsdtIssueToken,
     mutateEsdtSendToken,
   } = useMultisigContract();
@@ -46,6 +51,7 @@ const ProposeMultiselectModal = ({
   const [submitDisabled, setSubmitDisabled] = React.useState(false);
 
   const onProposeClicked = () => {
+    console.log(selectedProposal);
     try {
       if (selectedProposal instanceof MultisigSendEgld) {
         mutateSendEgld(
@@ -64,8 +70,16 @@ const ProposeMultiselectModal = ({
           selectedProposal.endpointName,
           selectedProposal.args,
         );
-        return;
+      } else if (selectedProposal instanceof MultisigDeployContract) {
+        mutateDeployContract(
+          new BigUIntValue(Balance.egld(selectedProposal.amount).valueOf()),
+          selectedProposal.code,
+          selectedProposal.upgradeable,
+          selectedProposal.payable,
+          selectedProposal.readable,
+        );
       }
+      handleClose();
     } catch (err) {}
   };
   const handleProposalChange = (proposal: MultisigAction) => {
@@ -100,7 +114,7 @@ const ProposeMultiselectModal = ({
           />
         );
       case ProposalsTypes.deploy_contract:
-      // return <ProposeDeployContract handleChange={handleProposalChange} />;
+        return <ProposeDeployContract handleChange={handleProposalChange} />;
       default:
         return <SelectOption onSelected={handleOptionSelected} />;
     }

@@ -151,7 +151,7 @@ const ProposeSendEgld = ({
     <div>
       <div className="modal-control-container">
         <label>{t("Send to")} </label>
-        <div className="input-wrraper">
+        <div className="input-wrapper">
           <Form.Control
             id="receiver"
             name="receiver"
@@ -170,7 +170,7 @@ const ProposeSendEgld = ({
       </div>
       <div className="modal-control-container">
         <label>{t("Amount")} </label>
-        <div className="input-wrraper">
+        <div className="input-wrapper">
           <Form.Control
             id="amount"
             name="amount"

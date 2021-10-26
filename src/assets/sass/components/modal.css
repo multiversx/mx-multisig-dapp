@@ -9,15 +9,15 @@
   line-height: 21px;
 }
 
-.modal-control-container .input-wrraper {
+.modal-control-container .input-wrapper {
   position: relative;
 }
 
-.modal-control-container .input-wrraper input {
+.modal-control-container .input-wrapper input {
   margin-bottom: 5px !important;
 }
 
-.modal-control-container .input-wrraper span {
+.modal-control-container .input-wrapper span {
   position: absolute;
   color: #1390ff;
   top: calc(50% - 10px);

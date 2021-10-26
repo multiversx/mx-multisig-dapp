@@ -10,8 +10,6 @@ Override Bootstrap variables only above.
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
-@import url(/Users/macbook/Desktop/elrond-multisig/node_modules/@elrondnetwork/dapp/dist/index.css);
-@import url(/Users/macbook/Desktop/elrond-multisig/node_modules/react-circular-progressbar/dist/styles.css);
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -2384,10 +2382,11 @@ textarea.form-control {
 }
 
 .form-check-label {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 
 .form-check-inline {
+  cursor: pointer;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -2399,8 +2398,8 @@ textarea.form-control {
 }
 
 .form-check-inline .form-check-input {
-  position: static;
   margin-top: 0;
+  cursor: pointer;
   margin-right: 0.3125rem;
   margin-left: 0;
 }

@@ -30,6 +30,7 @@ import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendToken } from "types/MultisigSendToken";
 import getProviderType from "../components/SignTransactions/helpers/getProviderType";
+import { deployContractGasLimit } from "./ManagerContract";
 import { buildTransaction } from "./transactionUtils";
 
 export function useMultisigContract() {
@@ -137,6 +138,34 @@ export function useMultisigContract() {
     allArgs.push(...args);
 
     return sendTransaction("proposeSCCall", gasLimit, ...allArgs);
+  }
+
+  function mutateDeployContract(
+    amount: BigUIntValue,
+    code: string,
+    upgradeable: boolean,
+    payable: boolean,
+    readable: boolean,
+    ...args: BytesValue[]
+  ) {
+    const allArgs = [amount, BytesValue.fromUTF8(code), ...args];
+    if (upgradeable) {
+      args.push(BytesValue.fromUTF8("upgradeable"));
+      args.push(BytesValue.fromUTF8("true"));
+    }
+    if (payable) {
+      args.push(BytesValue.fromUTF8("payable"));
+      args.push(BytesValue.fromUTF8("true"));
+    }
+    if (readable) {
+      args.push(BytesValue.fromUTF8("readable"));
+      args.push(BytesValue.fromUTF8("true"));
+    }
+    return sendTransaction(
+      "proposeSCDeploy",
+      deployContractGasLimit,
+      ...allArgs,
+    );
   }
 
   function mutateEsdtSendToken(proposal: MultisigSendToken) {
@@ -339,6 +368,7 @@ export function useMultisigContract() {
     mutateEsdtSendToken,
     mutateSmartContractCall,
     mutateSendEgld,
+    mutateDeployContract,
     mutateProposeRemoveUser,
     mutateProposeAddBoardMember,
     mutateProposeAddProposer,

@@ -68,45 +68,50 @@ export default function TransactionToastStatusUpdate({
       }
       isFetchingStatusRef.current = true;
       for (const { hash } of transactions) {
-        const retriesForThisHash = retriesRef.current[hash];
-        if (retriesForThisHash > 20) {
-          //consider toast as stuck after 10 seconds
-          manageStuckToasts();
-          return;
-        }
-        const txOnNetwork = await apiProvider.getTransaction(
-          new TransactionHash(hash),
-        );
-        if (txOnNetwork != null) {
-          if (!txOnNetwork.status.isPending()) {
-            const status = getPlainTransactionStatus(txOnNetwork.status);
-            dispatch(
-              updateTransactionToastTransactionStatus({
-                toastSignSession,
-                transactionHash: hash,
-                status,
-              }),
-            );
-
-            if (txOnNetwork.status.isFailed()) {
-              const scResults = txOnNetwork
-                .getSmartContractResults()
-                .getAllResults();
-              const resultWithError = scResults.find(
-                (scResult) => scResult.getReturnMessage() !== "",
-              );
+        try {
+          const retriesForThisHash = retriesRef.current[hash];
+          if (retriesForThisHash > 20) {
+            //consider toast as stuck after 10 seconds
+            manageStuckToasts();
+            return;
+          }
+          const txOnNetwork = await apiProvider.getTransaction(
+            new TransactionHash(hash),
+          );
+          if (txOnNetwork != null) {
+            if (!txOnNetwork.status.isPending()) {
+              const status = getPlainTransactionStatus(txOnNetwork.status);
               dispatch(
-                updateTransactionToastErrorMessage({
+                updateTransactionToastTransactionStatus({
                   toastSignSession,
-                  errorMessage: resultWithError?.getReturnMessage(),
+                  transactionHash: hash,
+                  status,
                 }),
               );
+
+              if (txOnNetwork.status.isFailed()) {
+                const scResults = txOnNetwork
+                  .getSmartContractResults()
+                  .getAllResults();
+                const resultWithError = scResults.find(
+                  (scResult) => scResult.getReturnMessage() !== "",
+                );
+                dispatch(
+                  updateTransactionToastErrorMessage({
+                    toastSignSession,
+                    errorMessage: resultWithError?.getReturnMessage(),
+                  }),
+                );
+              }
+            } else {
+              retriesRef.current[hash] = retriesRef.current[hash] + 1;
             }
           } else {
             retriesRef.current[hash] = retriesRef.current[hash] + 1;
           }
-        } else {
-          retriesRef.current[hash] = retriesRef.current[hash] + 1;
+        } catch (error) {
+          console.error(error);
+          manageStuckToasts();
         }
       }
     } catch (error) {
