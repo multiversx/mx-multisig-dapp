@@ -180,7 +180,8 @@ const ProposeMultiselectModal = ({
           {getContent()}
           <div className="modal-action-btns">
             {cancelButton}
-            {selectedOption != null && proposeButton}
+            {selectedOption?.option !==
+              ProposalsTypes.multiselect_proposal_options && proposeButton}
           </div>
         </div>
       </div>
