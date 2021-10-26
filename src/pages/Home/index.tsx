@@ -1,11 +1,10 @@
 import * as React from "react";
 import * as Dapp from "@elrondnetwork/dapp";
 import { Link, Redirect } from "react-router-dom";
-import { dAppName } from "config";
-import { routeNames } from "routes";
 import { ReactComponent as Hero } from "assets/img/home-img-multisig.svg";
-import { ReactComponent as Union } from "assets/img/Union.svg";
 import shield from "assets/img/shield-icon.svg";
+import { ReactComponent as Union } from "assets/img/Union.svg";
+import { routeNames } from "routes";
 
 const Home = () => {
   const { loggedIn } = Dapp.useContext();

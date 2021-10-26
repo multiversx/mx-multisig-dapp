@@ -38,6 +38,8 @@ export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
       return parseSendEgld(remainingBytes);
     case MultisigActionType.SCCall:
       return parseSmartContractCall(remainingBytes);
+    case MultisigActionType.SCDeploy:
+      return parseSmartContractDeploy(remainingBytes);
     default:
       console.error(`Unrecognized action ${actionTypeByte}`);
       return [null, remainingBytes];
@@ -161,6 +163,26 @@ function parseSmartContractCall(
   );
 
   return [action, remainingBytes];
+}
+
+function parseSmartContractDeploy(
+  remainingBytes: Buffer,
+): [MultisigAction | null, Buffer] {
+  const amountSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  remainingBytes = remainingBytes.slice(4);
+  const amountBytes = remainingBytes.slice(0, amountSize);
+  remainingBytes = remainingBytes.slice(amountSize);
+  const codec = new NumericalBinaryCodec();
+  const amount = codec.decodeTopLevel(amountBytes, new BigUIntType());
+
+  const codeSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  remainingBytes = remainingBytes.slice(codeSize);
+
+  const codeBytes = remainingBytes.slice(0, amountSize);
+
+  const code = codeBytes.toString();
+  console.log(code, codeSize);
+  return [null, remainingBytes];
 }
 
 export function parseActionDetailed(

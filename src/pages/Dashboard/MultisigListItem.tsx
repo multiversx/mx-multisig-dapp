@@ -4,7 +4,6 @@ import { Ui } from "@elrondnetwork/dapp-utils";
 import { Address } from "@elrondnetwork/erdjs/out";
 import { faExternalLinkAlt, faTimes } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as Wallet } from "assets/img/wallet-logo.svg";
@@ -15,7 +14,6 @@ import { MultisigContractInfoType } from "types/multisigContracts";
 
 const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
   const { explorerAddress } = useDappContext();
-  const { t } = useTranslation();
   const history = useHistory();
   const dispatch = useDispatch();
   const { mutateUnregisterMultisigContract } = useManagerContract();

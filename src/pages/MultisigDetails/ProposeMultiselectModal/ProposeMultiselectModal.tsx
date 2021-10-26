@@ -1,4 +1,6 @@
 import React from "react";
+import { Balance } from "@elrondnetwork/erdjs/out";
+import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import {
   faHandPaper,
   faTimes,
@@ -11,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { useMultisigContract } from "contracts/MultisigContract";
 import { setProposeMultiselectSelectedOption } from "redux/slices/modalsSlice";
 import { MultisigAction } from "types/MultisigAction";
+import { MultisigDeployContract } from "types/MultisigDeployContract";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
 import { MultisigSendToken } from "types/MultisigSendToken";
@@ -18,6 +21,7 @@ import { MultisigSendToken } from "types/MultisigSendToken";
 import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
 import { ProposalsTypes, SelectedOptionType } from "types/Proposals";
 import { titles } from "../constants";
+import ProposeDeployContract from "./ProposeDeployContract";
 import ProposeIssueToken from "./ProposeIssueToken";
 import ProposeSendEgld from "./ProposeSendEgld";
 import ProposeSendToken from "./ProposeSendToken";
@@ -25,10 +29,6 @@ import ProposeSmartContractCall from "./ProposeSmartContractCall";
 import SelectOption from "./SelectOption";
 
 import "./proposeMultiselectModal.scss";
-import ProposeDeployContract from "./ProposeDeployContract";
-import { MultisigDeployContract } from "../../../types/MultisigDeployContract";
-import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
-import { Balance } from "@elrondnetwork/erdjs/out";
 
 interface ProposeMultiselectModalPropsType {
   selectedOption: SelectedOptionType;

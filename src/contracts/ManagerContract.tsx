@@ -1,10 +1,10 @@
 import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import {
-  ContractFunction,
   Address,
-  SmartContract,
   AddressValue,
   BytesValue,
+  ContractFunction,
+  SmartContract,
   TypedValue,
   U8Value,
 } from "@elrondnetwork/erdjs";
@@ -23,6 +23,7 @@ import { MultisigContractInfoType } from "types/multisigContracts";
 import getProviderType from "../components/SignTransactions/helpers/getProviderType";
 import { gasLimit, multisigManagerContract } from "../config";
 import { smartContractCode } from "../helpers/constants";
+import { multisigContractFunctionNames } from "../types/multisigFunctionNames";
 import { buildTransaction } from "./transactionUtils";
 
 export const deployContractGasLimit = 120000000;
@@ -93,7 +94,7 @@ export function useManagerContract() {
   function getRegisterMultisigContractTransaction(multisigAddress: Address) {
     return buildTransaction(
       0,
-      "registerMultisigContract",
+      multisigContractFunctionNames.registerMultisigContract,
       providerType,
       smartContract,
       gasLimit,
@@ -106,7 +107,7 @@ export function useManagerContract() {
   ) {
     return buildTransaction(
       0,
-      "registerMultisigName",
+      multisigContractFunctionNames.registerMultisigName,
       providerType,
       smartContract,
       gasLimit,
@@ -118,7 +119,7 @@ export function useManagerContract() {
   async function mutateUnregisterMultisigContract(multisigAddress: Address) {
     const transaction = buildTransaction(
       0,
-      "unregisterMultisigContract",
+      multisigContractFunctionNames.unregisterMultisigContract,
       providerType,
       smartContract,
       gasLimit,
@@ -148,14 +149,14 @@ export function useManagerContract() {
 
   async function queryContracts() {
     return queryMultisigContractInfoArray(
-      "getMultisigContracts",
+      multisigContractFunctionNames.getMultisigContracts,
       new AddressValue(transactionAddress),
     );
   }
 
   async function queryContractName(multisigAddress: Address) {
     return queryString(
-      "getMultisigContractName",
+      multisigContractFunctionNames.getMultisigContractName,
       new AddressValue(multisigAddress),
     );
   }

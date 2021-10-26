@@ -20,7 +20,6 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
       if (isNaN(amountNumeric)) {
         return null;
       }
-      console.log("getting");
       const parsedAddress = new Address(address);
 
       return new MultisigSendToken(parsedAddress, identifier, amountNumeric);

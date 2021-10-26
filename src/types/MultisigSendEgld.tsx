@@ -2,12 +2,13 @@ import React from "react";
 import { Ui } from "@elrondnetwork/dapp-utils";
 import { Address } from "@elrondnetwork/erdjs/out";
 import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import { faExternalLinkAlt } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import i18next from "i18next";
 import ExplorerLink from "components/ExplorerLink";
 import { MultisigAction } from "./MultisigAction";
+
 import { MultisigActionType } from "./MultisigActionType";
-import { faExternalLinkAlt } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export class MultisigSendEgld extends MultisigAction {
   address: Address;

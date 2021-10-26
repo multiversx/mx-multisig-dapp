@@ -1,10 +1,9 @@
 import React from "react";
+import { faQrcode } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import QrCode from "qrcode.react";
 import { Modal } from "react-bootstrap";
 import CopyButton from "../CopyButton";
-import ExplorerLink from "../ExplorerLink";
-import { faQrcode } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const ReceiveModal = ({ address }: { address?: string }) => {
   const [showModal, setShowModal] = React.useState(false);
 

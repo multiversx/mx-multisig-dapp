@@ -60,7 +60,6 @@ const MultisigProposalCard = ({
       boardMembers.some((boardMember) => boardMember.equals(signer)),
     );
   }, [signers, boardMembers]);
-
   const sign = () => {
     mutateSign(actionId);
   };

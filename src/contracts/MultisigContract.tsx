@@ -27,6 +27,7 @@ import useSendTransactions from "hooks/useSendTransactions";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
 import { MultisigAction } from "types/MultisigAction";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
+import { multisigContractFunctionNames } from "types/multisigFunctionNames";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendToken } from "types/MultisigSendToken";
 import getProviderType from "../components/SignTransactions/helpers/getProviderType";
@@ -43,7 +44,7 @@ export function useMultisigContract() {
   const smartContract = new SmartContract({ address: currentMultisigAddress });
 
   function sendTransaction(
-    functionName: string,
+    functionName: multisigContractFunctionNames,
     transactionGasLimit = gasLimit,
     ...args: TypedValue[]
   ) {
@@ -59,28 +60,40 @@ export function useMultisigContract() {
   }
 
   function mutateSign(actionId: number) {
-    return sendTransaction("sign", gasLimit, new U32Value(actionId));
+    return sendTransaction(
+      multisigContractFunctionNames.sign,
+      gasLimit,
+      new U32Value(actionId),
+    );
   }
 
   function mutateUnsign(actionId: number) {
-    return sendTransaction("unsign", gasLimit, new U32Value(actionId));
+    return sendTransaction(
+      multisigContractFunctionNames.unsign,
+      gasLimit,
+      new U32Value(actionId),
+    );
   }
 
   function mutatePerformAction(actionId: number, transactionGasLimit: number) {
     return sendTransaction(
-      "performAction",
+      multisigContractFunctionNames.performAction,
       transactionGasLimit,
       new U32Value(actionId),
     );
   }
 
   function mutateDiscardAction(actionId: number) {
-    return sendTransaction("discardAction", gasLimit, new U32Value(actionId));
+    return sendTransaction(
+      multisigContractFunctionNames.discardAction,
+      gasLimit,
+      new U32Value(actionId),
+    );
   }
 
   function mutateProposeChangeQuorum(quorumSize: number) {
     return sendTransaction(
-      "proposeChangeQuorum",
+      multisigContractFunctionNames.proposeChangeQuorum,
       gasLimit,
       new U32Value(quorumSize),
     );
@@ -88,7 +101,7 @@ export function useMultisigContract() {
 
   function mutateProposeAddProposer(address: Address) {
     return sendTransaction(
-      "proposeAddProposer",
+      multisigContractFunctionNames.proposeAddProposer,
       gasLimit,
       new AddressValue(address),
     );
@@ -96,7 +109,7 @@ export function useMultisigContract() {
 
   function mutateProposeAddBoardMember(address: Address) {
     return sendTransaction(
-      "proposeAddBoardMember",
+      multisigContractFunctionNames.proposeAddBoardMember,
       gasLimit,
       new AddressValue(address),
     );
@@ -104,7 +117,7 @@ export function useMultisigContract() {
 
   function mutateProposeRemoveUser(address: Address) {
     return sendTransaction(
-      "proposeRemoveUser",
+      multisigContractFunctionNames.proposeRemoveUser,
       gasLimit,
       new AddressValue(address),
     );
@@ -116,7 +129,7 @@ export function useMultisigContract() {
     data: string,
   ) {
     return sendTransaction(
-      "proposeSendEgld",
+      multisigContractFunctionNames.proposeSendEgld,
       gasLimit,
       new AddressValue(address),
       amount,
@@ -137,7 +150,11 @@ export function useMultisigContract() {
     ];
     allArgs.push(...args);
 
-    return sendTransaction("proposeSCCall", gasLimit, ...allArgs);
+    return sendTransaction(
+      multisigContractFunctionNames.proposeSCCall,
+      gasLimit,
+      ...allArgs,
+    );
   }
 
   function mutateDeployContract(
@@ -148,23 +165,19 @@ export function useMultisigContract() {
     readable: boolean,
     ...args: BytesValue[]
   ) {
-    const allArgs = [amount, BytesValue.fromUTF8(code), ...args];
-    if (upgradeable) {
-      args.push(BytesValue.fromUTF8("upgradeable"));
-      args.push(BytesValue.fromUTF8("true"));
-    }
-    if (payable) {
-      args.push(BytesValue.fromUTF8("payable"));
-      args.push(BytesValue.fromUTF8("true"));
-    }
-    if (readable) {
-      args.push(BytesValue.fromUTF8("readable"));
-      args.push(BytesValue.fromUTF8("true"));
-    }
+    const allArgs = [
+      amount,
+      BytesValue.fromHex(code),
+      BytesValue.fromHex(upgradeable ? "01" : "00"),
+      BytesValue.fromHex(payable ? "01" : "00"),
+      BytesValue.fromHex(readable ? "01" : "00"),
+    ];
+
+    const finalArgs = allArgs.concat(args);
     return sendTransaction(
-      "proposeSCDeploy",
+      multisigContractFunctionNames.proposeSCDeploy,
       deployContractGasLimit,
-      ...allArgs,
+      ...finalArgs,
     );
   }
 
@@ -172,7 +185,7 @@ export function useMultisigContract() {
     mutateSmartContractCall(
       proposal.address,
       new BigUIntValue(new BigNumber(0)),
-      "ESDTTransfer",
+      multisigContractFunctionNames.ESDTTransfer,
       [BytesValue.fromUTF8(proposal.identifier), new U32Value(proposal.amount)],
     );
   }
@@ -228,55 +241,75 @@ export function useMultisigContract() {
   }
 
   function queryAllActions(): Promise<MultisigActionDetailed[]> {
-    return queryActionContainerArray("getPendingActionFullInfo");
+    return queryActionContainerArray(
+      multisigContractFunctionNames.getPendingActionFullInfo,
+    );
   }
 
   function queryBoardMembersCount(): Promise<number> {
-    return queryNumber("getNumBoardMembers");
+    return queryNumber(multisigContractFunctionNames.getNumBoardMembers);
   }
 
   function queryProposersCount(): Promise<number> {
-    return queryNumber("getNumProposers");
+    return queryNumber(multisigContractFunctionNames.getNumProposers);
   }
 
   function queryQuorumCount(): Promise<number> {
-    return queryNumber("getQuorum");
+    return queryNumber(multisigContractFunctionNames.getQuorum);
   }
 
   function queryActionLastId(): Promise<number> {
-    return queryNumber("getActionLastIndex");
+    return queryNumber(multisigContractFunctionNames.getActionLastIndex);
   }
 
   function queryActionData(actionId: number): Promise<MultisigAction | null> {
-    return queryActionContainer("getActionData", new U32Value(actionId));
+    return queryActionContainer(
+      multisigContractFunctionNames.getActionData,
+      new U32Value(actionId),
+    );
   }
 
   function queryUserRole(userAddress: string): Promise<number> {
-    return queryNumber("userRole", new AddressValue(new Address(userAddress)));
+    return queryNumber(
+      multisigContractFunctionNames.userRole,
+      new AddressValue(new Address(userAddress)),
+    );
   }
 
   function queryBoardMemberAddresses(): Promise<Address[]> {
-    return queryAddressArray("getAllBoardMembers");
+    return queryAddressArray(multisigContractFunctionNames.getAllBoardMembers);
   }
 
   function queryProposerAddresses(): Promise<Address[]> {
-    return queryAddressArray("getAllProposers");
+    return queryAddressArray(multisigContractFunctionNames.getAllProposers);
   }
 
   function queryActionSignerAddresses(actionId: number): Promise<Address[]> {
-    return queryAddressArray("getActionSigners", new U32Value(actionId));
+    return queryAddressArray(
+      multisigContractFunctionNames.getActionSigners,
+      new U32Value(actionId),
+    );
   }
 
   function queryActionSignerCount(actionId: number): Promise<number> {
-    return queryNumber("getActionSignerCount", new U32Value(actionId));
+    return queryNumber(
+      multisigContractFunctionNames.getActionSignerCount,
+      new U32Value(actionId),
+    );
   }
 
   function queryActionValidSignerCount(actionId: number): Promise<number> {
-    return queryNumber("getActionValidSignerCount", new U32Value(actionId));
+    return queryNumber(
+      multisigContractFunctionNames.getActionValidSignerCount,
+      new U32Value(actionId),
+    );
   }
 
   function queryActionIsQuorumReached(actionId: number): Promise<boolean> {
-    return queryBoolean("quorumReached", new U32Value(actionId));
+    return queryBoolean(
+      multisigContractFunctionNames.quorumReached,
+      new U32Value(actionId),
+    );
   }
 
   function queryActionIsSignedByAddress(
@@ -284,7 +317,7 @@ export function useMultisigContract() {
     actionId: number,
   ): Promise<boolean> {
     return queryBoolean(
-      "signed",
+      multisigContractFunctionNames.signed,
       new AddressValue(userAddress),
       new U32Value(actionId),
     );

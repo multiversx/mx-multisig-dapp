@@ -7,12 +7,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import SVG from "react-inlinesvg";
-import { ReactComponent as BoardMember } from "assets/img/clipboard-check.svg";
-import { ReactComponent as Proposer } from "assets/img/clipboard-list.svg";
-import { ReactComponent as Money } from "assets/img/money.svg";
-import { ReactComponent as Quorum } from "assets/img/quorum.svg";
-import { ReactComponent as User } from "assets/img/user.svg";
 
 export interface StatCardType {
   title?: string;
@@ -32,37 +26,14 @@ const StatCard = ({
   title = "",
   value = "0",
   valueUnit = "",
-  svg = "",
   percentage = "",
   tooltipText = "",
-  children = null,
   onAddAction,
   onRemoveAction,
   onEditAction,
 }: StatCardType) => {
   return (
     <div className={"statcard text-black"}>
-      {/* <div className="d-flex align-items-center mt-1 mb-2">
-        <div className="icon my-1 statcard-item ">
-          {svg === "clipboard-check.svg" ? (
-            <BoardMember style={{ width: 32, height: 32 }} />
-          ) : svg === "clipboard-list.svg" ? (
-            <Proposer style={{ width: 32, height: 32 }} />
-          ) : svg === "quorum.svg" ? (
-            <Quorum style={{ width: 32, height: 32 }} />
-          ) : svg === "user.svg" ? (
-            <User style={{ width: 32, height: 32 }} />
-          ) : svg === "money.svg" ? (
-            <Money style={{ width: 32, height: 32 }} />
-          ) : (
-            <SVG
-              src={process.env.PUBLIC_URL + "/" + svg}
-              className="text-black"
-            ></SVG>
-          )}
-        </div>
-        <div>{children}</div>
-      </div> */}
       <span className="h5 title">{title}</span>
 
       <small className="opacity-5">

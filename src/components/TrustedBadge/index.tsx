@@ -1,6 +1,7 @@
 import React from "react";
 import "./trustedBadge.scss";
-import { getIsContractTrusted } from "../../apiCalls/multisigContractsCalls";
+import { getIsContractTrusted } from "apiCalls/multisigContractsCalls";
+
 import TrustedBadgeIcon from "assets/img/trusted-badge.svg";
 
 interface TrustedBadgePropsType {
