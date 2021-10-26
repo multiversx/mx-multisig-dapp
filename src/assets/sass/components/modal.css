@@ -60,6 +60,7 @@
   height: 20px;
   margin-bottom: 2px;
   margin-right: 8px;
+  cursor: pointer;
 }
 
 .receive canvas {

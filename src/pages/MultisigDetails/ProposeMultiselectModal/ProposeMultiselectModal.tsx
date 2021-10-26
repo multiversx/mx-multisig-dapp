@@ -114,7 +114,12 @@ const ProposeMultiselectModal = ({
           />
         );
       case ProposalsTypes.deploy_contract:
-        return <ProposeDeployContract handleChange={handleProposalChange} />;
+        return (
+          <ProposeDeployContract
+            setSubmitDisabled={setSubmitDisabled}
+            handleChange={handleProposalChange}
+          />
+        );
       default:
         return <SelectOption onSelected={handleOptionSelected} />;
     }
