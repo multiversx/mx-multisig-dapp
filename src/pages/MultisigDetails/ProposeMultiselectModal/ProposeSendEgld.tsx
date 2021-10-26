@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Address, Balance } from "@elrondnetwork/erdjs/out";
 import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import { useFormik } from "formik";
@@ -69,13 +69,17 @@ const ProposeSendEgld = ({
     refreshProposal();
   }, [formik.values]);
 
+  useEffect(() => {
+    const hasErrors = Object.keys(formik.errors).length > 0;
+    setSubmitDisabled(hasErrors);
+  }, [formik.errors]);
+
   const getProposal = (): MultisigSendEgld | null => {
     try {
       const addressParam = new Address(formik.values.receiver);
 
       const amountNumeric = Number(formik.values.amount);
       if (isNaN(amountNumeric)) {
-        setSubmitDisabled(true);
         return null;
       }
 
@@ -89,19 +93,16 @@ const ProposeSendEgld = ({
         formik.values.data,
       );
     } catch (err) {
-      setSubmitDisabled(true);
       return null;
     }
   };
 
   function refreshProposal() {
     if (Object.keys(formik.errors).length > 0) {
-      setSubmitDisabled(true);
       return;
     }
     const proposal = getProposal();
     if (proposal !== null) {
-      setSubmitDisabled(false);
       handleChange(proposal);
     }
   }
@@ -131,7 +132,6 @@ const ProposeSendEgld = ({
       formik.setFieldValue("amount", 0);
     }
     if (amount > Number(multisigBalance.toDenominated())) {
-      setSubmitDisabled(true);
       return (
         testContext?.createError({
           message:
