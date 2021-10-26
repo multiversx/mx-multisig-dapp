@@ -101,7 +101,7 @@ const ProposeDeployContract = ({
     <div>
       <div className="modal-control-container">
         <div className={"input-wrapper"}>
-          <p className={"form-label"}>{t(" Amount")}: </p>
+          <label className={"form-label"}>{t(" Amount")}: </label>
           <Form.Control
             id="amount"
             name="amount"
@@ -120,7 +120,7 @@ const ProposeDeployContract = ({
       </div>
       <div className="modal-control-container my-5">
         <div className={"input-wrapper"}>
-          <p className={"form-label"}>{t("Code")}: </p>
+          <label className={"form-label"}>{t("Code")}: </label>
           <Form.Control
             id="code"
             name="code"

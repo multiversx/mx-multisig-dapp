@@ -91,7 +91,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
   return (
     <div>
       <div className="modal-control-container">
-        <span>{t("Name")}: </span>
+        <label>{t("Name")}: </label>
         <input
           type="text"
           className="form-control"
@@ -101,7 +101,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>{t("Identifier")}: </span>
+        <label>{t("Identifier")}: </label>
         <input
           type="text"
           className="form-control"
@@ -111,7 +111,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>{t("Mint Amount")}: </span>
+        <label>{t("Mint Amount")}: </label>
         <input
           type="number"
           className="form-control"
@@ -121,7 +121,7 @@ const ProposeIssueToken = ({ handleChange }: ProposeIssueTokenType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>{t("Decimals")}: </span>
+        <label>{t("Decimals")}: </label>
         <input
           type="number"
           className="form-control"

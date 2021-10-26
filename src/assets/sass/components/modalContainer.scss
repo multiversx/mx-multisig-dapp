@@ -71,6 +71,9 @@
         background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0 0);
       }
     }
+    .selectable-option {
+      max-width: 100% !important;
+    }
     .btn-light {
       color: #1392ff;
       background: #f3f9ff;

@@ -28,12 +28,11 @@ const ProposeRemoveUser = ({
   return (
     <div className="modal-control-container">
       <label>{t("Address")} </label>
-      <div className="h6 mb-spacer copy-address" data-testid="delegateSubTitle">
+      <div
+        className="h6 mb-spacer text-break remove-user"
+        data-testid="delegateSubTitle"
+      >
         <p className="address"> {address} </p>
-        <span className={"copy-btn"}>
-          <CopyButton text={address} />
-          {/* <ExplorerLink page={`accounts/${address}`} className="ml-2" /> */}
-        </span>
       </div>
     </div>
   );

@@ -101,3 +101,14 @@
     color: #1392ff;
   }
 }
+
+.remove-user {
+  .address {
+    display: flex;
+    width: 100%;
+    padding: 15px 24px;
+    margin: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+}

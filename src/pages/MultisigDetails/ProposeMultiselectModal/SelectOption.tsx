@@ -30,11 +30,11 @@ const availableOptions = [
 
 export default function SelectOption({ onSelected }: SelectOptionPropsType) {
   return (
-    <div className="card select-options-list">
+    <div className="card select-options-list modal-action-btns">
       {availableOptions.map((option) => (
         <button
           key={option.type}
-          className="selectable-option"
+          className="selectable-option btn btn-primary btn-light"
           onClick={() => onSelected(option.type)}
         >
           {option.label}

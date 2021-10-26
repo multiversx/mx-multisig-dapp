@@ -58,7 +58,7 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
   return (
     <div>
       <div className="modal-control-container">
-        <span>{t("Address")}: </span>
+        <label>{t("Address")}: </label>
         <input
           type="text"
           className="form-control"
@@ -68,7 +68,7 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>{t("Identifier")}: </span>
+        <label>{t("Identifier")}: </label>
         <input
           type="text"
           className="form-control"
@@ -78,7 +78,7 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>{t("Amount")}: </span>
+        <label>{t("Amount")}: </label>
         <input
           type="number"
           className="form-control"
