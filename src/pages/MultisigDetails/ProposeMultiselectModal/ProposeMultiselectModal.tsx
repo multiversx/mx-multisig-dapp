@@ -72,7 +72,7 @@ const ProposeMultiselectModal = ({
         );
       } else if (selectedProposal instanceof MultisigDeployContract) {
         mutateDeployContract(
-          new BigUIntValue(Balance.egld(selectedProposal.amount).valueOf()),
+          selectedProposal.amount,
           selectedProposal.code,
           selectedProposal.upgradeable,
           selectedProposal.payable,

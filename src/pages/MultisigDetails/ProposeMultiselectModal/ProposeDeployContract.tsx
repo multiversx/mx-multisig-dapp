@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
-import { BytesValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import { Balance } from "@elrondnetwork/erdjs/out";
+import {
+  BigUIntValue,
+  BytesValue,
+} from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import { useFormik } from "formik";
 import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
@@ -75,7 +79,8 @@ const ProposeDeployContract = ({
       return null;
     }
 
-    const result = new MultisigDeployContract(amountNumeric, code);
+    const amountParam = new BigUIntValue(Balance.egld(amountNumeric).valueOf());
+    const result = new MultisigDeployContract(amountParam, code);
     result.upgradeable = upgradeable;
     result.payable = payable;
     result.readable = readable;

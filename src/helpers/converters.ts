@@ -18,6 +18,7 @@ import { MultisigContractInfoType } from "types/multisigContracts";
 import { MultisigRemoveUser } from "types/MultisigRemoveUser";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
 import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
+import { MultisigDeployContract } from "../types/MultisigDeployContract";
 import { PlainAddress } from "./plainObjects";
 
 const createKeccakHash = require("keccak");
@@ -176,13 +177,14 @@ function parseSmartContractDeploy(
   const amount = codec.decodeTopLevel(amountBytes, new BigUIntType());
 
   const codeSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  remainingBytes = remainingBytes.slice(4);
+  const codeBytes = remainingBytes.slice(0, codeSize);
   remainingBytes = remainingBytes.slice(codeSize);
+  const code = new BytesValue(codeBytes).valueOf().toString("hex");
 
-  const codeBytes = remainingBytes.slice(0, amountSize);
+  const action = new MultisigDeployContract(amount, code);
 
-  const code = codeBytes.toString();
-  console.log(code, codeSize);
-  return [null, remainingBytes];
+  return [action, remainingBytes];
 }
 
 export function parseActionDetailed(

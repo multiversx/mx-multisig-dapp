@@ -1,15 +1,16 @@
+import { BigUIntValue } from "@elrondnetwork/erdjs";
 import i18next from "i18next";
 import { MultisigAction } from "./MultisigAction";
 import { MultisigActionType } from "./MultisigActionType";
 
 export class MultisigDeployContract extends MultisigAction {
-  amount: number;
+  amount: BigUIntValue;
   code: string;
   upgradeable = false;
   payable = false;
   readable = false;
 
-  constructor(amount: number, code: string) {
+  constructor(amount: BigUIntValue, code: string) {
     super(MultisigActionType.SCDeploy);
     this.amount = amount;
     this.code = code;
