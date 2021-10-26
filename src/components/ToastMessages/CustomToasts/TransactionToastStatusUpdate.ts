@@ -104,10 +104,14 @@ export default function TransactionToastStatusUpdate({
                 );
               }
             } else {
-              retriesRef.current[hash] = retriesRef.current[hash] + 1;
+              retriesRef.current[hash] = retriesRef.current[hash]
+                ? retriesRef.current[hash] + 1
+                : 1;
             }
           } else {
-            retriesRef.current[hash] = retriesRef.current[hash] + 1;
+            retriesRef.current[hash] = retriesRef.current[hash]
+              ? retriesRef.current[hash] + 1
+              : 1;
           }
         } catch (error) {
           console.error(error);

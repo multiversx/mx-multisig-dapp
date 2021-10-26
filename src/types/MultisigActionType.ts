@@ -7,5 +7,4 @@ export enum MultisigActionType {
   SendEgld = 5,
   SCDeploy = 6,
   SCCall = 7,
-  DeployContract = 8,
 }

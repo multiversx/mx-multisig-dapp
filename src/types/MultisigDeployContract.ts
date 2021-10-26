@@ -10,7 +10,7 @@ export class MultisigDeployContract extends MultisigAction {
   readable = false;
 
   constructor(amount: number, code: string) {
-    super(MultisigActionType.DeployContract);
+    super(MultisigActionType.SCDeploy);
     this.amount = amount;
     this.code = code;
   }
