@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Address, Nonce } from "@elrondnetwork/erdjs/out";
+import { Address, Nonce } from "@elrondnetwork/erdjs";
 import { NumericalBinaryCodec } from "@elrondnetwork/erdjs/out/smartcontracts/codec/numerical";
 import {
   BigUIntType,
@@ -182,7 +182,34 @@ function parseSmartContractDeploy(
   remainingBytes = remainingBytes.slice(codeSize);
   const code = new BytesValue(codeBytes).valueOf().toString("hex");
 
-  const action = new MultisigDeployContract(amount, code);
+  const codeMetadataBytes = remainingBytes.slice(0, 2);
+  remainingBytes = remainingBytes.slice(2);
+
+  const codeMetadata = Number(codeMetadataBytes.toString("hex"));
+  const upgradeable = Boolean(codeMetadata & 100);
+  const payable = Boolean(codeMetadata & 2);
+  const readable = Boolean(codeMetadata & 400);
+  const argsSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  remainingBytes = remainingBytes.slice(4);
+
+  const args = [];
+  for (let i = 0; i < argsSize; i++) {
+    const argSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+    remainingBytes = remainingBytes.slice(4);
+
+    const argBytes = remainingBytes.slice(0, argSize);
+    remainingBytes = remainingBytes.slice(argSize);
+
+    args.push(new BytesValue(argBytes));
+  }
+
+  const action = new MultisigDeployContract(
+    amount,
+    code,
+    upgradeable,
+    payable,
+    readable,
+  );
 
   return [action, remainingBytes];
 }
