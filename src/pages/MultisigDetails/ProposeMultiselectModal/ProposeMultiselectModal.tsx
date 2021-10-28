@@ -1,10 +1,8 @@
 import React from "react";
-import { Balance } from "@elrondnetwork/erdjs/out";
-import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import {
+  faArrowLeft,
   faHandPaper,
   faTimes,
-  faArrowLeft,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
@@ -21,6 +19,7 @@ import { MultisigSendToken } from "types/MultisigSendToken";
 import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
 import { ProposalsTypes, SelectedOptionType } from "types/Proposals";
 import { titles } from "../constants";
+import AttachContractContent from "./AttachContractContent";
 import ProposeDeployContract from "./ProposeDeployContract";
 import ProposeIssueToken from "./ProposeIssueToken";
 import ProposeSendEgld from "./ProposeSendEgld";
@@ -162,6 +161,28 @@ const ProposeMultiselectModal = ({
   const actionTitle =
     selectedOption?.option != null ? `: ${titles[selectedOption?.option]}` : "";
 
+  const isAttachContractAction =
+    selectedOption?.option === ProposalsTypes.attach_contract;
+
+  const modalContent = isAttachContractAction ? (
+    <AttachContractContent handleClose={handleClose} />
+  ) : (
+    <div className="card">
+      <div className="card-body">
+        <p className="h3 mb-spacer text-center" data-testid="delegateTitle">
+          {`${t("Make a proposal")}${actionTitle}`}
+        </p>
+
+        {getContent()}
+        <div className="modal-action-btns">
+          {cancelButton}
+          {selectedOption?.option !==
+            ProposalsTypes.multiselect_proposal_options && proposeButton}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <Modal
       show
@@ -171,20 +192,7 @@ const ProposeMultiselectModal = ({
       animation={false}
       centered
     >
-      <div className="card">
-        <div className="card-body">
-          <p className="h3 mb-spacer text-center" data-testid="delegateTitle">
-            {`${t("Make a proposal")}${actionTitle}`}
-          </p>
-
-          {getContent()}
-          <div className="modal-action-btns">
-            {cancelButton}
-            {selectedOption?.option !==
-              ProposalsTypes.multiselect_proposal_options && proposeButton}
-          </div>
-        </div>
-      </div>
+      {modalContent}
     </Modal>
   );
 };

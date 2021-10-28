@@ -9,6 +9,7 @@ export enum ProposalsTypes {
   "smart_contract_call" = "smart_contract_call",
   "multiselect_proposal_options" = "multiselect_proposal_options",
   "deploy_contract" = "deploy_contract",
+  "attach_contract" = "attach_contract",
 }
 
 export interface RemoveUserOptionType {

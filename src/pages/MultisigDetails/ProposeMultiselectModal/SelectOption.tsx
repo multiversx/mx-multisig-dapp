@@ -5,7 +5,7 @@ interface SelectOptionPropsType {
   onSelected: (option: ProposalsTypes) => void;
 }
 
-const availableOptions = [
+const proposeAvailableOptions = [
   {
     type: ProposalsTypes.send_egld,
     label: "Send EGLD",
@@ -28,18 +28,41 @@ const availableOptions = [
   },
 ];
 
+const othersAvailableOptions = [
+  {
+    type: ProposalsTypes.attach_contract,
+    label: "Transfer contract ownership",
+  },
+];
+
 export default function SelectOption({ onSelected }: SelectOptionPropsType) {
   return (
-    <div className="card select-options-list modal-action-btns">
-      {availableOptions.map((option) => (
-        <button
-          key={option.type}
-          className="selectable-option btn btn-primary btn-light"
-          onClick={() => onSelected(option.type)}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
+    <>
+      <div className="card select-options-list modal-action-btns">
+        {proposeAvailableOptions.map((option) => (
+          <button
+            key={option.type}
+            className="selectable-option btn btn-primary btn-light"
+            onClick={() => onSelected(option.type)}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+      <div className="card select-options-list modal-action-btns">
+        <p className="h4 text-center" data-testid="delegateTitle">
+          Other actions
+        </p>
+        {othersAvailableOptions.map((option) => (
+          <button
+            key={option.type}
+            className="selectable-option btn btn-primary btn-light"
+            onClick={() => onSelected(option.type)}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </>
   );
 }

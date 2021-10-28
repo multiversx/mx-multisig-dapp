@@ -44,7 +44,6 @@ const ReceiveModal = ({ address }: { address?: string }) => {
               <textarea readOnly value={address} className="address" />
               <span className={"copy-btn"}>
                 <CopyButton text={address} />
-                {/* <ExplorerLink page={`accounts/${address}`} className="ml-2" /> */}
               </span>
             </div>
             <div className="modal-action-btns">

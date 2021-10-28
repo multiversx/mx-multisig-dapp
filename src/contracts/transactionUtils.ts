@@ -11,7 +11,7 @@ import {
   TransactionVersion,
 } from "@elrondnetwork/erdjs";
 import { Address } from "@elrondnetwork/erdjs/out";
-import { chainID, gasPerDataByte } from "config";
+import { chainID, gasPerDataByte, gasLimit } from "config";
 import { providerTypes } from "helpers/constants";
 import { multisigContractFunctionNames } from "../types/multisigFunctionNames";
 
@@ -60,6 +60,27 @@ export function buildTransaction(
     value: Balance.egld(value),
     gasLimit: new GasLimit(gasLimit),
     data: payload,
+  };
+  if (providerType === providerTypes.ledger) {
+    transactionPayload.options = TransactionOptions.withTxHashSignOptions();
+    transactionPayload.version = TransactionVersion.withTxHashSignVersion();
+  }
+  return new Transaction(transactionPayload);
+}
+
+export function buildBlockchainTransaction(
+  value: number,
+  providerType: string,
+  transactionGasLimit: number = gasLimit,
+  receiver: Address,
+  data: string,
+) {
+  const transactionPayload: TransactionPayloadType = {
+    chainID: new ChainID(chainID),
+    receiver,
+    value: Balance.egld(value),
+    gasLimit: new GasLimit(transactionGasLimit),
+    data: new TransactionPayload(data),
   };
   if (providerType === providerTypes.ledger) {
     transactionPayload.options = TransactionOptions.withTxHashSignOptions();
