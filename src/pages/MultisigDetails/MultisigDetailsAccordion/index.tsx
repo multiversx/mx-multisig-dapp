@@ -10,7 +10,13 @@ import {
   faChevronCircleUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, useAccordionToggle, Card } from "react-bootstrap";
+import {
+  Accordion,
+  useAccordionToggle,
+  Card,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { ReactComponent as EmptyStateIcon } from "assets/img/empty-state-icon.svg";
@@ -73,35 +79,65 @@ const MultisigDetailsAccordion = ({
       }),
     );
 
-  const renderAddress = (address: Address) => (
-    <Card.Header key={address.bech32()}>
-      <div className="user-item">
-        <span className="address text d-flex">
-          <Ui.Trim text={address.bech32()} />
-          <a
-            href="#"
-            target="_blank"
-            rel="noreferrer"
-            className="link-second-style  ml-2"
-          >
-            <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
-          </a>
-        </span>
+  const boardMembersExceedQuorumSize = totalBoardMembers > quorumSize;
 
-        {isProposer && (
-          <div className="btns">
-            <button
-              onClick={() => onRemoveUser(address)}
-              className={"action-remove action remove"}
+  const renderAddress = (
+    address: Address,
+    index: number,
+    isBoardMember = false,
+  ) => {
+    const canRemoveUser = !isBoardMember || boardMembersExceedQuorumSize;
+
+    const removeButton = isProposer && (
+      <button
+        disabled={!canRemoveUser}
+        onClick={() => onRemoveUser(address)}
+        className={`action-remove action remove ${
+          canRemoveUser ? "" : "disabled"
+        }`}
+      >
+        <FontAwesomeIcon icon={faMinus} />
+        <span className="name">Remove</span>
+      </button>
+    );
+
+    const removeButtonContainer = !canRemoveUser ? (
+      <OverlayTrigger
+        placement="top"
+        delay={{ show: 50, hide: 50 }}
+        overlay={(props) => {
+          return (
+            <Tooltip id={`remove-user-tooltip-${index}`} {...props}>
+              {t("Insufficient quorum size for removing a board member")}
+            </Tooltip>
+          );
+        }}
+      >
+        <div className="d-inline-block">{removeButton}</div>
+      </OverlayTrigger>
+    ) : (
+      removeButton
+    );
+    return (
+      <Card.Header key={address.bech32()}>
+        <div className="user-item">
+          <span className="address text d-flex">
+            <Ui.Trim text={address.bech32()} />
+            <a
+              href="#"
+              target="_blank"
+              rel="noreferrer"
+              className="link-second-style  ml-2"
             >
-              <FontAwesomeIcon icon={faMinus} />
-              <span className="name">Remove</span>
-            </button>
-          </div>
-        )}
-      </div>
-    </Card.Header>
-  );
+              <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
+            </a>
+          </span>
+
+          <div className="btns">{removeButtonContainer}</div>
+        </div>
+      </Card.Header>
+    );
+  };
 
   const boardMembersContent = boardMembersAddresses != null && (
     <div className={"actions-card boards-members-content"}>
@@ -128,7 +164,11 @@ const MultisigDetailsAccordion = ({
       </Card.Header>
 
       {Object.keys(boardMembersAddresses).length > 0 ? (
-        <Card.Body>{boardMembersAddresses.map(renderAddress)}</Card.Body>
+        <Card.Body>
+          {boardMembersAddresses.map((address, index) =>
+            renderAddress(address, index, true),
+          )}
+        </Card.Body>
       ) : (
         <div className=" w-100 no-active-proposals">
           <p className="d-flex flex-column align-items-center mb-3">
@@ -157,7 +197,11 @@ const MultisigDetailsAccordion = ({
         )}
       </Card.Header>
       {Object.keys(proposersAddresses).length > 0 ? (
-        <Card.Body>{proposersAddresses.map(renderAddress)}</Card.Body>
+        <Card.Body>
+          {proposersAddresses.map((address, index) =>
+            renderAddress(address, index),
+          )}
+        </Card.Body>
       ) : (
         <div className=" w-100 no-active-proposals">
           <p className="d-flex flex-column align-items-center mb-3">
