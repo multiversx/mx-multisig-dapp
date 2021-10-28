@@ -334,6 +334,9 @@
     &:active {
       background-image: linear-gradient(rgba(220, 53, 69, 0.1) 0 0);
     }
+    &.disabled {
+      color: lightgray;
+    }
   }
   .perform {
     color: #16d296;
