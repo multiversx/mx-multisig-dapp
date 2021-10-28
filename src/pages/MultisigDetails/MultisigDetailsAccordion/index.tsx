@@ -105,6 +105,7 @@ const MultisigDetailsAccordion = ({
       <OverlayTrigger
         placement="top"
         delay={{ show: 50, hide: 50 }}
+        trigger="click"
         overlay={(props) => {
           return (
             <Tooltip id={`remove-user-tooltip-${index}`} {...props}>
