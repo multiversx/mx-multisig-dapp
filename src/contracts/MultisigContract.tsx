@@ -31,8 +31,9 @@ import { multisigContractFunctionNames } from "types/multisigFunctionNames";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendToken } from "types/MultisigSendToken";
 import getProviderType from "../components/SignTransactions/helpers/getProviderType";
-import { deployContractGasLimit } from "./ManagerContract";
 import { buildTransaction } from "./transactionUtils";
+
+const proposeDeployGasLimit = 256_000_000;
 
 export function useMultisigContract() {
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
@@ -176,7 +177,7 @@ export function useMultisigContract() {
     const finalArgs = allArgs.concat(args);
     return sendTransaction(
       multisigContractFunctionNames.proposeSCDeploy,
-      deployContractGasLimit,
+      proposeDeployGasLimit,
       ...finalArgs,
     );
   }

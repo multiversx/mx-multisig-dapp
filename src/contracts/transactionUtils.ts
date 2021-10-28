@@ -11,7 +11,7 @@ import {
   TransactionVersion,
 } from "@elrondnetwork/erdjs";
 import { Address } from "@elrondnetwork/erdjs/out";
-import { chainID, gasPerDataByte, gasLimit } from "config";
+import { chainID, gasLimit } from "config";
 import { providerTypes } from "helpers/constants";
 import { multisigContractFunctionNames } from "../types/multisigFunctionNames";
 
@@ -24,18 +24,6 @@ interface TransactionPayloadType {
   options?: TransactionOptions;
   version?: TransactionVersion;
 }
-
-const calculateGasLimit = (
-  payload: TransactionPayload,
-  minGasLimit: number,
-) => {
-  const gasLimitForBytes = Number(gasPerDataByte) * payload.length();
-  return gasLimitForBytes + minGasLimit;
-};
-
-const functionsWithDynamicGasLimit = [
-  multisigContractFunctionNames.proposeSCDeploy,
-];
 
 export function buildTransaction(
   value: number,
@@ -50,15 +38,12 @@ export function buildTransaction(
     .setFunction(func)
     .setArgs(args)
     .build();
-  const gasLimit = functionsWithDynamicGasLimit.includes(functionName)
-    ? calculateGasLimit(payload, transactionGasLimit)
-    : transactionGasLimit;
 
   const transactionPayload: TransactionPayloadType = {
     chainID: new ChainID(chainID),
     receiver: contract.getAddress(),
     value: Balance.egld(value),
-    gasLimit: new GasLimit(gasLimit),
+    gasLimit: new GasLimit(transactionGasLimit),
     data: payload,
   };
   if (providerType === providerTypes.ledger) {

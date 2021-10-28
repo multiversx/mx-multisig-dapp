@@ -12,14 +12,14 @@ import {
 import { MultisigActionType } from "types/MultisigActionType";
 
 const gasLimits = {
-  [MultisigActionType.Nothing]: 60000000,
-  [MultisigActionType.AddBoardMember]: 60000001,
-  [MultisigActionType.AddProposer]: 600000002,
-  [MultisigActionType.RemoveUser]: 60000003,
-  [MultisigActionType.SCDeploy]: 120000004,
-  [MultisigActionType.SendEgld]: 60000005,
-  [MultisigActionType.ChangeQuorum]: 60000006,
-  [MultisigActionType.SCCall]: 120000007,
+  [MultisigActionType.Nothing]: 60_000_000,
+  [MultisigActionType.AddBoardMember]: 60_000_001,
+  [MultisigActionType.AddProposer]: 60_000_002,
+  [MultisigActionType.RemoveUser]: 60_000_003,
+  [MultisigActionType.SCDeploy]: 80_000_000,
+  [MultisigActionType.SendEgld]: 60_000_0005,
+  [MultisigActionType.ChangeQuorum]: 60_000_006,
+  [MultisigActionType.SCCall]: 120_000_007,
 };
 
 interface PerformActionModalPropsType {
