@@ -1,29 +1,27 @@
 import React, { useEffect } from "react";
-import { Balance } from "@elrondnetwork/erdjs/out";
-import {
-  BigUIntValue,
-  BytesValue,
-} from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import { Address, Balance } from "@elrondnetwork/erdjs/out";
+import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { FormikCheckbox, FormikInputField } from "helpers/formikFields";
-import { MultisigDeployContract } from "types/MultisigDeployContract";
+import { validateAddressIsContract } from "helpers/validation";
+import { MultisigDeployContractFromSource } from "types/MultisigDeployContractFromSource";
 
-interface ProposeDeployContractType {
-  handleChange: (proposal: MultisigDeployContract) => void;
+interface ProposeDeployContractFromSourceType {
+  handleChange: (proposal: MultisigDeployContractFromSource) => void;
   setSubmitDisabled: (value: boolean) => void;
 }
 
-const ProposeDeployContract = ({
+const ProposeDeployContractFromSource = ({
   handleChange,
   setSubmitDisabled,
-}: ProposeDeployContractType) => {
+}: ProposeDeployContractFromSourceType) => {
   const { t } = useTranslation();
 
   const validationSchema = Yup.object().shape({
     amount: Yup.string().required("Required").test(validateAmount),
-    code: Yup.string().required("Required").test(validateCode),
+    source: Yup.string().required("required").test(validateAddressIsContract),
     upgradeable: Yup.boolean(),
     payable: Yup.boolean(),
     readable: Yup.boolean(),
@@ -32,7 +30,7 @@ const ProposeDeployContract = ({
   const formik = useFormik({
     initialValues: {
       amount: 0,
-      code: "",
+      source: "",
       upgradeable: false,
       payable: false,
       readable: false,
@@ -46,11 +44,7 @@ const ProposeDeployContract = ({
   });
   const { touched, errors, values } = formik;
 
-  const { amount, code, upgradeable, payable, readable } = values;
-
-  useEffect(() => {
-    setSubmitDisabled(true);
-  }, []);
+  const { amount, source, upgradeable, payable, readable } = values;
 
   useEffect(() => {
     const hasErrors = Object.keys(errors).length > 0;
@@ -62,31 +56,24 @@ const ProposeDeployContract = ({
     return !isNaN(amountNumeric);
   }
 
-  function validateCode(value?: string) {
-    try {
-      if (value == null) {
-        return false;
-      }
-      BytesValue.fromHex(value);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  const getProposal = (): MultisigDeployContract | null => {
+  const getProposal = (): MultisigDeployContractFromSource | null => {
     const amountNumeric = Number(amount);
+    if (Object.keys(errors).length > 0) {
+      return null;
+    }
     if (isNaN(amountNumeric)) {
       return null;
     }
 
     const amountParam = new BigUIntValue(Balance.egld(amountNumeric).valueOf());
-    const result = new MultisigDeployContract(amountParam, code);
-    result.upgradeable = upgradeable;
-    result.payable = payable;
-    result.readable = readable;
-
-    return result;
+    console.log(source);
+    return new MultisigDeployContractFromSource(
+      amountParam,
+      new Address(source),
+      upgradeable,
+      payable,
+      readable,
+    );
   };
 
   const refreshProposal = () => {
@@ -98,13 +85,22 @@ const ProposeDeployContract = ({
 
   React.useEffect(() => {
     refreshProposal();
-  }, [name, amount, code, upgradeable, payable, readable]);
+  }, [amount, source, upgradeable, payable, readable]);
 
-  const codeError = touched.code && errors.code;
+  const sourceError = touched.source && errors.source;
+
   const amountError = touched.amount && errors.amount;
 
   return (
     <div>
+      <FormikInputField
+        label={t("Source")}
+        name={"source"}
+        value={source}
+        error={sourceError}
+        handleChange={formik.handleChange}
+        handleBlur={formik.handleBlur}
+      />
       <FormikInputField
         label={t("Amount")}
         name={"amount"}
@@ -113,16 +109,6 @@ const ProposeDeployContract = ({
         handleChange={formik.handleChange}
         handleBlur={formik.handleBlur}
       />
-      <FormikInputField
-        label={t("Code")}
-        name={"code"}
-        value={code}
-        as={"textarea"}
-        error={codeError}
-        handleChange={formik.handleChange}
-        handleBlur={formik.handleBlur}
-      />
-
       <FormikCheckbox
         label={t("Upgradeable")}
         name={"upgradeable"}
@@ -145,4 +131,4 @@ const ProposeDeployContract = ({
   );
 };
 
-export default ProposeDeployContract;
+export default ProposeDeployContractFromSource;

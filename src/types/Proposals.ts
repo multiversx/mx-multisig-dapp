@@ -9,6 +9,10 @@ export enum ProposalsTypes {
   "smart_contract_call" = "smart_contract_call",
   "multiselect_proposal_options" = "multiselect_proposal_options",
   "deploy_contract" = "deploy_contract",
+  "deploy_contract_from_source" = "deploy_contract_from_source",
+  "upgrade_contract" = "upgrade_contract",
+  "upgrade_contract_from_source" = "upgrade_contract_from_source",
+
   "attach_contract" = "attach_contract",
 }
 

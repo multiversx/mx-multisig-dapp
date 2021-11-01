@@ -11,5 +11,11 @@ export const titles = {
   [ProposalsTypes.multiselect_proposal_options]: "select proposal type",
   [ProposalsTypes.smart_contract_call]: "smart contract call",
   [ProposalsTypes.deploy_contract]: "Deploy smart contract",
+  [ProposalsTypes.deploy_contract_from_source]:
+    "Deploy smart contract from source",
+  [ProposalsTypes.upgrade_contract]: "Upgrade smart contract",
+  [ProposalsTypes.upgrade_contract_from_source]:
+    "Upgrade smart contract from source",
+
   [ProposalsTypes.attach_contract]: "Attach contract",
 };

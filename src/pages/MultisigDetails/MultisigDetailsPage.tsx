@@ -451,7 +451,7 @@ const MultisigDetailsPage = () => {
                         title={action.title()}
                         tooltip={action.tooltip()}
                         value={action.description()}
-                        data={action.data()}
+                        data={action.getData()}
                         canSign={canSign(action)}
                         canUnsign={canUnsign(action)}
                         canPerformAction={canPerformAction(action)}

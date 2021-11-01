@@ -1,38 +1,38 @@
-import { BigUIntValue } from "@elrondnetwork/erdjs";
+import { BigUIntValue, Address } from "@elrondnetwork/erdjs";
 import i18next from "i18next";
 import denominate from "../components/Denominate/denominate";
 import { denomination } from "../config";
 import { MultisigAction } from "./MultisigAction";
 import { MultisigActionType } from "./MultisigActionType";
 
-export class MultisigDeployContract extends MultisigAction {
+export class MultisigDeployContractFromSource extends MultisigAction {
   amount: BigUIntValue;
-  code: string;
+  source: Address;
   upgradeable: boolean;
   payable: boolean;
   readable: boolean;
 
   constructor(
     amount: BigUIntValue,
-    code: string,
+    source: Address,
     upgradeable = false,
     payable = false,
     readable = false,
   ) {
-    super(MultisigActionType.SCDeploy);
+    super(MultisigActionType.SCDeployFromSource);
     this.amount = amount;
-    this.code = code;
+    this.source = source;
     this.upgradeable = upgradeable;
     this.payable = payable;
     this.readable = readable;
   }
 
-  getData() {
-    return this.code;
+  title() {
+    return i18next.t("Deploy Contract from source");
   }
 
-  title() {
-    return i18next.t("Deploy Contract");
+  getData() {
+    return `Deploy from ${this.source.bech32()}`;
   }
 
   description() {

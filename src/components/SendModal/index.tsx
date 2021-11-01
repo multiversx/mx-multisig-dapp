@@ -18,13 +18,6 @@ import {
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { priceSelector } from "redux/selectors/economicsSelector";
 
-interface FormValues {
-  receiver: string;
-  amount: number;
-  gasLimit: number;
-  data: string;
-}
-
 const SendModal = () => {
   const [showModal, setShowModal] = React.useState(false);
   const minGasLimitRef = React.useRef(gasLimit);
@@ -57,6 +50,7 @@ const SendModal = () => {
     },
     validationSchema,
     validateOnChange: true,
+    validateOnMount: true,
     onSubmit: handleSubmit,
   });
   const fee = operations.calculateFeeLimit({
@@ -76,7 +70,7 @@ const SendModal = () => {
     showLastNonZeroDecimal: true,
   });
 
-  async function handleSubmit(values: FormValues) {
+  async function handleSubmit() {
     return null;
   }
 

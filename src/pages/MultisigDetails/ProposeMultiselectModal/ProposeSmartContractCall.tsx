@@ -5,13 +5,13 @@ import {
   BytesValue,
 } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import { useFormik } from "formik";
-import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { TestContext } from "yup";
 import denominate from "components/Denominate/denominate";
 import { denomination } from "config";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
+import { FormikInputField } from "helpers/formikFields";
 import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
 
 interface ProposeSmartContractCallType {
@@ -62,6 +62,7 @@ const ProposeSmartContractCall = ({
     },
     validationSchema,
     validateOnChange: true,
+    validateOnMount: true,
   });
 
   React.useEffect(() => {
@@ -168,72 +169,40 @@ const ProposeSmartContractCall = ({
     return true;
   }
 
-  const { touched, errors } = formik;
+  const { touched, errors, values } = formik;
+  const { receiver, amount, data } = values;
 
   const receiverError = touched.receiver && errors.receiver;
   const amountError = touched.amount && errors.amount;
   const dataError = touched.data && errors.data;
-  console.log(dataError);
 
   return (
     <div>
-      <div className="modal-control-container">
-        <label>{t("Send to")} </label>
-        <div className="input-wrapper">
-          <Form.Control
-            id="receiver"
-            name="receiver"
-            type="text"
-            isInvalid={receiverError != null}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.receiver}
-          />
-          {receiverError != null && (
-            <Form.Control.Feedback type={"invalid"}>
-              {receiverError}
-            </Form.Control.Feedback>
-          )}
-        </div>
-      </div>
-      <div className="modal-control-container">
-        <label>{t("Amount")} </label>
-        <div className="input-wrapper">
-          <Form.Control
-            id="amount"
-            name="amount"
-            isInvalid={amountError != null}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.amount}
-          />
-
-          {amountError != null && (
-            <Form.Control.Feedback type={"invalid"}>
-              {amountError}
-            </Form.Control.Feedback>
-          )}
-        </div>
-        <span>{`Balance: ${denominatedValue} EGLD`} </span>
-      </div>
-      <div className="modal-control-container">
-        <label>{t("Data")} </label>
-        <div className="input-wrapper">
-          <Form.Control
-            id="data"
-            name="data"
-            type="data"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.data}
-          />
-          {dataError != null && (
-            <Form.Control.Feedback type={"invalid"}>
-              {dataError}
-            </Form.Control.Feedback>
-          )}
-        </div>
-      </div>
+      <FormikInputField
+        label={t("Send to")}
+        name={"receiver"}
+        value={receiver}
+        error={receiverError}
+        handleChange={formik.handleChange}
+        handleBlur={formik.handleBlur}
+      />
+      <FormikInputField
+        label={t("Amount")}
+        name={"amount"}
+        value={amount}
+        error={amountError}
+        handleChange={formik.handleChange}
+        handleBlur={formik.handleBlur}
+        footer={<span>{`Balance: ${denominatedValue} EGLD`} </span>}
+      />
+      <FormikInputField
+        label={t("Data")}
+        name={"data"}
+        value={data}
+        error={dataError}
+        handleChange={formik.handleChange}
+        handleBlur={formik.handleBlur}
+      />
     </div>
   );
 };

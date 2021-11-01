@@ -22,6 +22,10 @@ export class MultisigSendEgld extends MultisigAction {
     this.data = data;
   }
 
+  getData() {
+    return this.data;
+  }
+
   title() {
     return i18next.t("Transfer EGLD");
   }

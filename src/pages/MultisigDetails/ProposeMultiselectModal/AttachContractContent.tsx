@@ -8,9 +8,9 @@ import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { getAccountData } from "apiCalls/accountCalls";
 import getProviderType from "components/SignTransactions/helpers/getProviderType";
 import { buildBlockchainTransaction } from "contracts/transactionUtils";
+import { validateContractAddressOwner } from "helpers/validation";
 import useSendTransactions from "hooks/useSendTransactions";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
 import { setProposeMultiselectSelectedOption } from "redux/slices/modalsSlice";
@@ -25,7 +25,6 @@ const AttachContractContent = ({ handleClose }: AttachContractContentProps) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const {
-    address,
     dapp: { provider },
   } = useDappContext();
   const sendTransactionsToBeSigned = useSendTransactions();
@@ -35,7 +34,7 @@ const AttachContractContent = ({ handleClose }: AttachContractContentProps) => {
   const validationSchema = Yup.object().shape({
     contractAddress: Yup.string()
       .required("Required")
-      .test(validateContractAddress),
+      .test(validateContractAddressOwner(currentMultisigAddress)),
   });
 
   const formik = useFormik({
@@ -61,45 +60,8 @@ const AttachContractContent = ({ handleClose }: AttachContractContentProps) => {
     },
     validationSchema,
     validateOnChange: true,
+    validateOnMount: true,
   });
-
-  async function validateContractAddress(
-    value?: string,
-    testContext?: Yup.TestContext,
-  ) {
-    try {
-      const contractAddress = new Address(value);
-      if (value == null) {
-        return true;
-      }
-      const isContract = contractAddress.isContractAddress();
-      if (!isContract) {
-        return (
-          testContext?.createError({
-            message: "Entered address does not belong to a contract",
-          }) ?? false
-        );
-      }
-      const contractInfo = await getAccountData(value);
-      const isCurrentUserOwner = new Address(contractInfo.ownerAddress).equals(
-        new Address(address),
-      );
-      if (!isCurrentUserOwner) {
-        return (
-          testContext?.createError({
-            message: "This contract does not belong to the current user",
-          }) ?? false
-        );
-      }
-      return true;
-    } catch (err) {
-      return (
-        testContext?.createError({
-          message: "Invalid address",
-        }) ?? false
-      );
-    }
-  }
 
   const { touched, errors } = formik;
 

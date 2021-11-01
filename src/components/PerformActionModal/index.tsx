@@ -20,6 +20,9 @@ const gasLimits = {
   [MultisigActionType.SendEgld]: 60_000_0005,
   [MultisigActionType.ChangeQuorum]: 60_000_006,
   [MultisigActionType.SCCall]: 120_000_007,
+  [MultisigActionType.SCDeployFromSource]: 80_000_000,
+  [MultisigActionType.SCUpgrade]: 80_000_000,
+  [MultisigActionType.SCUpgradeFromSource]: 80_000_000,
 };
 
 interface PerformActionModalPropsType {

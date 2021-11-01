@@ -182,6 +182,82 @@ export function useMultisigContract() {
     );
   }
 
+  function mutateDeployContractFromSource(
+    amount: BigUIntValue,
+    source: Address,
+    upgradeable: boolean,
+    payable: boolean,
+    readable: boolean,
+    ...args: BytesValue[]
+  ) {
+    const allArgs = [
+      amount,
+      new AddressValue(source),
+      BytesValue.fromHex(upgradeable ? "01" : "00"),
+      BytesValue.fromHex(payable ? "01" : "00"),
+      BytesValue.fromHex(readable ? "01" : "00"),
+    ];
+
+    const finalArgs = allArgs.concat(args);
+    return sendTransaction(
+      multisigContractFunctionNames.proposeSCDeployFromSource,
+      proposeDeployGasLimit,
+      ...finalArgs,
+    );
+  }
+
+  function mutateUpgradeContract(
+    address: Address,
+    amount: BigUIntValue,
+    code: string,
+    upgradeable: boolean,
+    payable: boolean,
+    readable: boolean,
+    ...args: BytesValue[]
+  ) {
+    const allArgs = [
+      new AddressValue(address),
+      amount,
+      BytesValue.fromHex(code),
+      BytesValue.fromHex(upgradeable ? "01" : "00"),
+      BytesValue.fromHex(payable ? "01" : "00"),
+      BytesValue.fromHex(readable ? "01" : "00"),
+    ];
+
+    const finalArgs = allArgs.concat(args);
+    return sendTransaction(
+      multisigContractFunctionNames.proposeSCDeployFromSource,
+      proposeDeployGasLimit,
+      ...finalArgs,
+    );
+  }
+
+  function mutateUpgradeContractFromSource(
+    address: Address,
+    amount: BigUIntValue,
+    source: Address,
+    upgradeable: boolean,
+    payable: boolean,
+    readable: boolean,
+    ...args: BytesValue[]
+  ) {
+    const allArgs = [
+      new AddressValue(address),
+      amount,
+      new AddressValue(address),
+      BytesValue.fromHex(upgradeable ? "01" : "00"),
+      BytesValue.fromHex(payable ? "01" : "00"),
+      BytesValue.fromHex(readable ? "01" : "00"),
+    ];
+
+    const finalArgs = allArgs.concat(args);
+    return sendTransaction(
+      multisigContractFunctionNames.proposeSCDeployFromSource,
+      proposeDeployGasLimit,
+      ...finalArgs,
+    );
+  }
+
   function mutateEsdtSendToken(proposal: MultisigSendToken) {
     mutateSmartContractCall(
       proposal.address,
@@ -403,6 +479,9 @@ export function useMultisigContract() {
     mutateSmartContractCall,
     mutateSendEgld,
     mutateDeployContract,
+    mutateDeployContractFromSource,
+    mutateUpgradeContract,
+    mutateUpgradeContractFromSource,
     mutateProposeRemoveUser,
     mutateProposeAddBoardMember,
     mutateProposeAddProposer,

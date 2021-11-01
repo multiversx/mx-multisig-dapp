@@ -1,17 +1,21 @@
 import React, { useEffect } from "react";
-import { Balance } from "@elrondnetwork/erdjs/out";
 import {
   BigUIntValue,
   BytesValue,
-} from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+  Address,
+  Balance,
+} from "@elrondnetwork/erdjs";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { FormikCheckbox, FormikInputField } from "helpers/formikFields";
-import { MultisigDeployContract } from "types/MultisigDeployContract";
+import { validateContractAddressOwner } from "helpers/validation";
+import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
+import { MultisigUpgradeContract } from "types/MultisigUpgradeContract";
 
 interface ProposeDeployContractType {
-  handleChange: (proposal: MultisigDeployContract) => void;
+  handleChange: (proposal: MultisigUpgradeContract) => void;
   setSubmitDisabled: (value: boolean) => void;
 }
 
@@ -20,8 +24,12 @@ const ProposeDeployContract = ({
   setSubmitDisabled,
 }: ProposeDeployContractType) => {
   const { t } = useTranslation();
+  const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
 
   const validationSchema = Yup.object().shape({
+    address: Yup.string()
+      .required("Required")
+      .test(validateContractAddressOwner(currentMultisigAddress)),
     amount: Yup.string().required("Required").test(validateAmount),
     code: Yup.string().required("Required").test(validateCode),
     upgradeable: Yup.boolean(),
@@ -31,6 +39,7 @@ const ProposeDeployContract = ({
 
   const formik = useFormik({
     initialValues: {
+      address: "",
       amount: 0,
       code: "",
       upgradeable: false,
@@ -46,11 +55,7 @@ const ProposeDeployContract = ({
   });
   const { touched, errors, values } = formik;
 
-  const { amount, code, upgradeable, payable, readable } = values;
-
-  useEffect(() => {
-    setSubmitDisabled(true);
-  }, []);
+  const { address, amount, code, upgradeable, payable, readable } = values;
 
   useEffect(() => {
     const hasErrors = Object.keys(errors).length > 0;
@@ -74,19 +79,21 @@ const ProposeDeployContract = ({
     }
   }
 
-  const getProposal = (): MultisigDeployContract | null => {
+  const getProposal = (): MultisigUpgradeContract | null => {
     const amountNumeric = Number(amount);
     if (isNaN(amountNumeric)) {
       return null;
     }
 
     const amountParam = new BigUIntValue(Balance.egld(amountNumeric).valueOf());
-    const result = new MultisigDeployContract(amountParam, code);
-    result.upgradeable = upgradeable;
-    result.payable = payable;
-    result.readable = readable;
-
-    return result;
+    return new MultisigUpgradeContract(
+      new Address(address),
+      amountParam,
+      code,
+      upgradeable,
+      payable,
+      readable,
+    );
   };
 
   const refreshProposal = () => {
@@ -102,9 +109,18 @@ const ProposeDeployContract = ({
 
   const codeError = touched.code && errors.code;
   const amountError = touched.amount && errors.amount;
+  const addressError = touched.address && errors.address;
 
   return (
     <div>
+      <FormikInputField
+        label={t("Address")}
+        name={"address"}
+        value={address}
+        error={addressError}
+        handleChange={formik.handleChange}
+        handleBlur={formik.handleBlur}
+      />
       <FormikInputField
         label={t("Amount")}
         name={"amount"}

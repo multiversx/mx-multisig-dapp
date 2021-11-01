@@ -38,7 +38,6 @@ export function buildTransaction(
     .setFunction(func)
     .setArgs(args)
     .build();
-
   const transactionPayload: TransactionPayloadType = {
     chainID: new ChainID(chainID),
     receiver: contract.getAddress(),

@@ -9,6 +9,7 @@ import { TestContext } from "yup";
 import denominate from "components/Denominate/denominate";
 import { denomination } from "config";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
+import { FormikInputField } from "helpers/formikFields";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
 
 interface ProposeSendEgldType {
@@ -63,6 +64,7 @@ const ProposeSendEgld = ({
     },
     validationSchema,
     validateOnChange: true,
+    validateOnMount: true,
   });
 
   React.useEffect(() => {
@@ -142,32 +144,22 @@ const ProposeSendEgld = ({
     return true;
   }
 
-  const { touched, errors } = formik;
+  const { touched, errors, values } = formik;
+  const { amount, receiver } = values;
 
   const receiverError = touched.receiver && errors.receiver;
   const amountError = touched.amount && errors.amount;
 
   return (
     <div>
-      <div className="modal-control-container">
-        <label>{t("Send to")} </label>
-        <div className="input-wrapper">
-          <Form.Control
-            id="receiver"
-            name="receiver"
-            type="text"
-            isInvalid={receiverError != null}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.receiver}
-          />
-          {receiverError != null && (
-            <Form.Control.Feedback type={"invalid"}>
-              {receiverError}
-            </Form.Control.Feedback>
-          )}
-        </div>
-      </div>
+      <FormikInputField
+        label={t("Send to")}
+        name={"receiver"}
+        value={receiver}
+        error={receiverError}
+        handleChange={formik.handleChange}
+        handleBlur={formik.handleBlur}
+      />
       <div className="modal-control-container">
         <label>{t("Amount")} </label>
         <div className="input-wrapper">
@@ -177,7 +169,7 @@ const ProposeSendEgld = ({
             isInvalid={amountError != null}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.amount}
+            value={amount}
           />
 
           {amountError != null && (

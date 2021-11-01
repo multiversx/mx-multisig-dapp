@@ -3,10 +3,13 @@ import { MultisigActionType } from "./MultisigActionType";
 export abstract class MultisigAction {
   type: MultisigActionType = MultisigActionType.Nothing;
   data?: string;
-  code?: string;
 
   constructor(type: MultisigActionType) {
     this.type = type;
+  }
+
+  getData(): any {
+    return null;
   }
 
   abstract title(): any;
