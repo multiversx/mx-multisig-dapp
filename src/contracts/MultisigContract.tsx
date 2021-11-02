@@ -23,6 +23,7 @@ import {
 import BigNumber from "bignumber.js";
 import { useSelector } from "react-redux";
 import { gasLimit } from "config";
+import { issueTokenContractAddress } from "helpers/constants";
 import { parseAction, parseActionDetailed } from "helpers/converters";
 import useSendTransactions from "hooks/useSendTransactions";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
@@ -261,9 +262,7 @@ export function useMultisigContract() {
   }
 
   function mutateEsdtIssueToken(proposal: MultisigIssueToken) {
-    const esdtAddress = new Address(
-      "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u",
-    );
+    const esdtAddress = new Address(issueTokenContractAddress);
     const esdtAmount = new BigUIntValue(Balance.egld(5).valueOf());
 
     const args = [];
