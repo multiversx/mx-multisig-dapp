@@ -17,7 +17,6 @@ import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
 import { MultisigSendToken } from "types/MultisigSendToken";
 
-import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
 import { MultisigUpgradeContract } from "types/MultisigUpgradeContract";
 import { MultisigUpgradeContractFromSource } from "types/MultisigUpgradeContractFromSource";
 import { ProposalsTypes, SelectedOptionType } from "types/Proposals";
@@ -28,7 +27,6 @@ import ProposeDeployContractFromSource from "./ProposeDeployContractFromSource";
 import ProposeIssueToken from "./ProposeIssueToken";
 import ProposeSendEgld from "./ProposeSendEgld";
 import ProposeSendToken from "./ProposeSendToken";
-import ProposeSmartContractCall from "./ProposeSmartContractCall";
 
 import ProposeUpgradeContract from "./ProposeUpgradeContract";
 import ProposeUpgradeContractFromSource from "./ProposeUpgradeContractFromSource";
@@ -44,7 +42,6 @@ const ProposeMultiselectModal = ({
   selectedOption,
 }: ProposeMultiselectModalPropsType) => {
   const {
-    mutateSmartContractCall,
     mutateSendEgld,
     mutateDeployContract,
     mutateDeployContractFromSource,
@@ -71,13 +68,6 @@ const ProposeMultiselectModal = ({
         mutateEsdtIssueToken(selectedProposal as MultisigIssueToken);
       } else if (selectedProposal instanceof MultisigSendToken) {
         mutateEsdtSendToken(selectedProposal as MultisigSendToken);
-      } else if (selectedProposal instanceof MultisigSmartContractCall) {
-        mutateSmartContractCall(
-          selectedProposal.address,
-          selectedProposal.amount,
-          selectedProposal.endpointName,
-          selectedProposal.args,
-        );
       } else if (selectedProposal instanceof MultisigDeployContract) {
         mutateDeployContract(
           selectedProposal.amount,
@@ -142,13 +132,6 @@ const ProposeMultiselectModal = ({
         return <ProposeIssueToken handleChange={handleProposalChange} />;
       case ProposalsTypes.send_token:
         return <ProposeSendToken handleChange={handleProposalChange} />;
-      case ProposalsTypes.smart_contract_call:
-        return (
-          <ProposeSmartContractCall
-            setSubmitDisabled={setSubmitDisabled}
-            handleChange={handleProposalChange}
-          />
-        );
       case ProposalsTypes.deploy_contract:
         return (
           <ProposeDeployContract

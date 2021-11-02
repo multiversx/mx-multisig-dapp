@@ -19,7 +19,6 @@ import { MultisigDeployContract } from "types/MultisigDeployContract";
 import { MultisigDeployContractFromSource } from "types/MultisigDeployContractFromSource";
 import { MultisigRemoveUser } from "types/MultisigRemoveUser";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
-import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
 import { MultisigUpgradeContract } from "types/MultisigUpgradeContract";
 import { MultisigUpgradeContractFromSource } from "types/MultisigUpgradeContractFromSource";
 import { PlainAddress } from "./plainObjects";
@@ -40,8 +39,6 @@ export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
       return parseChangeQuorum(remainingBytes);
     case MultisigActionType.SendEgld:
       return parseSendEgld(remainingBytes);
-    case MultisigActionType.SCCall:
-      return parseSmartContractCall(remainingBytes);
     case MultisigActionType.SCDeploy:
       return parseSmartContractDeploy(remainingBytes);
     case MultisigActionType.SCDeployFromSource:
@@ -123,38 +120,10 @@ function parseSendEgld(
 
   const data = dataBytes.toString();
 
-  const action = new MultisigSendEgld(targetAddress, amount, data);
-
-  return [action, remainingBytes];
-}
-
-function parseSmartContractCall(
-  remainingBytes: Buffer,
-): [MultisigAction | null, Buffer] {
-  const targetAddress = new Address(remainingBytes.slice(0, 32));
-  remainingBytes = remainingBytes.slice(32);
-
-  const amountSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
-  remainingBytes = remainingBytes.slice(4);
-
-  const amountBytes = remainingBytes.slice(0, amountSize);
-  remainingBytes = remainingBytes.slice(amountSize);
-
-  const codec = new NumericalBinaryCodec();
-  const amount = codec.decodeTopLevel(amountBytes, new BigUIntType());
-
-  const endpointNameSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
-  remainingBytes = remainingBytes.slice(4);
-
-  const endpointNameBytes = remainingBytes.slice(0, endpointNameSize);
-  remainingBytes = remainingBytes.slice(endpointNameSize);
-
-  const endpointName = endpointNameBytes.toString();
-
   const argsSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
 
-  const args = [];
+  const args: BytesValue[] = [];
   for (let i = 0; i < argsSize; i++) {
     const argSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
     remainingBytes = remainingBytes.slice(4);
@@ -165,12 +134,7 @@ function parseSmartContractCall(
     args.push(new BytesValue(argBytes));
   }
 
-  const action = new MultisigSmartContractCall(
-    targetAddress,
-    amount,
-    endpointName,
-    args,
-  );
+  const action = new MultisigSendEgld(targetAddress, amount, data, args);
 
   return [action, remainingBytes];
 }

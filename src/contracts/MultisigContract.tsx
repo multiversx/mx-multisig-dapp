@@ -153,7 +153,7 @@ export function useMultisigContract() {
     allArgs.push(...args);
 
     return sendTransaction(
-      multisigContractFunctionNames.proposeSCCall,
+      multisigContractFunctionNames.proposeSendEgld,
       gasLimit,
       ...allArgs,
     );
@@ -219,7 +219,7 @@ export function useMultisigContract() {
 
     const finalArgs = allArgs.concat(args);
     return sendTransaction(
-      multisigContractFunctionNames.proposeSCDeployFromSource,
+      multisigContractFunctionNames.proposeSCUpgrade,
       proposeDeployGasLimit,
       ...finalArgs,
     );
@@ -245,7 +245,7 @@ export function useMultisigContract() {
 
     const finalArgs = allArgs.concat(args);
     return sendTransaction(
-      multisigContractFunctionNames.proposeSCDeployFromSource,
+      multisigContractFunctionNames.proposeSCUpgradeFromSource,
       proposeDeployGasLimit,
       ...finalArgs,
     );
@@ -307,7 +307,12 @@ export function useMultisigContract() {
       args.push(BytesValue.fromUTF8("true"));
     }
 
-    mutateSmartContractCall(esdtAddress, esdtAmount, "issue", args);
+    mutateSmartContractCall(
+      esdtAddress,
+      esdtAmount,
+      multisigContractFunctionNames.issue,
+      args,
+    );
   }
 
   function queryAllActions(): Promise<MultisigActionDetailed[]> {

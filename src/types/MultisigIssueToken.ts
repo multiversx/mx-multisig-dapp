@@ -21,7 +21,7 @@ export class MultisigIssueToken extends MultisigAction {
     amount: number,
     decimals: number,
   ) {
-    super(MultisigActionType.SCCall);
+    super(MultisigActionType.SendEgld);
     this.name = name;
     this.identifier = identifier;
     this.amount = amount;
