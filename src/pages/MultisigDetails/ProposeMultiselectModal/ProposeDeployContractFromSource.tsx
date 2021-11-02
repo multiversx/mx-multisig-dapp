@@ -66,7 +66,6 @@ const ProposeDeployContractFromSource = ({
     }
 
     const amountParam = new BigUIntValue(Balance.egld(amountNumeric).valueOf());
-    console.log(source);
     return new MultisigDeployContractFromSource(
       amountParam,
       new Address(source),

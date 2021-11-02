@@ -26,7 +26,7 @@ import { smartContractCode } from "../helpers/constants";
 import { multisigContractFunctionNames } from "../types/multisigFunctionNames";
 import { buildTransaction } from "./transactionUtils";
 
-export const deployContractGasLimit = 120000000;
+export const deployContractGasLimit = 200_000_000;
 
 export function useManagerContract() {
   const { address, account, dapp } = useDappContext();

@@ -7,6 +7,7 @@ import {
   BinaryCodec,
 } from "@elrondnetwork/erdjs";
 
+import { CodeMetadata } from "@elrondnetwork/erdjs/out";
 import { NumericalBinaryCodec } from "@elrondnetwork/erdjs/out/smartcontracts/codec/numerical";
 import { Query } from "@elrondnetwork/erdjs/out/smartcontracts/query";
 import {
@@ -166,13 +167,9 @@ export function useMultisigContract() {
     readable: boolean,
     ...args: BytesValue[]
   ) {
-    const allArgs = [
-      amount,
-      BytesValue.fromHex(code),
-      BytesValue.fromHex(upgradeable ? "01" : "00"),
-      BytesValue.fromHex(payable ? "01" : "00"),
-      BytesValue.fromHex(readable ? "01" : "00"),
-    ];
+    const metadata = new CodeMetadata(upgradeable, payable, readable);
+    const contractMetadata = new BytesValue(metadata.toBuffer());
+    const allArgs = [amount, BytesValue.fromHex(code), contractMetadata];
 
     const finalArgs = allArgs.concat(args);
     return sendTransaction(
@@ -190,13 +187,9 @@ export function useMultisigContract() {
     readable: boolean,
     ...args: BytesValue[]
   ) {
-    const allArgs = [
-      amount,
-      new AddressValue(source),
-      BytesValue.fromHex(upgradeable ? "01" : "00"),
-      BytesValue.fromHex(payable ? "01" : "00"),
-      BytesValue.fromHex(readable ? "01" : "00"),
-    ];
+    const metadata = new CodeMetadata(upgradeable, payable, readable);
+    const contractMetadata = new BytesValue(metadata.toBuffer());
+    const allArgs = [amount, new AddressValue(source), contractMetadata];
 
     const finalArgs = allArgs.concat(args);
     return sendTransaction(
@@ -215,13 +208,13 @@ export function useMultisigContract() {
     readable: boolean,
     ...args: BytesValue[]
   ) {
+    const metadata = new CodeMetadata(upgradeable, payable, readable);
+    const contractMetadata = new BytesValue(metadata.toBuffer());
     const allArgs = [
       new AddressValue(address),
       amount,
       BytesValue.fromHex(code),
-      BytesValue.fromHex(upgradeable ? "01" : "00"),
-      BytesValue.fromHex(payable ? "01" : "00"),
-      BytesValue.fromHex(readable ? "01" : "00"),
+      contractMetadata,
     ];
 
     const finalArgs = allArgs.concat(args);
@@ -241,13 +234,13 @@ export function useMultisigContract() {
     readable: boolean,
     ...args: BytesValue[]
   ) {
+    const metadata = new CodeMetadata(upgradeable, payable, readable);
+    const contractMetadata = new BytesValue(metadata.toBuffer());
     const allArgs = [
       new AddressValue(address),
       amount,
       new AddressValue(address),
-      BytesValue.fromHex(upgradeable ? "01" : "00"),
-      BytesValue.fromHex(payable ? "01" : "00"),
-      BytesValue.fromHex(readable ? "01" : "00"),
+      contractMetadata,
     ];
 
     const finalArgs = allArgs.concat(args);

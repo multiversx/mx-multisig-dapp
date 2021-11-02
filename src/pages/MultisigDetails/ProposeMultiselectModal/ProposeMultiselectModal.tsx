@@ -60,7 +60,6 @@ const ProposeMultiselectModal = ({
   const [submitDisabled, setSubmitDisabled] = React.useState(false);
 
   const onProposeClicked = () => {
-    console.log(selectedProposal);
     try {
       if (selectedProposal instanceof MultisigSendEgld) {
         mutateSendEgld(

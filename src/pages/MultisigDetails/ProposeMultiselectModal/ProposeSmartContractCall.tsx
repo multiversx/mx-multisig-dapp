@@ -101,7 +101,6 @@ const ProposeSmartContractCall = ({
         throw error;
       }
     } catch (err) {
-      console.log("caught");
       setSubmitDisabled(true);
       console.error(err);
       return null;
