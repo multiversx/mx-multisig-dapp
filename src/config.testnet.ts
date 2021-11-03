@@ -9,18 +9,11 @@ export const gasPriceModifier = "0.01";
 export const gasPerDataByte = "1500";
 export const chainID = "T";
 export const gasLimit = 60000000;
-
-export const maxGasLimit = 1500000000;
+export const maxGasLimit = 1499999999;
 
 export const walletConnectBridge = "https://bridge.walletconnect.org";
 export const walletConnectDeepLink =
   "https://maiar.page.link/?apn=com.elrond.maiar.wallet&isi=1519405832&ibi=com.elrond.maiar.wallet.dev&link=https://maiar.com/";
-
-export const contractAddress =
-  "erd1qqqqqqqqqqqqqpgqp699jngundfqw07d8jzkepucvpzush6k3wvqyc44rx";
-
-export const multisigManagerContract =
-  "erd1qqqqqqqqqqqqqpgqev0zge8f4yhaxartkk0jdpnqzq3j97knermshpz6k7";
 
 export const network: NetworkType = {
   id: "testnet",
@@ -31,10 +24,6 @@ export const network: NetworkType = {
   gatewayAddress: "https://testnet-gateway.elrond.com",
   explorerAddress: "http://testnet-explorer.elrond.com/",
 };
-
-export const verifiedContractsHashes = [
-  "jzvVnfYqwzgh8J6ea0HxUJ0v0FfPY9GgCHBndGypH1A=",
-];
 
 const networkSchema = object({
   id: string().defined().required(),

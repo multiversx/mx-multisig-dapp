@@ -17,16 +17,16 @@ import {
 import { Code } from "@elrondnetwork/erdjs/out/smartcontracts/code";
 import { Query } from "@elrondnetwork/erdjs/out/smartcontracts/query";
 
+import { gasLimit } from "config";
+import { multisigManagerContract, smartContractCode } from "helpers/constants";
 import { parseContractInfo } from "helpers/converters";
 import useSendTransactions from "hooks/useSendTransactions";
 import { MultisigContractInfoType } from "types/multisigContracts";
+import { multisigContractFunctionNames } from "types/multisigFunctionNames";
 import getProviderType from "../components/SignTransactions/helpers/getProviderType";
-import { gasLimit, multisigManagerContract } from "../config";
-import { smartContractCode } from "../helpers/constants";
-import { multisigContractFunctionNames } from "../types/multisigFunctionNames";
 import { buildTransaction } from "./transactionUtils";
 
-export const deployContractGasLimit = 200_000_000;
+export const deployContractGasLimit = 150_000_000;
 
 export function useManagerContract() {
   const { address, account, dapp } = useDappContext();

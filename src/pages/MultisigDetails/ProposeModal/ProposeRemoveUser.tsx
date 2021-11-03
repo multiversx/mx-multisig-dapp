@@ -1,7 +1,6 @@
 import React from "react";
 import { Address } from "@elrondnetwork/erdjs";
 import { useTranslation } from "react-i18next";
-import CopyButton from "components/CopyButton";
 import { SelectedOptionType } from "types/Proposals";
 
 interface ProposeRemoveUserType {

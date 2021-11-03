@@ -1,5 +1,6 @@
 import axios from "axios";
-import { network, verifiedContractsHashes } from "../config";
+import { network } from "config";
+import { verifiedContractsHashes } from "helpers/constants";
 
 export async function getIsContractTrusted(address: string) {
   try {
