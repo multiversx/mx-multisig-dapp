@@ -195,7 +195,7 @@ export function useMultisigContract() {
     const finalArgs = allArgs.concat(args);
     return sendTransaction(
       multisigContractFunctionNames.proposeSCDeployFromSource,
-      proposeDeployGasLimit,
+      gasLimit,
       ...finalArgs,
     );
   }

@@ -29,7 +29,7 @@ const ProposeDeployContractFromSource = ({
 
   const formik = useFormik({
     initialValues: {
-      amount: 0,
+      amount: "0",
       source: "",
       upgradeable: false,
       payable: false,
