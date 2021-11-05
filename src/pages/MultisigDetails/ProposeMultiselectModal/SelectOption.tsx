@@ -18,10 +18,6 @@ const proposeAvailableOptions = [
     type: ProposalsTypes.issue_token,
     label: "Issue token",
   },
-  {
-    type: ProposalsTypes.smart_contract_call,
-    label: "Smart contract call",
-  },
 
   {
     type: ProposalsTypes.deploy_contract_from_source,

@@ -173,7 +173,7 @@ function parseSmartContractDeployFromSource(
     upgradeable,
     payable,
     readable,
-    args[0],
+    args,
   );
 
   return [action, remainingBytes];
@@ -222,7 +222,7 @@ function parseSmartContractUpgradeFromSource(
     upgradeable,
     payable,
     readable,
-    args[0],
+    args,
   );
 
   return [action, remainingBytes];

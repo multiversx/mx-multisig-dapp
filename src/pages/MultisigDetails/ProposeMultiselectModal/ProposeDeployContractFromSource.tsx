@@ -71,13 +71,18 @@ const ProposeDeployContractFromSource = ({
     }
 
     const amountParam = new BigUIntValue(Balance.egld(amountNumeric).valueOf());
+    let argsArguments: BytesValue[] = [];
+    try {
+      argsArguments = args.split("@").map((arg) => BytesValue.fromHex(arg));
+    } catch (err) {}
+
     return new MultisigDeployContractFromSource(
       amountParam,
       new Address(source),
       upgradeable,
       payable,
       readable,
-      BytesValue.fromUTF8(args),
+      argsArguments,
     );
   };
 

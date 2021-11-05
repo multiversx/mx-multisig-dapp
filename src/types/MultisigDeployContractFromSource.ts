@@ -12,7 +12,7 @@ export class MultisigDeployContractFromSource extends MultisigAction {
   upgradeable: boolean;
   payable: boolean;
   readable: boolean;
-  args: BytesValue;
+  args: BytesValue[];
 
   constructor(
     amount: BigUIntValue,
@@ -20,7 +20,7 @@ export class MultisigDeployContractFromSource extends MultisigAction {
     upgradeable = false,
     payable = false,
     readable = false,
-    args = BytesValue.fromUTF8(""),
+    args: BytesValue[] = [],
   ) {
     super(MultisigActionType.SCDeployFromSource);
     this.amount = amount;
@@ -36,9 +36,13 @@ export class MultisigDeployContractFromSource extends MultisigAction {
   }
 
   getData() {
-    const args = this.args.valueOf().toString();
+    const hasArgs =
+      this.args.length > 1 && this.args[0].valueOf().toString().length > 0;
     return `Deploy from ${this.source.bech32()}  ${
-      args.length > 0 ? "/ arguments: " + args : ""
+      hasArgs
+        ? "/ arguments: " +
+          this.args.map((arg) => arg.valueOf().toString("hex"))
+        : ""
     }`;
   }
 

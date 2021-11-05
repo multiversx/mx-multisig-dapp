@@ -14,7 +14,7 @@ export class MultisigUpgradeContractFromSource extends MultisigAction {
   upgradeable: boolean;
   payable: boolean;
   readable: boolean;
-  args: BytesValue;
+  args: BytesValue[];
 
   constructor(
     address: Address,
@@ -23,7 +23,7 @@ export class MultisigUpgradeContractFromSource extends MultisigAction {
     upgradeable = false,
     payable = false,
     readable = false,
-    args = BytesValue.fromUTF8(""),
+    args: BytesValue[] = [],
   ) {
     super(MultisigActionType.SCUpgradeFromSource);
     this.address = address;
@@ -36,11 +36,12 @@ export class MultisigUpgradeContractFromSource extends MultisigAction {
   }
 
   title() {
-    const args = this.args.valueOf().toString();
+    const hasArgs =
+      this.args.length > 1 && this.args[0].valueOf().toString().length > 0;
     return `${i18next.t("Upgrade Contract")} ${
       this.address
     } from ${this.source.bech32()} ${
-      args.length > 0 ? "arguments: " + args : ""
+      hasArgs ? this.args.map((arg) => arg.valueOf().toString("hex")) : ""
     }`;
   }
 

@@ -186,7 +186,7 @@ export function useMultisigContract() {
     upgradeable: boolean,
     payable: boolean,
     readable: boolean,
-    ...args: BytesValue[]
+    args: BytesValue[],
   ) {
     const metadata = new CodeMetadata(upgradeable, payable, readable);
     const contractMetadata = new BytesValue(metadata.toBuffer());
@@ -233,7 +233,7 @@ export function useMultisigContract() {
     upgradeable: boolean,
     payable: boolean,
     readable: boolean,
-    ...args: BytesValue[]
+    args: BytesValue[],
   ) {
     const metadata = new CodeMetadata(upgradeable, payable, readable);
     const contractMetadata = new BytesValue(metadata.toBuffer());

@@ -78,6 +78,10 @@ const ProposeDeployContract = ({
     }
 
     const amountParam = new BigUIntValue(Balance.egld(amountNumeric).valueOf());
+    let argsArguments: BytesValue[] = [];
+    try {
+      argsArguments = args.split("@").map((arg) => BytesValue.fromHex(arg));
+    } catch (err) {}
     return new MultisigUpgradeContractFromSource(
       new Address(address),
       amountParam,
@@ -85,7 +89,7 @@ const ProposeDeployContract = ({
       upgradeable,
       payable,
       readable,
-      BytesValue.fromUTF8(args),
+      argsArguments,
     );
   };
 
