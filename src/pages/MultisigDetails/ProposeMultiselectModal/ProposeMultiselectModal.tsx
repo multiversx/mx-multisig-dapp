@@ -11,24 +11,20 @@ import { useDispatch } from "react-redux";
 import { useMultisigContract } from "contracts/MultisigContract";
 import { setProposeMultiselectSelectedOption } from "redux/slices/modalsSlice";
 import { MultisigAction } from "types/MultisigAction";
-import { MultisigDeployContract } from "types/MultisigDeployContract";
 import { MultisigDeployContractFromSource } from "types/MultisigDeployContractFromSource";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
 import { MultisigSendToken } from "types/MultisigSendToken";
 
-import { MultisigUpgradeContract } from "types/MultisigUpgradeContract";
 import { MultisigUpgradeContractFromSource } from "types/MultisigUpgradeContractFromSource";
 import { ProposalsTypes, SelectedOptionType } from "types/Proposals";
 import { titles } from "../constants";
 import AttachContractContent from "./AttachContractContent";
-import ProposeDeployContract from "./ProposeDeployContract";
 import ProposeDeployContractFromSource from "./ProposeDeployContractFromSource";
 import ProposeIssueToken from "./ProposeIssueToken";
 import ProposeSendEgld from "./ProposeSendEgld";
 import ProposeSendToken from "./ProposeSendToken";
 
-import ProposeUpgradeContract from "./ProposeUpgradeContract";
 import ProposeUpgradeContractFromSource from "./ProposeUpgradeContractFromSource";
 import SelectOption from "./SelectOption";
 
@@ -43,9 +39,7 @@ const ProposeMultiselectModal = ({
 }: ProposeMultiselectModalPropsType) => {
   const {
     mutateSendEgld,
-    mutateDeployContract,
     mutateDeployContractFromSource,
-    mutateUpgradeContract,
     mutateUpgradeContractFromSource,
     mutateEsdtIssueToken,
     mutateEsdtSendToken,
@@ -68,14 +62,6 @@ const ProposeMultiselectModal = ({
         mutateEsdtIssueToken(selectedProposal as MultisigIssueToken);
       } else if (selectedProposal instanceof MultisigSendToken) {
         mutateEsdtSendToken(selectedProposal as MultisigSendToken);
-      } else if (selectedProposal instanceof MultisigDeployContract) {
-        mutateDeployContract(
-          selectedProposal.amount,
-          selectedProposal.code,
-          selectedProposal.upgradeable,
-          selectedProposal.payable,
-          selectedProposal.readable,
-        );
       } else if (selectedProposal instanceof MultisigDeployContractFromSource) {
         mutateDeployContractFromSource(
           selectedProposal.amount,
@@ -83,15 +69,7 @@ const ProposeMultiselectModal = ({
           selectedProposal.upgradeable,
           selectedProposal.payable,
           selectedProposal.readable,
-        );
-      } else if (selectedProposal instanceof MultisigUpgradeContract) {
-        mutateUpgradeContract(
-          selectedProposal.address,
-          selectedProposal.amount,
-          selectedProposal.code,
-          selectedProposal.upgradeable,
-          selectedProposal.payable,
-          selectedProposal.readable,
+          selectedProposal.args,
         );
       } else if (
         selectedProposal instanceof MultisigUpgradeContractFromSource
@@ -103,6 +81,7 @@ const ProposeMultiselectModal = ({
           selectedProposal.upgradeable,
           selectedProposal.payable,
           selectedProposal.readable,
+          selectedProposal.args,
         );
       }
       handleClose();
@@ -132,23 +111,9 @@ const ProposeMultiselectModal = ({
         return <ProposeIssueToken handleChange={handleProposalChange} />;
       case ProposalsTypes.send_token:
         return <ProposeSendToken handleChange={handleProposalChange} />;
-      case ProposalsTypes.deploy_contract:
-        return (
-          <ProposeDeployContract
-            setSubmitDisabled={setSubmitDisabled}
-            handleChange={handleProposalChange}
-          />
-        );
       case ProposalsTypes.deploy_contract_from_source:
         return (
           <ProposeDeployContractFromSource
-            setSubmitDisabled={setSubmitDisabled}
-            handleChange={handleProposalChange}
-          />
-        );
-      case ProposalsTypes.upgrade_contract:
-        return (
-          <ProposeUpgradeContract
             setSubmitDisabled={setSubmitDisabled}
             handleChange={handleProposalChange}
           />

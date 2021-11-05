@@ -1,4 +1,5 @@
 import { BigUIntValue, Address } from "@elrondnetwork/erdjs";
+import { BytesValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import i18next from "i18next";
 import denominate from "../components/Denominate/denominate";
 import { denomination } from "../config";
@@ -11,6 +12,7 @@ export class MultisigDeployContractFromSource extends MultisigAction {
   upgradeable: boolean;
   payable: boolean;
   readable: boolean;
+  args: BytesValue;
 
   constructor(
     amount: BigUIntValue,
@@ -18,6 +20,7 @@ export class MultisigDeployContractFromSource extends MultisigAction {
     upgradeable = false,
     payable = false,
     readable = false,
+    args = BytesValue.fromUTF8(""),
   ) {
     super(MultisigActionType.SCDeployFromSource);
     this.amount = amount;
@@ -25,6 +28,7 @@ export class MultisigDeployContractFromSource extends MultisigAction {
     this.upgradeable = upgradeable;
     this.payable = payable;
     this.readable = readable;
+    this.args = args;
   }
 
   title() {
@@ -32,7 +36,10 @@ export class MultisigDeployContractFromSource extends MultisigAction {
   }
 
   getData() {
-    return `Deploy from ${this.source.bech32()}`;
+    const args = this.args.valueOf().toString();
+    return `Deploy from ${this.source.bech32()} ${
+      args.length > 0 ? "arguments: " + args : ""
+    }`;
   }
 
   description() {

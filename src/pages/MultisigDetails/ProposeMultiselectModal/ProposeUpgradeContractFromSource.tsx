@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import { Address, Balance } from "@elrondnetwork/erdjs/out";
-import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import {
+  BigUIntValue,
+  BytesValue,
+} from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
@@ -33,6 +36,7 @@ const ProposeDeployContract = ({
     upgradeable: Yup.boolean(),
     payable: Yup.boolean(),
     readable: Yup.boolean(),
+    args: Yup.string(),
   });
 
   const formik = useFormik({
@@ -40,6 +44,7 @@ const ProposeDeployContract = ({
       address: "",
       amount: "",
       source: "",
+      args: "",
       upgradeable: false,
       payable: false,
       readable: false,
@@ -53,7 +58,8 @@ const ProposeDeployContract = ({
   });
   const { touched, errors, values } = formik;
 
-  const { address, amount, source, upgradeable, payable, readable } = values;
+  const { address, amount, args, source, upgradeable, payable, readable } =
+    values;
 
   useEffect(() => {
     const hasErrors = Object.keys(errors).length > 0;
@@ -79,6 +85,7 @@ const ProposeDeployContract = ({
       upgradeable,
       payable,
       readable,
+      BytesValue.fromUTF8(args),
     );
   };
 
@@ -91,7 +98,7 @@ const ProposeDeployContract = ({
 
   React.useEffect(() => {
     refreshProposal();
-  }, [address, amount, source, upgradeable, payable, readable]);
+  }, [address, args, amount, source, upgradeable, payable, readable]);
 
   const addressError = touched.address && errors.address;
 
@@ -120,6 +127,13 @@ const ProposeDeployContract = ({
         name={"source"}
         value={source}
         error={sourceError}
+        handleChange={formik.handleChange}
+        handleBlur={formik.handleBlur}
+      />
+      <FormikInputField
+        label={t("Arguments")}
+        name={"args"}
+        value={args}
         handleChange={formik.handleChange}
         handleBlur={formik.handleBlur}
       />

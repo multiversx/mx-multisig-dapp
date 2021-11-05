@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import { Address, Balance } from "@elrondnetwork/erdjs/out";
-import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import {
+  BigUIntValue,
+  BytesValue,
+} from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
@@ -22,6 +25,7 @@ const ProposeDeployContractFromSource = ({
   const validationSchema = Yup.object().shape({
     amount: Yup.string().required("Required").test(validateAmount),
     source: Yup.string().required("required").test(validateAddressIsContract),
+    args: Yup.string(),
     upgradeable: Yup.boolean(),
     payable: Yup.boolean(),
     readable: Yup.boolean(),
@@ -31,6 +35,7 @@ const ProposeDeployContractFromSource = ({
     initialValues: {
       amount: "0",
       source: "",
+      args: "",
       upgradeable: false,
       payable: false,
       readable: false,
@@ -44,7 +49,7 @@ const ProposeDeployContractFromSource = ({
   });
   const { touched, errors, values } = formik;
 
-  const { amount, source, upgradeable, payable, readable } = values;
+  const { amount, source, args, upgradeable, payable, readable } = values;
 
   useEffect(() => {
     const hasErrors = Object.keys(errors).length > 0;
@@ -72,6 +77,7 @@ const ProposeDeployContractFromSource = ({
       upgradeable,
       payable,
       readable,
+      BytesValue.fromUTF8(args),
     );
   };
 
@@ -84,7 +90,7 @@ const ProposeDeployContractFromSource = ({
 
   React.useEffect(() => {
     refreshProposal();
-  }, [amount, source, upgradeable, payable, readable]);
+  }, [amount, source, args, upgradeable, payable, readable]);
 
   const sourceError = touched.source && errors.source;
 
@@ -105,6 +111,13 @@ const ProposeDeployContractFromSource = ({
         name={"amount"}
         value={amount}
         error={amountError}
+        handleChange={formik.handleChange}
+        handleBlur={formik.handleBlur}
+      />
+      <FormikInputField
+        label={t("Arguments")}
+        name={"args"}
+        value={args}
         handleChange={formik.handleChange}
         handleBlur={formik.handleBlur}
       />
