@@ -22,18 +22,12 @@ const proposeAvailableOptions = [
     type: ProposalsTypes.smart_contract_call,
     label: "Smart contract call",
   },
-  {
-    type: ProposalsTypes.deploy_contract,
-    label: "Deploy Contract",
-  },
+
   {
     type: ProposalsTypes.deploy_contract_from_source,
     label: "Deploy Contract from source",
   },
-  {
-    type: ProposalsTypes.upgrade_contract,
-    label: "Upgrade Contract",
-  },
+
   {
     type: ProposalsTypes.upgrade_contract_from_source,
     label: "Upgrade Contract from source",
