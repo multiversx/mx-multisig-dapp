@@ -37,8 +37,8 @@ export class MultisigDeployContractFromSource extends MultisigAction {
 
   getData() {
     const args = this.args.valueOf().toString();
-    return `Deploy from ${this.source.bech32()} ${
-      args.length > 0 ? "arguments: " + args : ""
+    return `Deploy from ${this.source.bech32()}  ${
+      args.length > 0 ? "/ arguments: " + args : ""
     }`;
   }
 
