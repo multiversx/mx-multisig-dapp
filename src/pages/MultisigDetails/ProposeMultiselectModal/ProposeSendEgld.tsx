@@ -69,7 +69,7 @@ const ProposeSendEgld = ({
 
   React.useEffect(() => {
     refreshProposal();
-  }, [formik.values]);
+  }, [formik.values, formik.errors]);
 
   useEffect(() => {
     const hasErrors = Object.keys(formik.errors).length > 0;

@@ -95,7 +95,7 @@ const ProposeDeployContractFromSource = ({
 
   React.useEffect(() => {
     refreshProposal();
-  }, [amount, source, args, upgradeable, payable, readable]);
+  }, [amount, source, args, upgradeable, payable, readable, errors]);
 
   const sourceError = touched.source && errors.source;
 

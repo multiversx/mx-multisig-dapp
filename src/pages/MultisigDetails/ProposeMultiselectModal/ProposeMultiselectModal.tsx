@@ -101,6 +101,7 @@ const ProposeMultiselectModal = ({
   const getContent = () => {
     switch (selectedOption?.option) {
       case ProposalsTypes.send_egld:
+      case ProposalsTypes.smart_contract_call:
         return (
           <ProposeSendEgld
             setSubmitDisabled={setSubmitDisabled}

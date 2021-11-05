@@ -73,6 +73,9 @@ const ProposeDeployContract = ({
 
   const getProposal = (): MultisigUpgradeContractFromSource | null => {
     const amountNumeric = Number(amount);
+    if (Object.keys(errors).length > 0) {
+      return null;
+    }
     if (isNaN(amountNumeric)) {
       return null;
     }
@@ -102,7 +105,7 @@ const ProposeDeployContract = ({
 
   React.useEffect(() => {
     refreshProposal();
-  }, [address, args, amount, source, upgradeable, payable, readable]);
+  }, [address, args, amount, source, upgradeable, payable, readable, errors]);
 
   const addressError = touched.address && errors.address;
 
