@@ -12,13 +12,13 @@ import {
 import { MultisigActionType } from "types/MultisigActionType";
 
 const gasLimits = {
-  [MultisigActionType.Nothing]: 60_000_000,
-  [MultisigActionType.AddBoardMember]: 60_000_001,
-  [MultisigActionType.AddProposer]: 60_000_002,
-  [MultisigActionType.RemoveUser]: 60_000_003,
-  [MultisigActionType.SCDeploy]: 80_000_000,
+  [MultisigActionType.Nothing]: 10_000_000,
+  [MultisigActionType.AddBoardMember]: 10_000_000,
+  [MultisigActionType.AddProposer]: 10_000_000,
+  [MultisigActionType.RemoveUser]: 10_000_000,
+  [MultisigActionType.ChangeQuorum]: 10_000_006,
   [MultisigActionType.SendEgld]: 60_000_005,
-  [MultisigActionType.ChangeQuorum]: 60_000_006,
+  [MultisigActionType.SCDeploy]: 60_000_000,
   [MultisigActionType.SCDeployFromSource]: 80_000_000,
   [MultisigActionType.SCUpgrade]: 80_000_000,
   [MultisigActionType.SCUpgradeFromSource]: 80_000_000,
