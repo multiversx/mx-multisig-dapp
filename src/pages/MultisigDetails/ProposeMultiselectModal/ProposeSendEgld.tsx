@@ -1,13 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import {
-  Address,
-  Balance,
-  BigUIntValue,
-  BytesValue,
-} from "@elrondnetwork/erdjs/out";
-import { faMinus } from "@fortawesome/free-solid-svg-icons";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Address, Balance, BigUIntValue } from "@elrondnetwork/erdjs/out";
 import { useFormik } from "formik";
 import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
@@ -58,7 +50,6 @@ const ProposeSendEgld = ({
       .transform((value) => value.replace(",", "."))
       .test(validateAmount),
     functionName: Yup.string(),
-    args: Yup.array().test(validateArgument),
   });
 
   const formik = useFormik({
@@ -66,7 +57,6 @@ const ProposeSendEgld = ({
       receiver: "",
       amount: 0,
       functionName: "",
-      args: [""],
     },
     onSubmit: () => {
       return;
@@ -77,7 +67,7 @@ const ProposeSendEgld = ({
   });
 
   const { touched, errors, values } = formik;
-  const { amount, receiver, functionName, args } = values;
+  const { amount, receiver, functionName } = values;
 
   useEffect(() => {
     refreshProposal();
@@ -87,18 +77,6 @@ const ProposeSendEgld = ({
     const hasErrors = Object.keys(formik.errors).length > 0;
     setSubmitDisabled(hasErrors);
   }, [formik.errors]);
-
-  const addNewArgsField = () => {
-    const nextArgNumber = args.length;
-    formik.setFieldValue(`args[${nextArgNumber}]`, "");
-  };
-
-  const removeArg = (removeIdx: number) => {
-    formik.setFieldValue(
-      "args",
-      args.filter((_, index: number) => index !== removeIdx),
-    );
-  };
 
   const getProposal = (): MultisigSendEgld | null => {
     try {
@@ -113,14 +91,7 @@ const ProposeSendEgld = ({
         Balance.egld(amountNumeric).valueOf(),
       );
 
-      const argsParams = args.map((arg) => BytesValue.fromHex(arg));
-
-      return new MultisigSendEgld(
-        addressParam,
-        amountParam,
-        functionName,
-        argsParams,
-      );
+      return new MultisigSendEgld(addressParam, amountParam, functionName);
     } catch (err) {
       return null;
     }
@@ -142,22 +113,6 @@ const ProposeSendEgld = ({
       return true;
     } catch (err) {
       return false;
-    }
-  }
-
-  function validateArgument(value?: string[], testContext?: TestContext) {
-    try {
-      if (value == null) {
-        return true;
-      }
-      value.map((arg) => BytesValue.fromHex(arg));
-      return true;
-    } catch (err) {
-      return (
-        testContext?.createError({
-          message: "Invalid arguments",
-        }) ?? false
-      );
     }
   }
 
@@ -189,11 +144,6 @@ const ProposeSendEgld = ({
 
   const receiverError = touched.receiver && errors.receiver;
   const amountError = touched.amount && errors.amount;
-  const argsError =
-    Array.isArray(touched?.args) &&
-    touched.args.length === args.length &&
-    touched.args.every((arg) => arg) &&
-    errors.args;
   return (
     <div>
       <FormikInputField
@@ -235,42 +185,6 @@ const ProposeSendEgld = ({
           value={functionName}
         />
       </div>
-      {functionName?.length > 0 && (
-        <div className={"d-flex flex-column "}>
-          {args.map((arg, idx) => (
-            <div key={idx} className="modal-control-container mb-3">
-              <label>{`${t("argument")} ${idx + 1}`} </label>
-              <div className={"d-flex align-items-stretch my-0"}>
-                <Form.Control
-                  id={`args[${idx}]`}
-                  name={`args[${idx}]`}
-                  className={"my-0 mr-3"}
-                  type="text"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={arg}
-                />
-
-                <button
-                  onClick={() => removeArg(idx)}
-                  className={"btn btn-danger"}
-                >
-                  <FontAwesomeIcon className={"mx-2"} icon={faMinus} />
-                </button>
-              </div>
-            </div>
-          ))}
-          {argsError && <small className="text-danger">{argsError}</small>}
-
-          <button
-            onClick={addNewArgsField}
-            className={"btn btn-primary add-arguments"}
-          >
-            <FontAwesomeIcon className={"mx-2"} icon={faPlus} />
-            <span className="name">Add argument</span>
-          </button>
-        </div>
-      )}
     </div>
   );
 };

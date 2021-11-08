@@ -66,7 +66,7 @@ const ProposeSmartContractCall = ({
       receiver: "",
       amount: 0,
       functionName: "",
-      args: [""],
+      args: [],
     },
     onSubmit: () => {
       return;
@@ -226,14 +226,16 @@ const ProposeSmartContractCall = ({
       </div>
       <div className="modal-control-container">
         <label>{t("function name (optional)")} </label>
-        <Form.Control
-          id="functionName"
-          name="functionName"
-          type="functionName"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={functionName}
-        />
+        <div className="input-wrapper">
+          <Form.Control
+            id="functionName"
+            name="functionName"
+            type="functionName"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={functionName}
+          />
+        </div>
       </div>
       {functionName?.length > 0 && (
         <div className={"d-flex flex-column "}>
@@ -253,7 +255,7 @@ const ProposeSmartContractCall = ({
 
                 <button
                   onClick={() => removeArg(idx)}
-                  className={"btn btn-danger"}
+                  className={"action-remove action remove"}
                 >
                   <FontAwesomeIcon className={"mx-2"} icon={faMinus} />
                 </button>
@@ -261,14 +263,12 @@ const ProposeSmartContractCall = ({
             </div>
           ))}
           {argsError && <small className="text-danger">{argsError}</small>}
-
-          <button
-            onClick={addNewArgsField}
-            className={"btn btn-primary add-arguments"}
-          >
-            <FontAwesomeIcon className={"mx-2"} icon={faPlus} />
-            <span className="name">Add argument</span>
-          </button>
+          <div className={"modal-action-btns"}>
+            <button onClick={addNewArgsField} className={"btn btn-primary "}>
+              <FontAwesomeIcon className={"mx-2"} icon={faPlus} />
+              <span className="name">Add argument</span>
+            </button>
+          </div>
         </div>
       )}
     </div>

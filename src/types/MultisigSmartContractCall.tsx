@@ -11,6 +11,7 @@ import {
 import { faExternalLinkAlt } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import i18next from "i18next";
+import startCase from "lodash/startCase";
 import ExplorerLink from "components/ExplorerLink";
 import { MultisigAction } from "./MultisigAction";
 
@@ -51,7 +52,9 @@ export class MultisigSmartContractCall extends MultisigAction {
       case multisigContractFunctionNames.ESDTTransfer:
         return null;
     }
-    return this.data;
+    return `${this.functionName}${this.args.map(
+      (arg) => `@${arg.valueOf().toString("hex")}`,
+    )}`;
   }
 
   title() {
@@ -61,7 +64,7 @@ export class MultisigSmartContractCall extends MultisigAction {
       case multisigContractFunctionNames.ESDTTransfer:
         return i18next.t("Send Token");
     }
-    return i18next.t("Transfer EGLD");
+    return i18next.t("Smart contract call");
   }
 
   description() {
@@ -105,7 +108,9 @@ export class MultisigSmartContractCall extends MultisigAction {
       extraProperties.push({ name, value });
     }
 
-    return extraProperties.map((x) => `${x.name}: ${x.value}`).join("\n");
+    return extraProperties
+      .map((x) => `${startCase(String(x.name))}: ${x.value}`)
+      .join("\n");
   }
 
   getSendTokenDescription(): string {
