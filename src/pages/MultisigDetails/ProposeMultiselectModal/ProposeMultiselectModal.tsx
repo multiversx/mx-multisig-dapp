@@ -16,6 +16,7 @@ import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
 import { MultisigSendToken } from "types/MultisigSendToken";
 
+import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
 import { MultisigUpgradeContractFromSource } from "types/MultisigUpgradeContractFromSource";
 import { ProposalsTypes, SelectedOptionType } from "types/Proposals";
 import { titles } from "../constants";
@@ -25,12 +26,11 @@ import ProposeIssueToken from "./ProposeIssueToken";
 import ProposeSendEgld from "./ProposeSendEgld";
 import ProposeSendToken from "./ProposeSendToken";
 
+import ProposeSmartContractCall from "./ProposeSmartContractCall";
 import ProposeUpgradeContractFromSource from "./ProposeUpgradeContractFromSource";
 import SelectOption from "./SelectOption";
 
 import "./proposeMultiselectModal.scss";
-import ProposeSmartContractCall from "./ProposeSmartContractCall";
-import { MultisigSmartContractCall } from "../../../types/MultisigSmartContractCall";
 
 interface ProposeMultiselectModalPropsType {
   selectedOption: SelectedOptionType;
@@ -80,7 +80,7 @@ const ProposeMultiselectModal = ({
           selectedProposal.upgradeable,
           selectedProposal.payable,
           selectedProposal.readable,
-          selectedProposal.args,
+          ...selectedProposal.args,
         );
       } else if (
         selectedProposal instanceof MultisigUpgradeContractFromSource
@@ -92,7 +92,7 @@ const ProposeMultiselectModal = ({
           selectedProposal.upgradeable,
           selectedProposal.payable,
           selectedProposal.readable,
-          selectedProposal.args,
+          ...selectedProposal.args,
         );
       }
       handleClose();

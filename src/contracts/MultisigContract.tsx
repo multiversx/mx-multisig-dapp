@@ -152,8 +152,8 @@ export function useMultisigContract() {
       new AddressValue(address),
       amount,
       BytesValue.fromUTF8(endpointName),
+      ...args,
     ];
-    allArgs.push(...args);
 
     return sendTransaction(
       multisigContractFunctionNames.proposeAsyncCall,
@@ -168,17 +168,21 @@ export function useMultisigContract() {
     upgradeable: boolean,
     payable: boolean,
     readable: boolean,
-    args: BytesValue[],
+    ...args: BytesValue[]
   ) {
     const metadata = new CodeMetadata(upgradeable, payable, readable);
     const contractMetadata = new BytesValue(metadata.toBuffer());
-    const allArgs = [amount, new AddressValue(source), contractMetadata];
+    const allArgs = [
+      amount,
+      new AddressValue(source),
+      contractMetadata,
+      ...args,
+    ];
 
-    const finalArgs = allArgs.concat(args);
     return sendTransaction(
       multisigContractFunctionNames.proposeSCDeployFromSource,
       gasLimit,
-      ...finalArgs,
+      ...allArgs,
     );
   }
 
@@ -189,7 +193,7 @@ export function useMultisigContract() {
     upgradeable: boolean,
     payable: boolean,
     readable: boolean,
-    args: BytesValue[],
+    ...args: BytesValue[]
   ) {
     const metadata = new CodeMetadata(upgradeable, payable, readable);
     const contractMetadata = new BytesValue(metadata.toBuffer());
@@ -198,13 +202,13 @@ export function useMultisigContract() {
       amount,
       new AddressValue(address),
       contractMetadata,
+      ...args,
     ];
 
-    const finalArgs = allArgs.concat(args);
     return sendTransaction(
       multisigContractFunctionNames.proposeSCUpgradeFromSource,
       proposeDeployGasLimit,
-      ...finalArgs,
+      ...allArgs,
     );
   }
 
