@@ -129,14 +129,16 @@ export function useMultisigContract() {
   function mutateSendEgld(
     address: Address,
     amount: BigUIntValue,
-    data: string,
+    functionName: string,
+    ...args: BytesValue[]
   ) {
     return sendTransaction(
-      multisigContractFunctionNames.proposeSendEgld,
+      multisigContractFunctionNames.proposeTransferExecute,
       gasLimit,
       new AddressValue(address),
       amount,
-      BytesValue.fromUTF8(data),
+      BytesValue.fromUTF8(functionName),
+      ...args,
     );
   }
 
@@ -144,7 +146,7 @@ export function useMultisigContract() {
     address: Address,
     amount: BigUIntValue,
     endpointName: string,
-    args: TypedValue[],
+    ...args: (BytesValue | U32Value)[]
   ) {
     const allArgs: TypedValue[] = [
       new AddressValue(address),
@@ -154,29 +156,9 @@ export function useMultisigContract() {
     allArgs.push(...args);
 
     return sendTransaction(
-      multisigContractFunctionNames.proposeSendEgld,
+      multisigContractFunctionNames.proposeAsyncCall,
       gasLimit,
       ...allArgs,
-    );
-  }
-
-  function mutateDeployContract(
-    amount: BigUIntValue,
-    code: string,
-    upgradeable: boolean,
-    payable: boolean,
-    readable: boolean,
-    ...args: BytesValue[]
-  ) {
-    const metadata = new CodeMetadata(upgradeable, payable, readable);
-    const contractMetadata = new BytesValue(metadata.toBuffer());
-    const allArgs = [amount, BytesValue.fromHex(code), contractMetadata];
-
-    const finalArgs = allArgs.concat(args);
-    return sendTransaction(
-      multisigContractFunctionNames.proposeSCDeploy,
-      proposeDeployGasLimit,
-      ...finalArgs,
     );
   }
 
@@ -196,32 +178,6 @@ export function useMultisigContract() {
     return sendTransaction(
       multisigContractFunctionNames.proposeSCDeployFromSource,
       gasLimit,
-      ...finalArgs,
-    );
-  }
-
-  function mutateUpgradeContract(
-    address: Address,
-    amount: BigUIntValue,
-    code: string,
-    upgradeable: boolean,
-    payable: boolean,
-    readable: boolean,
-    ...args: BytesValue[]
-  ) {
-    const metadata = new CodeMetadata(upgradeable, payable, readable);
-    const contractMetadata = new BytesValue(metadata.toBuffer());
-    const allArgs = [
-      new AddressValue(address),
-      amount,
-      BytesValue.fromHex(code),
-      contractMetadata,
-    ];
-
-    const finalArgs = allArgs.concat(args);
-    return sendTransaction(
-      multisigContractFunctionNames.proposeSCUpgrade,
-      proposeDeployGasLimit,
       ...finalArgs,
     );
   }
@@ -257,7 +213,8 @@ export function useMultisigContract() {
       proposal.address,
       new BigUIntValue(new BigNumber(0)),
       multisigContractFunctionNames.ESDTTransfer,
-      [BytesValue.fromUTF8(proposal.identifier), new U32Value(proposal.amount)],
+      BytesValue.fromUTF8(proposal.identifier),
+      new U32Value(proposal.amount),
     );
   }
 
@@ -310,7 +267,7 @@ export function useMultisigContract() {
       esdtAddress,
       esdtAmount,
       multisigContractFunctionNames.issue,
-      args,
+      ...args,
     );
   }
 
@@ -475,9 +432,7 @@ export function useMultisigContract() {
     mutateEsdtSendToken,
     mutateSmartContractCall,
     mutateSendEgld,
-    mutateDeployContract,
     mutateDeployContractFromSource,
-    mutateUpgradeContract,
     mutateUpgradeContractFromSource,
     mutateProposeRemoveUser,
     mutateProposeAddBoardMember,

@@ -4,7 +4,8 @@ export enum MultisigActionType {
   AddProposer = 2,
   RemoveUser = 3,
   ChangeQuorum = 4,
-  SendEgld = 5,
+  SendTransferExecute = 5,
+  SendAsyncCall = 6,
   SCDeployFromSource = 7,
   SCUpgradeFromSource = 8,
 }

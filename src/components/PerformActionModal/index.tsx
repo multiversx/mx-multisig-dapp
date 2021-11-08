@@ -17,7 +17,8 @@ const gasLimits = {
   [MultisigActionType.AddProposer]: 10_000_000,
   [MultisigActionType.RemoveUser]: 10_000_000,
   [MultisigActionType.ChangeQuorum]: 10_000_000,
-  [MultisigActionType.SendEgld]: 60_000_000,
+  [MultisigActionType.SendTransferExecute]: 60_000_000,
+  [MultisigActionType.SendAsyncCall]: 60_000_000,
   [MultisigActionType.SCDeployFromSource]: 80_000_000,
   [MultisigActionType.SCUpgradeFromSource]: 80_000_000,
 };

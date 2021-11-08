@@ -17,17 +17,17 @@ import denominate from "components/Denominate/denominate";
 import { denomination } from "config";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { FormikInputField } from "helpers/formikFields";
-import { MultisigSendEgld } from "types/MultisigSendEgld";
+import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
 
-interface ProposeSendEgldType {
-  handleChange: (proposal: MultisigSendEgld) => void;
+interface ProposeSmartContractCallType {
+  handleChange: (proposal: MultisigSmartContractCall) => void;
   setSubmitDisabled: (value: boolean) => void;
 }
 
-const ProposeSendEgld = ({
+const ProposeSmartContractCall = ({
   handleChange,
   setSubmitDisabled,
-}: ProposeSendEgldType) => {
+}: ProposeSmartContractCallType) => {
   const { multisigBalance } = React.useContext(MultisigDetailsContext);
 
   const { t } = useTranslation();
@@ -100,7 +100,7 @@ const ProposeSendEgld = ({
     );
   };
 
-  const getProposal = (): MultisigSendEgld | null => {
+  const getProposal = (): MultisigSmartContractCall | null => {
     try {
       const addressParam = new Address(formik.values.receiver);
 
@@ -115,7 +115,7 @@ const ProposeSendEgld = ({
 
       const argsParams = args.map((arg) => BytesValue.fromHex(arg));
 
-      return new MultisigSendEgld(
+      return new MultisigSmartContractCall(
         addressParam,
         amountParam,
         functionName,
@@ -275,4 +275,4 @@ const ProposeSendEgld = ({
   );
 };
 
-export default ProposeSendEgld;
+export default ProposeSmartContractCall;

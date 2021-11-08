@@ -29,6 +29,8 @@ import ProposeUpgradeContractFromSource from "./ProposeUpgradeContractFromSource
 import SelectOption from "./SelectOption";
 
 import "./proposeMultiselectModal.scss";
+import ProposeSmartContractCall from "./ProposeSmartContractCall";
+import { MultisigSmartContractCall } from "../../../types/MultisigSmartContractCall";
 
 interface ProposeMultiselectModalPropsType {
   selectedOption: SelectedOptionType;
@@ -39,6 +41,7 @@ const ProposeMultiselectModal = ({
 }: ProposeMultiselectModalPropsType) => {
   const {
     mutateSendEgld,
+    mutateSmartContractCall,
     mutateDeployContractFromSource,
     mutateUpgradeContractFromSource,
     mutateEsdtIssueToken,
@@ -56,7 +59,15 @@ const ProposeMultiselectModal = ({
         mutateSendEgld(
           selectedProposal.address,
           selectedProposal.amount,
-          selectedProposal.data,
+          selectedProposal.functionName,
+          ...selectedProposal.args,
+        );
+      } else if (selectedProposal instanceof MultisigSmartContractCall) {
+        mutateSmartContractCall(
+          selectedProposal.address,
+          selectedProposal.amount,
+          selectedProposal.functionName,
+          ...selectedProposal.args,
         );
       } else if (selectedProposal instanceof MultisigIssueToken) {
         mutateEsdtIssueToken(selectedProposal as MultisigIssueToken);
@@ -101,9 +112,15 @@ const ProposeMultiselectModal = ({
   const getContent = () => {
     switch (selectedOption?.option) {
       case ProposalsTypes.send_egld:
-      case ProposalsTypes.smart_contract_call:
         return (
           <ProposeSendEgld
+            setSubmitDisabled={setSubmitDisabled}
+            handleChange={handleProposalChange}
+          />
+        );
+      case ProposalsTypes.smart_contract_call:
+        return (
+          <ProposeSmartContractCall
             setSubmitDisabled={setSubmitDisabled}
             handleChange={handleProposalChange}
           />
