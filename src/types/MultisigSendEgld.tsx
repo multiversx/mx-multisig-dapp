@@ -37,7 +37,7 @@ export class MultisigSendEgld extends MultisigAction {
   }
 
   getData() {
-    return `${this.functionName}${this.args.map((arg) => `@${arg}`)}`;
+    return this.functionName;
   }
 
   title() {

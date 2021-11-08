@@ -49,14 +49,14 @@ const ProposeSendEgld = ({
       .required("Required")
       .transform((value) => value.replace(",", "."))
       .test(validateAmount),
-    functionName: Yup.string(),
+    data: Yup.string(),
   });
 
   const formik = useFormik({
     initialValues: {
       receiver: "",
       amount: 0,
-      functionName: "",
+      data: "",
     },
     onSubmit: () => {
       return;
@@ -67,7 +67,7 @@ const ProposeSendEgld = ({
   });
 
   const { touched, errors, values } = formik;
-  const { amount, receiver, functionName } = values;
+  const { amount, receiver, data } = values;
 
   useEffect(() => {
     refreshProposal();
@@ -91,7 +91,7 @@ const ProposeSendEgld = ({
         Balance.egld(amountNumeric).valueOf(),
       );
 
-      return new MultisigSendEgld(addressParam, amountParam, functionName);
+      return new MultisigSendEgld(addressParam, amountParam, data);
     } catch (err) {
       return null;
     }
@@ -175,14 +175,14 @@ const ProposeSendEgld = ({
         <span>{`Balance: ${denominatedValue} EGLD`} </span>
       </div>
       <div className="modal-control-container">
-        <label>{t("function name (optional)")} </label>
+        <label>{t("data (optional)")} </label>
         <Form.Control
-          id="functionName"
-          name="functionName"
-          type="functionName"
+          id="data"
+          name="data"
+          type="data"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={functionName}
+          value={data}
         />
       </div>
     </div>
