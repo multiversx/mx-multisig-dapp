@@ -224,7 +224,7 @@ export function useMultisigContract() {
 
   function mutateEsdtIssueToken(proposal: MultisigIssueToken) {
     const esdtAddress = new Address(issueTokenContractAddress);
-    const esdtAmount = new BigUIntValue(Balance.egld(5).valueOf());
+    const esdtAmount = new BigUIntValue(Balance.egld(0.05).valueOf());
 
     const args = [];
     args.push(BytesValue.fromUTF8(proposal.name));
