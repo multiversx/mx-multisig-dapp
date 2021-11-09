@@ -13,7 +13,10 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { FormikCheckbox, FormikInputField } from "helpers/formikFields";
-import { validateContractAddressOwner } from "helpers/validation";
+import {
+  validateAddressIsContract,
+  validateContractAddressOwner,
+} from "helpers/validation";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
 import { MultisigUpgradeContractFromSource } from "types/MultisigUpgradeContractFromSource";
 
@@ -34,9 +37,7 @@ const ProposeDeployContract = ({
       .required("Required")
       .test(validateContractAddressOwner(currentMultisigAddress)),
     amount: Yup.string().required("Required").test(validateAmount),
-    source: Yup.string()
-      .required("Required")
-      .test(validateContractAddressOwner(currentMultisigAddress)),
+    source: Yup.string().required("Required").test(validateAddressIsContract),
     upgradeable: Yup.boolean(),
     payable: Yup.boolean(),
     readable: Yup.boolean(),

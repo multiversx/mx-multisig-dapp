@@ -209,6 +209,7 @@ const ProposeMultiselectModal = ({
 
   return (
     <Modal
+      backdrop={"static"}
       show
       size="lg"
       onHide={handleClose}
