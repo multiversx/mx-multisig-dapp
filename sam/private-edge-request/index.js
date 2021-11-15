@@ -4,6 +4,9 @@ const whitelist = [
   "83.103.170.152", // vpn elrond upc
   "104.248.25.147", // vpn elrond do
   "82.76.245.236", // stan
+  "188.25.132.177", // virgil serbanuta
+  "73.168.39.137", // yi zhang
+  "79.115.61.254", // calin nicolau
 ];
 
 exports.handler = (event, context, callback) => {
