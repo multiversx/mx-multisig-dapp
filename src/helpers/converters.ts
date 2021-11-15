@@ -15,12 +15,11 @@ import { MultisigAddBoardMember } from "types/MultisigAddBoardMember";
 import { MultisigAddProposer } from "types/MultisigAddProposer";
 import { MultisigChangeQuorum } from "types/MultisigChangeQuorum";
 import { MultisigContractInfoType } from "types/multisigContracts";
-import { MultisigDeployContract } from "types/MultisigDeployContract";
 import { MultisigDeployContractFromSource } from "types/MultisigDeployContractFromSource";
 import { MultisigRemoveUser } from "types/MultisigRemoveUser";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
-import { MultisigUpgradeContract } from "types/MultisigUpgradeContract";
 import { MultisigUpgradeContractFromSource } from "types/MultisigUpgradeContractFromSource";
+import { MultisigSmartContractCall } from "../types/MultisigSmartContractCall";
 import { PlainAddress } from "./plainObjects";
 
 const createKeccakHash = require("keccak");
@@ -37,14 +36,12 @@ export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
       return parseRemoveUser(remainingBytes);
     case MultisigActionType.ChangeQuorum:
       return parseChangeQuorum(remainingBytes);
-    case MultisigActionType.SendEgld:
+    case MultisigActionType.SendTransferExecute:
       return parseSendEgld(remainingBytes);
-    case MultisigActionType.SCDeploy:
-      return parseSmartContractDeploy(remainingBytes);
+    case MultisigActionType.SendAsyncCall:
+      return parseSmartContractCall(remainingBytes);
     case MultisigActionType.SCDeployFromSource:
       return parseSmartContractDeployFromSource(remainingBytes);
-    case MultisigActionType.SCUpgrade:
-      return parseSmartContractUpgrade(remainingBytes);
     case MultisigActionType.SCUpgradeFromSource:
       return parseSmartContractUpgradeFromSource(remainingBytes);
     default:
@@ -112,13 +109,13 @@ function parseSendEgld(
   const codec = new NumericalBinaryCodec();
   const amount = codec.decodeTopLevel(amountBytes, new BigUIntType());
 
-  const dataSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  const functionNameSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
 
-  const dataBytes = remainingBytes.slice(0, dataSize);
-  remainingBytes = remainingBytes.slice(dataSize);
+  const dataBytes = remainingBytes.slice(0, functionNameSize);
+  remainingBytes = remainingBytes.slice(functionNameSize);
 
-  const data = dataBytes.toString();
+  const functionName = dataBytes.toString();
 
   const argsSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
@@ -134,38 +131,43 @@ function parseSendEgld(
     args.push(new BytesValue(argBytes));
   }
 
-  const action = new MultisigSendEgld(targetAddress, amount, data, args);
+  const action = new MultisigSendEgld(
+    targetAddress,
+    amount,
+    functionName,
+    args,
+  );
 
   return [action, remainingBytes];
 }
 
-function parseSmartContractDeploy(
+function parseSmartContractCall(
   remainingBytes: Buffer,
 ): [MultisigAction | null, Buffer] {
+  const targetAddress = new Address(remainingBytes.slice(0, 32));
+  remainingBytes = remainingBytes.slice(32);
+
   const amountSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
+
   const amountBytes = remainingBytes.slice(0, amountSize);
   remainingBytes = remainingBytes.slice(amountSize);
+
   const codec = new NumericalBinaryCodec();
   const amount = codec.decodeTopLevel(amountBytes, new BigUIntType());
 
-  const codeSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  const functionNameSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
-  const codeBytes = remainingBytes.slice(0, codeSize);
-  remainingBytes = remainingBytes.slice(codeSize);
-  const code = new BytesValue(codeBytes).valueOf().toString("hex");
 
-  const codeMetadataBytes = remainingBytes.slice(0, 2);
-  remainingBytes = remainingBytes.slice(2);
+  const dataBytes = remainingBytes.slice(0, functionNameSize);
+  remainingBytes = remainingBytes.slice(functionNameSize);
 
-  const codeMetadata = Number(codeMetadataBytes.toString("hex"));
-  const upgradeable = Boolean(codeMetadata & 100);
-  const payable = Boolean(codeMetadata & 2);
-  const readable = Boolean(codeMetadata & 400);
+  const functionName = dataBytes.toString();
+
   const argsSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
   remainingBytes = remainingBytes.slice(4);
 
-  const args = [];
+  const args: BytesValue[] = [];
   for (let i = 0; i < argsSize; i++) {
     const argSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
     remainingBytes = remainingBytes.slice(4);
@@ -176,17 +178,15 @@ function parseSmartContractDeploy(
     args.push(new BytesValue(argBytes));
   }
 
-  const action = new MultisigDeployContract(
+  const action = new MultisigSmartContractCall(
+    targetAddress,
     amount,
-    code,
-    upgradeable,
-    payable,
-    readable,
+    functionName,
+    args,
   );
 
   return [action, remainingBytes];
 }
-
 function parseSmartContractDeployFromSource(
   remainingBytes: Buffer,
 ): [MultisigAction | null, Buffer] {
@@ -227,60 +227,12 @@ function parseSmartContractDeployFromSource(
     upgradeable,
     payable,
     readable,
+    args,
   );
 
   return [action, remainingBytes];
 }
-function parseSmartContractUpgrade(
-  remainingBytes: Buffer,
-): [MultisigAction | null, Buffer] {
-  const address = new Address(remainingBytes.slice(0, 32));
-  remainingBytes = remainingBytes.slice(32);
-  const amountSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
-  remainingBytes = remainingBytes.slice(4);
-  const amountBytes = remainingBytes.slice(0, amountSize);
-  remainingBytes = remainingBytes.slice(amountSize);
-  const codec = new NumericalBinaryCodec();
-  const amount = codec.decodeTopLevel(amountBytes, new BigUIntType());
 
-  const codeSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
-  remainingBytes = remainingBytes.slice(4);
-  const codeBytes = remainingBytes.slice(0, codeSize);
-  remainingBytes = remainingBytes.slice(codeSize);
-  const code = new BytesValue(codeBytes).valueOf().toString("hex");
-
-  const codeMetadataBytes = remainingBytes.slice(0, 2);
-  remainingBytes = remainingBytes.slice(2);
-
-  const codeMetadata = Number(codeMetadataBytes.toString("hex"));
-  const upgradeable = Boolean(codeMetadata & 100);
-  const payable = Boolean(codeMetadata & 2);
-  const readable = Boolean(codeMetadata & 400);
-  const argsSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
-  remainingBytes = remainingBytes.slice(4);
-
-  const args = [];
-  for (let i = 0; i < argsSize; i++) {
-    const argSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
-    remainingBytes = remainingBytes.slice(4);
-
-    const argBytes = remainingBytes.slice(0, argSize);
-    remainingBytes = remainingBytes.slice(argSize);
-
-    args.push(new BytesValue(argBytes));
-  }
-
-  const action = new MultisigUpgradeContract(
-    address,
-    amount,
-    code,
-    upgradeable,
-    payable,
-    readable,
-  );
-
-  return [action, remainingBytes];
-}
 function parseSmartContractUpgradeFromSource(
   remainingBytes: Buffer,
 ): [MultisigAction | null, Buffer] {
@@ -324,6 +276,7 @@ function parseSmartContractUpgradeFromSource(
     upgradeable,
     payable,
     readable,
+    args,
   );
 
   return [action, remainingBytes];

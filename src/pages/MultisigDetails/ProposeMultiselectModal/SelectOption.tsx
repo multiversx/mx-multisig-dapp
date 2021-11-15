@@ -22,7 +22,6 @@ const proposeAvailableOptions = [
     type: ProposalsTypes.smart_contract_call,
     label: "Smart contract call",
   },
-
   {
     type: ProposalsTypes.deploy_contract_from_source,
     label: "Deploy Contract from source",

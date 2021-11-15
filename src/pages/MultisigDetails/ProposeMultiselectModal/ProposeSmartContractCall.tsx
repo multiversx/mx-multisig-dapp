@@ -1,5 +1,13 @@
 import React, { useEffect, useMemo } from "react";
-import { Address, Balance, BigUIntValue } from "@elrondnetwork/erdjs/out";
+import {
+  Address,
+  Balance,
+  BigUIntValue,
+  BytesValue,
+} from "@elrondnetwork/erdjs/out";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFormik } from "formik";
 import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
@@ -9,17 +17,17 @@ import denominate from "components/Denominate/denominate";
 import { denomination } from "config";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { FormikInputField } from "helpers/formikFields";
-import { MultisigSendEgld } from "types/MultisigSendEgld";
+import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
 
-interface ProposeSendEgldType {
-  handleChange: (proposal: MultisigSendEgld) => void;
+interface ProposeSmartContractCallType {
+  handleChange: (proposal: MultisigSmartContractCall) => void;
   setSubmitDisabled: (value: boolean) => void;
 }
 
-const ProposeSendEgld = ({
+const ProposeSmartContractCall = ({
   handleChange,
   setSubmitDisabled,
-}: ProposeSendEgldType) => {
+}: ProposeSmartContractCallType) => {
   const { multisigBalance } = React.useContext(MultisigDetailsContext);
 
   const { t } = useTranslation();
@@ -49,14 +57,16 @@ const ProposeSendEgld = ({
       .required("Required")
       .transform((value) => value.replace(",", "."))
       .test(validateAmount),
-    data: Yup.string(),
+    functionName: Yup.string(),
+    args: Yup.array().test(validateArgument),
   });
 
   const formik = useFormik({
     initialValues: {
       receiver: "",
       amount: 0,
-      data: "",
+      functionName: "",
+      args: [],
     },
     onSubmit: () => {
       return;
@@ -67,7 +77,7 @@ const ProposeSendEgld = ({
   });
 
   const { touched, errors, values } = formik;
-  const { amount, receiver, data } = values;
+  const { amount, receiver, functionName, args } = values;
 
   useEffect(() => {
     refreshProposal();
@@ -78,7 +88,19 @@ const ProposeSendEgld = ({
     setSubmitDisabled(hasErrors);
   }, [formik.errors]);
 
-  const getProposal = (): MultisigSendEgld | null => {
+  const addNewArgsField = () => {
+    const nextArgNumber = args.length;
+    formik.setFieldValue(`args[${nextArgNumber}]`, "");
+  };
+
+  const removeArg = (removeIdx: number) => {
+    formik.setFieldValue(
+      "args",
+      args.filter((_, index: number) => index !== removeIdx),
+    );
+  };
+
+  const getProposal = (): MultisigSmartContractCall | null => {
     try {
       const addressParam = new Address(formik.values.receiver);
 
@@ -91,7 +113,14 @@ const ProposeSendEgld = ({
         Balance.egld(amountNumeric).valueOf(),
       );
 
-      return new MultisigSendEgld(addressParam, amountParam, data);
+      const argsParams = args.map((arg) => BytesValue.fromHex(arg));
+
+      return new MultisigSmartContractCall(
+        addressParam,
+        amountParam,
+        functionName,
+        argsParams,
+      );
     } catch (err) {
       return null;
     }
@@ -113,6 +142,22 @@ const ProposeSendEgld = ({
       return true;
     } catch (err) {
       return false;
+    }
+  }
+
+  function validateArgument(value?: string[], testContext?: TestContext) {
+    try {
+      if (value == null) {
+        return true;
+      }
+      value.map((arg) => BytesValue.fromHex(arg));
+      return true;
+    } catch (err) {
+      return (
+        testContext?.createError({
+          message: "Invalid arguments",
+        }) ?? false
+      );
     }
   }
 
@@ -144,6 +189,11 @@ const ProposeSendEgld = ({
 
   const receiverError = touched.receiver && errors.receiver;
   const amountError = touched.amount && errors.amount;
+  const argsError =
+    Array.isArray(touched?.args) &&
+    touched.args.length === args.length &&
+    touched.args.every((arg) => arg) &&
+    errors.args;
   return (
     <div>
       <FormikInputField
@@ -175,18 +225,54 @@ const ProposeSendEgld = ({
         <span>{`Balance: ${denominatedValue} EGLD`} </span>
       </div>
       <div className="modal-control-container">
-        <label>{t("data (optional)")} </label>
-        <Form.Control
-          id="data"
-          name="data"
-          type="data"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={data}
-        />
+        <label>{t("function name (optional)")} </label>
+        <div className="input-wrapper">
+          <Form.Control
+            id="functionName"
+            name="functionName"
+            type="functionName"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={functionName}
+          />
+        </div>
       </div>
+      {functionName?.length > 0 && (
+        <div className={"d-flex flex-column "}>
+          {args.map((arg, idx) => (
+            <div key={idx} className="modal-control-container mb-3">
+              <label>{`${t("argument")} ${idx + 1}`} </label>
+              <div className={"d-flex align-items-stretch my-0"}>
+                <Form.Control
+                  id={`args[${idx}]`}
+                  name={`args[${idx}]`}
+                  className={"my-0 mr-3"}
+                  type="text"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={arg}
+                />
+
+                <button
+                  onClick={() => removeArg(idx)}
+                  className={"action-remove action remove"}
+                >
+                  <FontAwesomeIcon className={"mx-2"} icon={faMinus} />
+                </button>
+              </div>
+            </div>
+          ))}
+          {argsError && <small className="text-danger">{argsError}</small>}
+          <div className={"modal-action-btns"}>
+            <button onClick={addNewArgsField} className={"btn btn-primary "}>
+              <FontAwesomeIcon className={"mx-2"} icon={faPlus} />
+              <span className="name">Add argument</span>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ProposeSendEgld;
+export default ProposeSmartContractCall;

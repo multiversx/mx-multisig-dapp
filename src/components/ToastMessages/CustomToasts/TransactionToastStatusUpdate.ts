@@ -70,7 +70,7 @@ export default function TransactionToastStatusUpdate({
       for (const { hash } of transactions) {
         try {
           const retriesForThisHash = retriesRef.current[hash];
-          if (retriesForThisHash > 20) {
+          if (retriesForThisHash > 40) {
             //consider toast as stuck after 10 seconds
             manageStuckToasts();
             return;
@@ -127,7 +127,7 @@ export default function TransactionToastStatusUpdate({
     if (pending) {
       intervalRef.current = setInterval(() => {
         checkTransactionStatus();
-      }, 1000);
+      }, 2000);
     } else {
       clearInterval(intervalRef.current);
     }

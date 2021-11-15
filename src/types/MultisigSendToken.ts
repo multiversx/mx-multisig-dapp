@@ -9,7 +9,7 @@ export class MultisigSendToken extends MultisigAction {
   amount: number;
 
   constructor(address: Address, identifier: string, amount: number) {
-    super(MultisigActionType.SendEgld);
+    super(MultisigActionType.SendTransferExecute);
     this.address = address;
     this.identifier = identifier;
     this.amount = amount;

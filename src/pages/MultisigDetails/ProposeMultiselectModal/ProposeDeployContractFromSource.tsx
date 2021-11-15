@@ -1,7 +1,14 @@
 import React, { useEffect } from "react";
 import { Address, Balance } from "@elrondnetwork/erdjs/out";
-import { BigUIntValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import {
+  BigUIntValue,
+  BytesValue,
+} from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFormik } from "formik";
+import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { FormikCheckbox, FormikInputField } from "helpers/formikFields";
@@ -25,15 +32,17 @@ const ProposeDeployContractFromSource = ({
     upgradeable: Yup.boolean(),
     payable: Yup.boolean(),
     readable: Yup.boolean(),
+    args: Yup.array().test(validateArgument),
   });
 
   const formik = useFormik({
     initialValues: {
       amount: "0",
       source: "",
-      upgradeable: false,
-      payable: false,
-      readable: false,
+      args: [],
+      upgradeable: true,
+      payable: true,
+      readable: true,
     },
     onSubmit: () => {
       return;
@@ -44,7 +53,7 @@ const ProposeDeployContractFromSource = ({
   });
   const { touched, errors, values } = formik;
 
-  const { amount, source, upgradeable, payable, readable } = values;
+  const { amount, source, args, upgradeable, payable, readable } = values;
 
   useEffect(() => {
     const hasErrors = Object.keys(errors).length > 0;
@@ -54,6 +63,22 @@ const ProposeDeployContractFromSource = ({
   function validateAmount(value?: string) {
     const amountNumeric = Number(value);
     return !isNaN(amountNumeric);
+  }
+
+  function validateArgument(value?: string[], testContext?: Yup.TestContext) {
+    try {
+      if (value == null) {
+        return true;
+      }
+      value.map((arg) => BytesValue.fromHex(arg));
+      return true;
+    } catch (err) {
+      return (
+        testContext?.createError({
+          message: "Invalid arguments",
+        }) ?? false
+      );
+    }
   }
 
   const getProposal = (): MultisigDeployContractFromSource | null => {
@@ -66,12 +91,15 @@ const ProposeDeployContractFromSource = ({
     }
 
     const amountParam = new BigUIntValue(Balance.egld(amountNumeric).valueOf());
+    const argsParams = args.map((arg) => BytesValue.fromHex(arg));
+
     return new MultisigDeployContractFromSource(
       amountParam,
       new Address(source),
       upgradeable,
       payable,
       readable,
+      argsParams,
     );
   };
 
@@ -82,13 +110,30 @@ const ProposeDeployContractFromSource = ({
     }
   };
 
+  const addNewArgsField = () => {
+    const nextArgNumber = args.length;
+    formik.setFieldValue(`args[${nextArgNumber}]`, "");
+  };
+
+  const removeArg = (removeIdx: number) => {
+    formik.setFieldValue(
+      "args",
+      args.filter((_, index: number) => index !== removeIdx),
+    );
+  };
+
   React.useEffect(() => {
     refreshProposal();
-  }, [amount, source, upgradeable, payable, readable]);
+  }, [amount, source, args, upgradeable, payable, readable, errors]);
 
   const sourceError = touched.source && errors.source;
 
   const amountError = touched.amount && errors.amount;
+  const argsError =
+    Array.isArray(touched?.args) &&
+    touched.args.length === args.length &&
+    touched.args.every((arg) => arg) &&
+    errors.args;
 
   return (
     <div>
@@ -108,24 +153,58 @@ const ProposeDeployContractFromSource = ({
         handleChange={formik.handleChange}
         handleBlur={formik.handleBlur}
       />
-      <FormikCheckbox
-        label={t("Upgradeable")}
-        name={"upgradeable"}
-        checked={upgradeable}
-        handleChange={formik.handleChange}
-      />
-      <FormikCheckbox
-        label={t("Payable")}
-        name={"payable"}
-        checked={payable}
-        handleChange={formik.handleChange}
-      />
-      <FormikCheckbox
-        label={t("Readable")}
-        name={"readable"}
-        checked={readable}
-        handleChange={formik.handleChange}
-      />
+      <div className={"mt-4"}>
+        <FormikCheckbox
+          label={t("Upgradeable")}
+          name={"upgradeable"}
+          checked={upgradeable}
+          handleChange={formik.handleChange}
+        />
+        <FormikCheckbox
+          label={t("Payable")}
+          name={"payable"}
+          checked={payable}
+          handleChange={formik.handleChange}
+        />
+        <FormikCheckbox
+          label={t("Readable")}
+          name={"readable"}
+          checked={readable}
+          handleChange={formik.handleChange}
+        />
+      </div>
+      <div className={"d-flex flex-column"}>
+        {args.map((arg, idx) => (
+          <div key={idx} className="modal-control-container my-3">
+            <label>{`${t("argument")} ${idx + 1}`} </label>
+            <div className={"d-flex align-items-stretch my-0"}>
+              <Form.Control
+                id={`args[${idx}]`}
+                name={`args[${idx}]`}
+                className={"my-0 mr-3"}
+                type="text"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={arg}
+              />
+
+              <button
+                onClick={() => removeArg(idx)}
+                className={"action-remove action remove"}
+              >
+                <FontAwesomeIcon className={"mx-2"} icon={faMinus} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {argsError && <small className="text-danger">{argsError}</small>}
+        <div className={"modal-action-btns"}>
+          <button onClick={addNewArgsField} className={"btn btn-primary "}>
+            <FontAwesomeIcon className={"mx-2"} icon={faPlus} />
+            <span className="name">Add argument</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

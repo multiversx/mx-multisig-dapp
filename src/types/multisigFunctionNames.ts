@@ -8,10 +8,9 @@ export enum multisigContractFunctionNames {
   "getAllBoardMembers" = "getAllBoardMembers",
   "proposeAddProposer" = "proposeAddProposer",
   "proposeRemoveUser" = "proposeRemoveUser",
-  "proposeSendEgld" = "proposeSendEgld",
-  "proposeSCDeploy" = "proposeSCDeploy",
+  "proposeTransferExecute" = "proposeTransferExecute",
+  "proposeAsyncCall" = "proposeAsyncCall",
   "proposeSCDeployFromSource" = "proposeSCDeployFromSource",
-  "proposeSCUpgrade" = "proposeSCUpgrade",
   "proposeSCUpgradeFromSource" = "proposeSCUpgradeFromSource",
 
   "issue" = "issue",
