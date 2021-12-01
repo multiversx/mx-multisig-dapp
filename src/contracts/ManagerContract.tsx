@@ -17,8 +17,8 @@ import {
 import { Code } from "@elrondnetwork/erdjs/out/smartcontracts/code";
 import { Query } from "@elrondnetwork/erdjs/out/smartcontracts/query";
 
-import { gasLimit } from "config";
-import { multisigManagerContract, smartContractCode } from "helpers/constants";
+import { gasLimit, multisigManagerContract } from "config";
+import { smartContractCode } from "helpers/constants";
 import { parseContractInfo } from "helpers/converters";
 import useSendTransactions from "hooks/useSendTransactions";
 import { MultisigContractInfoType } from "types/multisigContracts";

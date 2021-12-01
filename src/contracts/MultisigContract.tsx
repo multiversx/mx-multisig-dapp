@@ -22,8 +22,7 @@ import {
 } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import BigNumber from "bignumber.js";
 import { useSelector } from "react-redux";
-import { gasLimit } from "config";
-import { issueTokenContractAddress } from "helpers/constants";
+import { gasLimit, issueTokenContractAddress } from "config";
 import { parseAction, parseActionDetailed } from "helpers/converters";
 import useSendTransactions from "hooks/useSendTransactions";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
