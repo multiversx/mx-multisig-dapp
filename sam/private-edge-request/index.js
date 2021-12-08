@@ -7,6 +7,7 @@ const whitelist = [
   "188.25.132.177", // virgil serbanuta
   "73.168.39.137", // yi zhang
   "79.115.61.254", // calin nicolau
+  "178.138.192.133", // stan
 ];
 
 exports.handler = (event, context, callback) => {
