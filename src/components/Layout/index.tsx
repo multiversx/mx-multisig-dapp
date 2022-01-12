@@ -1,29 +1,31 @@
 import React from "react";
-import * as Dapp from "@elrondnetwork/dapp";
+import {
+  AuthenticatedRoutesWrapper,
+  getIsLoggedIn,
+  refreshAccount,
+  useGetAccountInfo,
+  useGetLoginInfo,
+} from "@elrondnetwork/dapp-core";
+import { AccessTokenManager } from "@elrondnetwork/dapp-core-internal";
 import { useDispatch } from "react-redux";
-import SignTransactions from "components/SignTransactions";
+import { getAccountData } from "apiCalls/accountCalls";
+import { getEconomicsData } from "apiCalls/economicsCalls";
+import { maiarIdApi } from "config";
+import { setAccountData } from "redux/slices/accountSlice";
+import { setEconomics } from "redux/slices/economicsSlice";
 import routes, { routeNames } from "routes";
-import { getAccountData } from "../../apiCalls/accountCalls";
-import { getEconomicsData } from "../../apiCalls/economicsCalls";
-import { setAccountData } from "../../redux/slices/accountSlice";
-import { setEconomics } from "../../redux/slices/economicsSlice";
-import NotificationModal from "../NotificationModal";
-import ToastMessages from "../ToastMessages";
-import TransactionSender from "../TransactionSender";
-import TxSubmittedModal from "../TxSubmittedModal";
 import Navbar from "./Navbar";
-import useBgPage from "./useBgPage";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { loggedIn, address } = Dapp.useContext();
-  const { BgPage, hideBgPage } = useBgPage();
+  const { loginMethod, tokenLogin } = useGetLoginInfo();
+  const { address } = useGetAccountInfo();
   const dispatch = useDispatch();
-  const refreshAccount = Dapp.useRefreshAccount();
+  const loggedIn = getIsLoggedIn();
 
   React.useEffect(() => {
     if (loggedIn) {
       refreshAccount();
-      fetchAccountData(address);
+      fetchAccountData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
@@ -39,8 +41,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  async function fetchAccountData(userAddress: string) {
-    const accountData = await getAccountData(userAddress);
+  async function fetchAccountData() {
+    const accountData = await getAccountData(address);
     if (accountData !== null) {
       dispatch(setAccountData(accountData));
     }
@@ -51,19 +53,19 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Navbar />
 
       <main className="d-flex flex-row flex-fill position-relative justify-center  container">
-        <Dapp.Authenticate routes={routes} unlockRoute={routeNames.unlock}>
-          {!hideBgPage && <>{BgPage}</>}
+        <AuthenticatedRoutesWrapper
+          routes={routes}
+          unlockRoute={routeNames.unlock}
+        >
           {children}
-          {loggedIn && (
-            <>
-              <SignTransactions />
-              <TransactionSender />
-              <NotificationModal />
-              <TxSubmittedModal />
-              <ToastMessages />
-            </>
-          )}
-        </Dapp.Authenticate>
+        </AuthenticatedRoutesWrapper>
+        <AccessTokenManager
+          loggedIn={loggedIn}
+          loginMethod={loginMethod}
+          userAddress={address}
+          tokenLogin={tokenLogin}
+          maiarIdApi={maiarIdApi}
+        />
       </main>
     </div>
   );

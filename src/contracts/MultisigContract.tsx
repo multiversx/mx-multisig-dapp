@@ -1,4 +1,8 @@
-import { useContext as useDappContext } from "@elrondnetwork/dapp";
+import {
+  getAccountProviderType,
+  getNetworkProxy,
+  transactionServices,
+} from "@elrondnetwork/dapp-core";
 import {
   ContractFunction,
   Balance,
@@ -24,25 +28,20 @@ import BigNumber from "bignumber.js";
 import { useSelector } from "react-redux";
 import { gasLimit, issueTokenContractAddress } from "config";
 import { parseAction, parseActionDetailed } from "helpers/converters";
-import useSendTransactions from "hooks/useSendTransactions";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
 import { MultisigAction } from "types/MultisigAction";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import { multisigContractFunctionNames } from "types/multisigFunctionNames";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendToken } from "types/MultisigSendToken";
-import getProviderType from "../components/SignTransactions/helpers/getProviderType";
 import { buildTransaction } from "./transactionUtils";
 
 const proposeDeployGasLimit = 256_000_000;
 
 export function useMultisigContract() {
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
-  const { dapp } = useDappContext();
-  const sendTransactionsToBeSigned = useSendTransactions();
 
-  const providerType = getProviderType(dapp.provider);
-
+  const providerType = getAccountProviderType();
   const smartContract = new SmartContract({ address: currentMultisigAddress });
 
   function sendTransaction(
@@ -58,7 +57,7 @@ export function useMultisigContract() {
       transactionGasLimit,
       ...args,
     );
-    return sendTransactionsToBeSigned(transaction);
+    return transactionServices.sendTransactions({ transactions: transaction });
   }
 
   function mutateSign(actionId: number) {
@@ -428,7 +427,8 @@ export function useMultisigContract() {
       func: new ContractFunction(functionName),
       args: args,
     });
-    return await dapp.proxy.queryContract(newQuery);
+    const proxy = getNetworkProxy();
+    return await proxy.queryContract(newQuery);
   }
   return {
     mutateEsdtIssueToken,

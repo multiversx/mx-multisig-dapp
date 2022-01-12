@@ -9,7 +9,7 @@ import ProposeInputAddress from "../MultisigDetails/ProposeModal/ProposeInputAdd
 interface AddMultisigModalType {
   show: boolean;
   handleClose: () => void;
-  handleAdd: (address: Address) => void;
+  handleAdd: (address: Address, name: string) => void;
 }
 
 const AddMultisigModal = ({
@@ -21,13 +21,16 @@ const AddMultisigModal = ({
 
   const [address, setAddress] = React.useState(Address.Zero());
   const [submitDisabled, setSubmitDisabled] = React.useState(false);
+  const [contractName, setContractName] = React.useState("");
 
   const onAddressParamChange = (newAddress: Address) => {
     setAddress(newAddress);
   };
-
+  const onContractNameChange = (e: any) => {
+    setContractName(e.target.value);
+  };
   const onAddClicked = () => {
-    handleAdd(address);
+    handleAdd(address, contractName);
   };
 
   return (
@@ -44,14 +47,20 @@ const AddMultisigModal = ({
           <p className="h3 text-center" data-testid="delegateTitle">
             {t("Add Multisig")}
           </p>
-
-          <div className="">
-            <ProposeInputAddress
-              setSubmitDisabled={setSubmitDisabled}
-              handleParamsChange={onAddressParamChange}
+          <ProposeInputAddress
+            setSubmitDisabled={setSubmitDisabled}
+            handleParamsChange={onAddressParamChange}
+          />{" "}
+          <div className="modal-control-container">
+            <label>{t("Name (optional)")} </label>
+            <input
+              type="text"
+              className="form-control"
+              value={contractName}
+              autoComplete="off"
+              onChange={onContractNameChange}
             />
           </div>
-
           <div className="modal-action-btns">
             <button
               onClick={handleClose}

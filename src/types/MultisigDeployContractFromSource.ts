@@ -1,7 +1,7 @@
+import { operations } from "@elrondnetwork/dapp-utils";
 import { BigUIntValue, Address } from "@elrondnetwork/erdjs";
 import { BytesValue } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
 import i18next from "i18next";
-import denominate from "../components/Denominate/denominate";
 import { denomination } from "../config";
 import { MultisigAction } from "./MultisigAction";
 import { MultisigActionType } from "./MultisigActionType";
@@ -47,7 +47,7 @@ export class MultisigDeployContractFromSource extends MultisigAction {
   }
 
   description() {
-    const denominatedAmount = denominate({
+    const denominatedAmount = operations.denominate({
       input: this.amount.valueOf().toString(),
       denomination: denomination,
       decimals: 4,

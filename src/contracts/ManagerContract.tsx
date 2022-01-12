@@ -1,4 +1,9 @@
-import { useContext as useDappContext } from "@elrondnetwork/dapp";
+import {
+  getAccountProviderType,
+  getNetworkProxy,
+  useGetAccountInfo,
+} from "@elrondnetwork/dapp-core";
+import { transactionServices } from "@elrondnetwork/dapp-core";
 import {
   Address,
   AddressValue,
@@ -13,40 +18,37 @@ import {
   CodeMetadata,
   DeployArguments,
   GasLimit,
+  Nonce,
 } from "@elrondnetwork/erdjs/out";
 import { Code } from "@elrondnetwork/erdjs/out/smartcontracts/code";
 import { Query } from "@elrondnetwork/erdjs/out/smartcontracts/query";
 
 import { gasLimit, multisigManagerContract } from "config";
 import { smartContractCode } from "helpers/constants";
-import { parseContractInfo } from "helpers/converters";
-import useSendTransactions from "hooks/useSendTransactions";
-import { MultisigContractInfoType } from "types/multisigContracts";
 import { multisigContractFunctionNames } from "types/multisigFunctionNames";
-import getProviderType from "../components/SignTransactions/helpers/getProviderType";
 import { buildTransaction } from "./transactionUtils";
 
 export const deployContractGasLimit = 150_000_000;
 
+const { sendTransactions } = transactionServices;
+
 export function useManagerContract() {
-  const { address, account, dapp } = useDappContext();
-  const sendTransactions = useSendTransactions();
-  const providerType = getProviderType(dapp.provider);
+  const { address, account } = useGetAccountInfo();
+  const providerType = getAccountProviderType();
 
   const smartContract = new SmartContract({
     address: new Address(multisigManagerContract ?? ""),
   });
-  const transactionAddress = new Address(address);
 
   async function deployMultisigContract(contractName: string) {
     const multisigAddressHex = SmartContract.computeAddress(
       new Address(address),
-      account.nonce,
+      new Nonce(account.nonce),
     );
 
     const multisigAddress = new Address(multisigAddressHex);
 
-    const boardMembers = [new AddressValue(new Address(address))];
+    const boardMembers = [new AddressValue(new Address(account.address))];
     const quorum = 1;
     const deployTransaction = getDeployContractTransaction(
       quorum,
@@ -56,14 +58,9 @@ export function useManagerContract() {
       multisigAddress,
       contractName,
     );
-    const attachMultisigTransaction =
-      getRegisterMultisigContractTransaction(multisigAddress);
-    const transactions = [
-      deployTransaction,
-      registerMultisigNameTransaction,
-      attachMultisigTransaction,
-    ];
-    sendTransactions(transactions, deployContractGasLimit);
+
+    const transactions = [deployTransaction, registerMultisigNameTransaction];
+    sendTransactions({ transactions, minGasLimit: deployContractGasLimit });
   }
 
   function getDeployContractTransaction(
@@ -86,21 +83,6 @@ export function useManagerContract() {
     return contract.deploy(deployArguments);
   }
 
-  function mutateRegisterMultisigContract(multisigAddress: Address) {
-    const transaction = getRegisterMultisigContractTransaction(multisigAddress);
-    sendTransactions(transaction);
-  }
-
-  function getRegisterMultisigContractTransaction(multisigAddress: Address) {
-    return buildTransaction(
-      0,
-      multisigContractFunctionNames.registerMultisigContract,
-      providerType,
-      smartContract,
-      gasLimit,
-      new AddressValue(multisigAddress),
-    );
-  }
   function getRegisterContractNameTransaction(
     multisigAddress: Address,
     name: string,
@@ -125,33 +107,7 @@ export function useManagerContract() {
       gasLimit,
       new AddressValue(multisigAddress),
     );
-    sendTransactions(transaction);
-  }
-
-  async function queryMultisigContractInfoArray(
-    functionName: string,
-    ...args: TypedValue[]
-  ): Promise<MultisigContractInfoType[]> {
-    const result = await query(functionName, ...args);
-
-    if (result.returnData.length === 0) {
-      return [];
-    }
-    const contractInfos = [];
-    for (const buffer of result.outputUntyped()) {
-      const contractInfo = parseContractInfo(buffer);
-      if (contractInfo !== null) {
-        contractInfos.push(contractInfo);
-      }
-    }
-    return contractInfos;
-  }
-
-  async function queryContracts() {
-    return queryMultisigContractInfoArray(
-      multisigContractFunctionNames.getMultisigContracts,
-      new AddressValue(transactionAddress),
-    );
+    sendTransactions({ transactions: transaction });
   }
 
   async function queryContractName(multisigAddress: Address) {
@@ -176,15 +132,13 @@ export function useManagerContract() {
       func: new ContractFunction(functionName),
       args: args,
     });
-    return await dapp.proxy.queryContract(newQuery);
+    const proxy = getNetworkProxy();
+    return await proxy.queryContract(newQuery);
   }
 
   return {
     deployMultisigContract,
     mutateUnregisterMultisigContract,
-    mutateRegisterMultisigContract,
-    queryContracts,
     queryContractName,
-    queryMultisigContractInfoArray,
   };
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { network } from "config";
 
 const ExplorerLink = ({
   page,
@@ -12,10 +12,9 @@ const ExplorerLink = ({
   text?: any;
   className?: string;
 }) => {
-  const { explorerAddress } = useDappContext();
   return (
     <a
-      href={`${explorerAddress}${page}`}
+      href={`${network.explorerAddress}${page}`}
       {...{
         target: "_blank",
       }}

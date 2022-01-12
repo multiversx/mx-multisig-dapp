@@ -1,10 +1,10 @@
 import React from "react";
-import * as Dapp from "@elrondnetwork/dapp";
+import { DappProvider } from "@elrondnetwork/dapp-core";
 import { ChainID, NetworkConfig } from "@elrondnetwork/erdjs/out";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { Provider as ReduxProvider } from "react-redux";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { germanTranslations } from "i18n/de";
 import { englishTranslations } from "i18n/en";
@@ -42,27 +42,26 @@ i18n.use(initReactI18next).init({
 export default function App() {
   return (
     <ReduxProvider store={store}>
-      <Dapp.Context
-        config={{ network, walletConnectBridge, walletConnectDeepLink }}
+      <DappProvider
+        networkConfig={{ network, walletConnectBridge, walletConnectDeepLink }}
       >
         <Router basename={process.env.PUBLIC_URL}>
           <PersistGate loading={null} persistor={persistor}>
             <Layout>
-              <Switch>
+              <Routes>
                 {routes.map((route, i) => (
                   <Route
                     path={route.path}
                     key={route.path + i}
-                    component={route.component}
-                    exact={true}
+                    element={<route.component />}
                   />
                 ))}
-                <Route component={PageNotFound} />
-              </Switch>
+                <Route element={PageNotFound} />
+              </Routes>
             </Layout>
           </PersistGate>
         </Router>
-      </Dapp.Context>
+      </DappProvider>
     </ReduxProvider>
   );
 }

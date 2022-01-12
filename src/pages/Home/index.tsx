@@ -1,15 +1,15 @@
 import * as React from "react";
-import * as Dapp from "@elrondnetwork/dapp";
-import { Link, Redirect } from "react-router-dom";
+import { getIsLoggedIn } from "@elrondnetwork/dapp-core";
+import { Link, Navigate } from "react-router-dom";
 import { ReactComponent as Hero } from "assets/img/home-img-multisig.svg";
 import shield from "assets/img/shield-icon.svg";
 import { ReactComponent as Union } from "assets/img/Union.svg";
 import { routeNames } from "routes";
 
 const Home = () => {
-  const { loggedIn } = Dapp.useContext();
+  const loggedIn = getIsLoggedIn();
   if (loggedIn) {
-    return <Redirect to={routeNames.dashboard} />;
+    return <Navigate to={routeNames.dashboard} />;
   }
 
   return (

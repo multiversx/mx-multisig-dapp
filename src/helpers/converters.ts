@@ -20,7 +20,6 @@ import { MultisigRemoveUser } from "types/MultisigRemoveUser";
 import { MultisigSendEgld } from "types/MultisigSendEgld";
 import { MultisigUpgradeContractFromSource } from "types/MultisigUpgradeContractFromSource";
 import { MultisigSmartContractCall } from "../types/MultisigSmartContractCall";
-import { PlainAddress } from "./plainObjects";
 
 const createKeccakHash = require("keccak");
 
@@ -324,7 +323,7 @@ export function parseContractInfo(
   const nameBytes = remainingBytes.slice(0, nameSize);
   const name = nameBytes.toString();
 
-  return { address: PlainAddress(address), name };
+  return { address: address.bech32(), name };
 }
 
 export function getIntValueFromBytes(buffer: Buffer) {

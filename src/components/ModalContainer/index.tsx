@@ -3,7 +3,7 @@ import { faTimes } from "@fortawesome/pro-regular-svg-icons/faTimes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { multisigOriginSelector } from "redux/selectors/appConfigSelector";
 
 const ModalContainer = ({
@@ -31,7 +31,7 @@ const ModalContainer = ({
   }, []);
 
   return close ? (
-    <Redirect
+    <Navigate
       to={{
         pathname: multisigOrigin.pathname,
         search: multisigOrigin.search,

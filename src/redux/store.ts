@@ -4,9 +4,8 @@ import localStorage from "redux-persist/lib/storage";
 import makeRootReducer from "./makeRootReducer";
 
 const persistConfig = {
-  key: "root",
+  key: "multisig-root",
   storage: localStorage,
-  whitelist: ["toasts"],
 };
 
 const persistedReducer = persistReducer(persistConfig, makeRootReducer());

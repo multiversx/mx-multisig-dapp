@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo } from "react";
+import { operations } from "@elrondnetwork/dapp-utils";
 import { Address, Balance, BigUIntValue } from "@elrondnetwork/erdjs/out";
 import { useFormik } from "formik";
 import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { TestContext } from "yup";
-import denominate from "components/Denominate/denominate";
 import { denomination } from "config";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { FormikInputField } from "helpers/formikFields";
@@ -30,7 +30,7 @@ const ProposeSendEgld = ({
 
   const denominatedValue = useMemo(
     () =>
-      denominate({
+      operations.denominate({
         input: multisigBalance.toString(),
         denomination: denomination,
         decimals: 4,
@@ -120,18 +120,18 @@ const ProposeSendEgld = ({
     if (value == null) {
       return true;
     }
-    const amount = Number(value);
-    if (Number.isNaN(amount)) {
+    const newAmount = Number(value);
+    if (Number.isNaN(newAmount)) {
       return (
         testContext?.createError({
           message: "Invalid amount",
         }) ?? false
       );
     }
-    if (amount < 0) {
+    if (newAmount < 0) {
       formik.setFieldValue("amount", 0);
     }
-    if (amount > Number(multisigBalance.toDenominated())) {
+    if (newAmount > Number(multisigBalance.toDenominated())) {
       return (
         testContext?.createError({
           message:

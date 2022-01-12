@@ -1,7 +1,7 @@
 import React from "react";
-import { useContext as useDappContext } from "@elrondnetwork/dapp";
+import { getIsLoggedIn } from "@elrondnetwork/dapp-core";
 import { Navbar as BsNavbar, NavItem, Nav } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as ElrondLogo } from "assets/img/elrond.svg";
 import { ReactComponent as Union } from "assets/img/Union.svg";
 import { dAppName } from "config";
@@ -9,11 +9,11 @@ import { routeNames } from "routes";
 import Account from "./Account";
 
 const Navbar = () => {
-  const { loggedIn } = useDappContext();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const loggedIn = getIsLoggedIn();
 
   const handleRedirectToHome = () => {
-    history.push("/");
+    navigate("/");
   };
 
   return (
@@ -28,7 +28,7 @@ const Navbar = () => {
         </NavItem>
 
         <Nav className="ml-auto">
-          {loggedIn === true ? (
+          {loggedIn ? (
             <div
               className="d-flex align-items-center logged-in"
               style={{ minWidth: 0 }}

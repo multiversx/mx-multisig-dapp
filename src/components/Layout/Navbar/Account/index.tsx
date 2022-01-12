@@ -1,9 +1,10 @@
 import React from "react";
+
 import {
-  localstorage as dappLocalstorage,
-  useContext as useDappContext,
-  useLogout as useDappLogout,
-} from "@elrondnetwork/dapp";
+  getIsLoggedIn,
+  logout,
+  useGetAccountInfo,
+} from "@elrondnetwork/dapp-core";
 import { faUserCircle, faPowerOff } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,15 +15,14 @@ import { usernameSelector } from "redux/selectors/accountSelector";
 import { routeNames } from "routes";
 
 const Account = () => {
-  const { address } = useDappContext();
-  const dappLogout = useDappLogout();
+  const { address } = useGetAccountInfo();
   const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>();
   const intervalRef = React.useRef<any>();
   const username = useSelector(usernameSelector);
 
   const logOut = () => {
-    dappLogout({ callbackUrl: `${window.location.origin}${routeNames.home}` });
+    logout(`${window.location.origin}${routeNames.home}`);
     localStorage.clear();
     sessionStorage.clear();
     document.cookie = "";
@@ -31,7 +31,7 @@ const Account = () => {
 
   const logoutOnSessionExpire = () => {
     intervalRef.current = setInterval(() => {
-      const loggedIn = dappLocalstorage.getItem("address");
+      const loggedIn = getIsLoggedIn();
       if (!loggedIn && isLoggedIn === true) {
         window.location.reload();
       }

@@ -5,7 +5,7 @@ import { getIsContractTrusted } from "apiCalls/multisigContractsCalls";
 import TrustedBadgeIcon from "assets/img/trusted-badge.svg";
 
 interface TrustedBadgePropsType {
-  contractAddress: string;
+  contractAddress?: string;
   initialValue?: boolean;
   onVerificationComplete?: (trusted: boolean) => void;
 }
@@ -24,8 +24,10 @@ function TrustedBadge({
   }
 
   React.useEffect(() => {
-    validateContractHash();
-  }, []);
+    if (contractAddress != null) {
+      validateContractHash();
+    }
+  }, [contractAddress]);
 
   return (
     <>

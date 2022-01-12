@@ -50,7 +50,7 @@ export const multisigContractsSlice = createSlice({
         return state;
       }
       state.multisigContracts = state.multisigContracts.map((contract) => {
-        if (contract.address.bech32 === address.bech32) {
+        if (contract.address === address) {
           return {
             ...contract,
             ...action.payload,

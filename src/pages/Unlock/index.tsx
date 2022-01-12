@@ -1,16 +1,15 @@
 import * as React from "react";
-import * as Dapp from "@elrondnetwork/dapp";
+import { loginServices } from "@elrondnetwork/dapp-core";
+import { services } from "@elrondnetwork/dapp-core-internal";
 import { faArrowRight, faInfoCircle } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { ReactComponent as IconElrond } from "assets/img/icon-elrond.svg";
 import { ReactComponent as IconLedger } from "assets/img/icon-ledger.svg";
 import { ReactComponent as IconMaiar } from "assets/img/icon-maiar.svg";
-import { network } from "config";
+import { maiarIdApi, network } from "config";
 import { routeNames } from "routes";
-import Ledger from "./Ledger";
-import Maiar from "./Maiar";
 
 declare global {
   interface Window {
@@ -47,20 +46,30 @@ const UnlockTitle = () => (
 );
 
 const Unlock = () => {
-  const { loggedIn } = Dapp.useContext();
+  const [token, setToken] = React.useState("");
 
-  const webWalletLogin = Dapp.useWebWalletLogin({
+  React.useEffect(() => {
+    services.maiarId.init({ maiarIdApi }).then((loginToken) => {
+      setToken(loginToken);
+    });
+  }, []);
+
+  const loginParams = {
     callbackRoute: routeNames.dashboard,
-  });
+    token,
+    logoutRoute: routeNames.home,
+  };
 
-  const extensionWalletLogin = Dapp.useExtensionLogin({
-    callbackRoute: routeNames.dashboard,
-  });
+  const [webWalletLogin, { isLoggedIn }] =
+    loginServices.useWebWalletLogin(loginParams);
+  const [extensionWalletLogin] = loginServices.useExtensionLogin(loginParams);
+  const [ledgerLogin] = loginServices.useLedgerLogin(loginParams);
+  const [walletConnectLogin] = loginServices.useWalletConnectLogin(loginParams);
 
-  if (loggedIn) {
-    return <Redirect to={routeNames.dashboard} />;
+  console.log("yo");
+  if (isLoggedIn) {
+    return <Navigate to={routeNames.dashboard} />;
   }
-
   return (
     <div className="unlock-page m-auto">
       <div className="card unlock text-center">
@@ -96,8 +105,8 @@ const Unlock = () => {
             </div>
           </button>
         )}
-        <Link
-          to={routeNames.walletconnect}
+        <button
+          onClick={() => walletConnectLogin(true)}
           className="btn btn-unlock btn-block"
         >
           <div className="d-flex justify-content-between align-items-center">
@@ -108,9 +117,9 @@ const Unlock = () => {
 
             <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
-        </Link>
+        </button>
 
-        <Link to={routeNames.ledger} className="btn btn-unlock btn-block">
+        <button onClick={ledgerLogin} className="btn btn-unlock btn-block">
           <div className="d-flex justify-content-between align-items-center">
             <div className="d-flex flex-row method">
               <IconLedger />
@@ -119,7 +128,7 @@ const Unlock = () => {
 
             <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
-        </Link>
+        </button>
 
         <button onClick={webWalletLogin} className="btn btn-unlock btn-block">
           <div className="d-flex justify-content-between align-items-center">
@@ -147,7 +156,5 @@ const Unlock = () => {
     </div>
   );
 };
-
-export { Ledger, Maiar };
 
 export default Unlock;

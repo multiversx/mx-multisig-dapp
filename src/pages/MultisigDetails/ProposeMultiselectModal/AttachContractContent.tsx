@@ -1,5 +1,8 @@
 import React from "react";
-import { useContext as useDappContext } from "@elrondnetwork/dapp";
+import {
+  getAccountProviderType,
+  transactionServices,
+} from "@elrondnetwork/dapp-core";
 import { Address } from "@elrondnetwork/erdjs";
 import { faArrowLeft, faLink } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,10 +11,8 @@ import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import getProviderType from "components/SignTransactions/helpers/getProviderType";
 import { buildBlockchainTransaction } from "contracts/transactionUtils";
 import { validateContractAddressOwner } from "helpers/validation";
-import useSendTransactions from "hooks/useSendTransactions";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
 import { setProposeMultiselectSelectedOption } from "redux/slices/modalsSlice";
 import { ProposalsTypes } from "types/Proposals";
@@ -24,11 +25,8 @@ interface AttachContractContentProps {
 const AttachContractContent = ({ handleClose }: AttachContractContentProps) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const {
-    dapp: { provider },
-  } = useDappContext();
-  const sendTransactionsToBeSigned = useSendTransactions();
-  const providerType = getProviderType(provider);
+
+  const providerType = getAccountProviderType();
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
 
   const validationSchema = Yup.object().shape({
@@ -52,7 +50,7 @@ const AttachContractContent = ({ handleClose }: AttachContractContentProps) => {
           new Address(values.contractAddress),
           data,
         );
-        sendTransactionsToBeSigned(transaction);
+        transactionServices.sendTransactions({ transactions: transaction });
         handleClose();
       } catch (error) {
         alert("An error occurred, please try again");

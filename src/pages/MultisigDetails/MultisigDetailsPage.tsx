@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { useContext as useDappContext } from "@elrondnetwork/dapp";
+import {
+  getNetworkProxy,
+  useGetAccountInfo,
+  useGetNetworkConfig,
+} from "@elrondnetwork/dapp-core";
 import { Ui, operations } from "@elrondnetwork/dapp-utils";
 import { Address, Balance } from "@elrondnetwork/erdjs";
 import {
@@ -13,7 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { Redirect, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { getAccountData } from "apiCalls/accountCalls";
 import { ReactComponent as WalletLogo } from "assets/img/elrond-wallet-icon.svg";
 import { ReactComponent as NoPoposalsIcon } from "assets/img/no-proposals-icon.svg";
@@ -37,7 +41,6 @@ import {
   selectedPerformedActionSelector,
 } from "redux/selectors/modalsSelector";
 import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
-import { refetchSelector } from "redux/selectors/toastSelector";
 import {
   setProposeMultiselectSelectedOption,
   setSelectedPerformedAction,
@@ -48,10 +51,6 @@ import { ProposalsTypes } from "types/Proposals";
 import MultisigDetailsAccordion from "./MultisigDetailsAccordion";
 import ProposeModal from "./ProposeModal/ProposeModal";
 import ProposeMultiselectModal from "./ProposeMultiselectModal/ProposeMultiselectModal";
-
-interface MultisigDetailsPageParams {
-  multisigAddressParam: string;
-}
 
 export interface ContractInfo {
   totalBoardMembers: number;
@@ -96,9 +95,10 @@ const MultisigDetailsPage = () => {
   } = contractInfo;
 
   const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
-
-  const { address, apiAddress, dapp, egldLabel, explorerAddress } =
-    useDappContext();
+  const { address } = useGetAccountInfo();
+  const {
+    network: { explorerAddress, apiAddress, egldLabel },
+  } = useGetNetworkConfig();
   const {
     queryBoardMembersCount,
     queryProposersCount,
@@ -112,9 +112,8 @@ const MultisigDetailsPage = () => {
   } = useMultisigContract();
   const { queryContractName } = useManagerContract();
   const dispatch = useDispatch();
-  const { multisigAddressParam } = useParams<MultisigDetailsPageParams>();
+  const { multisigAddressParam } = useParams<string>();
   const confirmModal = useConfirmModal();
-  const refetch = useSelector(refetchSelector);
   const egldPrice = useSelector(priceSelector);
   const { t } = useTranslation();
   const isProposer = userRole !== 0;
@@ -132,7 +131,7 @@ const MultisigDetailsPage = () => {
     if (currentMultisigAddress == null) {
       return;
     }
-
+    const proxy = getNetworkProxy();
     try {
       const [
         newTotalBoardMembers,
@@ -151,7 +150,7 @@ const MultisigDetailsPage = () => {
         queryUserRole(new Address(address).hex()),
         queryAllActions(),
         queryContractName(currentMultisigAddress!),
-        dapp.proxy.getAccount(currentMultisigAddress!),
+        proxy.getAccount(currentMultisigAddress!),
         queryBoardMemberAddresses(),
         queryProposerAddresses(),
       ]);
@@ -312,7 +311,7 @@ const MultisigDetailsPage = () => {
     const isCurrentMultisigAddressDiferentThanParam =
       currentMultisigAddress &&
       newMultisigAddressParam &&
-      currentMultisigAddress?.hex() !== newMultisigAddressParam.hex();
+      currentMultisigAddress?.bech32() !== newMultisigAddressParam.bech32();
 
     if (
       (isCurrentMultisigAddressNotSet ||
@@ -325,10 +324,10 @@ const MultisigDetailsPage = () => {
     } else if (address !== null) {
       getDashboardInfo();
     }
-  }, [currentMultisigAddress?.hex(), refetch, address]);
+  }, [currentMultisigAddress?.bech32(), address]);
 
   if (!parseMultisigAddress()) {
-    return <Redirect to="/multisig" />;
+    return <Navigate to="/multisig" />;
   }
 
   if (!dataFetched) {

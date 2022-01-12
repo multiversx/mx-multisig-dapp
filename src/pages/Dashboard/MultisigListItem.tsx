@@ -1,22 +1,19 @@
 import React from "react";
-import { useContext as useDappContext } from "@elrondnetwork/dapp";
 import { Ui } from "@elrondnetwork/dapp-utils";
-import { Address } from "@elrondnetwork/erdjs/out";
 import { faExternalLinkAlt, faTimes } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as Wallet } from "assets/img/wallet-logo.svg";
 import TrustedBadge from "components/TrustedBadge";
-import { useManagerContract } from "contracts/ManagerContract";
+import { network } from "config";
 import { updateMultisigContract } from "redux/slices/multisigContractsSlice";
 import { MultisigContractInfoType } from "types/multisigContracts";
+import { removeContractFromMultisigContractsList } from "../../apiCalls/multisigContractsCalls";
 
 const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
-  const { explorerAddress } = useDappContext();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { mutateUnregisterMultisigContract } = useManagerContract();
 
   function ontTrustVerificationComplete(isContractTrusted: boolean) {
     dispatch(
@@ -28,13 +25,13 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
   }
 
   const onEnterClicked = () => {
-    history.push("/multisig/" + contract.address.bech32);
+    navigate("/multisig/" + contract.address);
   };
 
   const onUnregisterClicked = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    await mutateUnregisterMultisigContract(new Address(contract.address.hex));
+    await removeContractFromMultisigContractsList(contract.address);
   };
 
   return (
@@ -58,13 +55,13 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
 
           <div className="d-flex wallet-address">
             <TrustedBadge
-              contractAddress={contract.address.bech32}
+              contractAddress={contract.address}
               onVerificationComplete={ontTrustVerificationComplete}
               initialValue={contract.isTrusted}
             />
-            <Ui.Trim text={contract.address.bech32} />
+            <Ui.Trim text={contract.address} />
             <a
-              href={`${explorerAddress}accounts/${contract.address.bech32}`}
+              href={`${network.explorerAddress}accounts/${contract.address}`}
               target="_blank"
               onClick={(e) => e.stopPropagation()}
               rel="noreferrer"

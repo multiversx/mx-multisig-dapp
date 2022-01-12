@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from "react";
+import { operations } from "@elrondnetwork/dapp-utils";
 import {
   Address,
   Balance,
@@ -13,7 +14,6 @@ import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { TestContext } from "yup";
-import denominate from "components/Denominate/denominate";
 import { denomination } from "config";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
 import { FormikInputField } from "helpers/formikFields";
@@ -38,7 +38,7 @@ const ProposeSmartContractCall = ({
 
   const denominatedValue = useMemo(
     () =>
-      denominate({
+      operations.denominate({
         input: multisigBalance.toString(),
         denomination: denomination,
         decimals: 4,
