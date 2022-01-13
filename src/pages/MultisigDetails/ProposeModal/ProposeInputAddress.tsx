@@ -5,11 +5,13 @@ import { useTranslation } from "react-i18next";
 interface ProposeInputAddressType {
   handleParamsChange: (params: Address) => void;
   setSubmitDisabled: (value: boolean) => void;
+  disabled?: boolean;
 }
 
 const ProposeInputAddress = ({
   handleParamsChange,
   setSubmitDisabled,
+  disabled,
 }: ProposeInputAddressType) => {
   const [address, setAddress] = useState("");
   const [error, setError] = useState(false);
@@ -34,6 +36,7 @@ const ProposeInputAddress = ({
       <label>{t("Address")} </label>
       <input
         type="text"
+        disabled={disabled}
         className="form-control"
         value={address}
         autoComplete="off"

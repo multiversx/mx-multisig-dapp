@@ -14,7 +14,11 @@ import {
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
-import { useMultisigContract } from "contracts/MultisigContract";
+import {
+  mutateSign,
+  mutateUnsign,
+  mutateDiscardAction,
+} from "contracts/MultisigContract";
 import { setSelectedPerformedAction } from "redux/slices/modalsSlice";
 
 export interface MultisigProposalCardType {
@@ -46,8 +50,6 @@ const MultisigProposalCard = ({
   boardMembers,
   signers = [],
 }: MultisigProposalCardType) => {
-  const { mutateSign, mutateUnsign, mutateDiscardAction } =
-    useMultisigContract();
   const { quorumSize } = React.useContext(MultisigDetailsContext);
   const { t } = useTranslation();
   const dispatch = useDispatch();

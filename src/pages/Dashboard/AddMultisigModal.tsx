@@ -1,37 +1,47 @@
 import React from "react";
-import { Address } from "@elrondnetwork/erdjs/out";
+import { Address } from "@elrondnetwork/erdjs";
 import { faTimes } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { addContractToMultisigContractsList } from "../../apiCalls/multisigContractsCalls";
+import { MultisigContractInfoType } from "../../types/multisigContracts";
 import ProposeInputAddress from "../MultisigDetails/ProposeModal/ProposeInputAddress";
 
 interface AddMultisigModalType {
   show: boolean;
+  loading?: boolean;
   handleClose: () => void;
-  handleAdd: (address: Address, name: string) => void;
+  setNewContracts: (contracts: MultisigContractInfoType[]) => void;
 }
 
 const AddMultisigModal = ({
   show,
+  loading,
   handleClose,
-  handleAdd,
+  setNewContracts,
 }: AddMultisigModalType) => {
   const { t } = useTranslation();
 
   const [address, setAddress] = React.useState(Address.Zero());
   const [submitDisabled, setSubmitDisabled] = React.useState(false);
-  const [contractName, setContractName] = React.useState("");
+  const [name, setName] = React.useState("");
 
-  const onAddressParamChange = (newAddress: Address) => {
+  async function onAddressParamChange(newAddress: Address) {
     setAddress(newAddress);
-  };
-  const onContractNameChange = (e: any) => {
-    setContractName(e.target.value);
-  };
-  const onAddClicked = () => {
-    handleAdd(address, contractName);
-  };
+  }
+  async function onContractNameChange(e: any) {
+    setName(e.target.value);
+  }
+  async function onAddClicked() {
+    const contractAddress = address.bech32();
+    const newContracts = await addContractToMultisigContractsList({
+      address: contractAddress,
+      name,
+    });
+    setNewContracts(newContracts);
+    handleClose();
+  }
 
   return (
     <Modal
@@ -48,6 +58,7 @@ const AddMultisigModal = ({
             {t("Add Multisig")}
           </p>
           <ProposeInputAddress
+            disabled={loading}
             setSubmitDisabled={setSubmitDisabled}
             handleParamsChange={onAddressParamChange}
           />{" "}
@@ -55,8 +66,9 @@ const AddMultisigModal = ({
             <label>{t("Name (optional)")} </label>
             <input
               type="text"
+              disabled={loading}
               className="form-control"
-              value={contractName}
+              value={name}
               autoComplete="off"
               onChange={onContractNameChange}
             />
@@ -64,16 +76,22 @@ const AddMultisigModal = ({
           <div className="modal-action-btns">
             <button
               onClick={handleClose}
+              disabled={loading}
               className="btn btn-primary btn-light "
             >
               <FontAwesomeIcon icon={faTimes} />
               {t("Cancel")}
             </button>
             <button
-              disabled={submitDisabled}
+              disabled={submitDisabled || loading}
               onClick={onAddClicked}
               className="btn btn-primary mb-3"
             >
+              {loading && (
+                <div className="spinner-border " role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              )}
               {t("Add")}
             </button>
           </div>

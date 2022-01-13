@@ -5,7 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { useMultisigContract } from "contracts/MultisigContract";
+import {
+  mutateProposeChangeQuorum,
+  mutateProposeAddProposer,
+  mutateProposeAddBoardMember,
+  mutateProposeRemoveUser,
+} from "contracts/MultisigContract";
 import { setProposeModalSelectedOption } from "redux/slices/modalsSlice";
 import { ProposalsTypes, SelectedOptionType } from "types/Proposals";
 import { titles } from "../constants";
@@ -18,12 +23,6 @@ interface ProposeModalPropsType {
 }
 
 const ProposeModal = ({ selectedOption }: ProposeModalPropsType) => {
-  const {
-    mutateProposeChangeQuorum,
-    mutateProposeAddProposer,
-    mutateProposeAddBoardMember,
-    mutateProposeRemoveUser,
-  } = useMultisigContract();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 

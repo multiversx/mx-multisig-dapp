@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   getIsProviderEqualTo,
   useGetAccountInfo,
 } from "@elrondnetwork/dapp-core";
-import { Address } from "@elrondnetwork/erdjs";
 import {
   faWallet,
   faPlus,
@@ -18,7 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 import CreateWallet from "assets/img/create-wallet.svg";
 import OpenWallet from "assets/img/open-wallet.svg";
 import wawe from "assets/img/wawe.svg";
-import { useManagerContract } from "contracts/ManagerContract";
 import { providerTypes } from "helpers/constants";
 import MultisigListItem from "pages/Dashboard/MultisigListItem";
 import {
@@ -26,59 +24,49 @@ import {
   multisigContractsSelector,
 } from "redux/selectors/multisigContractsSelectors";
 import { setMultisigContracts } from "redux/slices/multisigContractsSlice";
-import {
-  addContractToMultisigContractsList,
-  getUserMultisigContractsList,
-} from "../../apiCalls/multisigContractsCalls";
+import { getUserMultisigContractsList } from "../../apiCalls/multisigContractsCalls";
+import { MultisigContractInfoType } from "../../types/multisigContracts";
 import AddMultisigModal from "./AddMultisigModal";
 import DeployStepsModal from "./DeployMultisigModal";
 
-const Index = () => {
+const Dashboard = () => {
   const multisigContracts = useSelector(multisigContractsSelector);
   const multisigContractsFetched = useSelector(
     multisigContractsFetchedSelector,
   );
   const dispatch = useDispatch();
-  const { deployMultisigContract } = useManagerContract();
   const { t } = useTranslation();
-  const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
-  const [showDeployMultisigModal, setShowDeployMultisigModal] =
-    React.useState(false);
+  const [showAddMultisigModal, setShowAddMultisigModal] = useState(false);
+  const [showDeployMultisigModal, setShowDeployMultisigModal] = useState(false);
 
   const { address } = useGetAccountInfo();
 
   const isWalletProvider = getIsProviderEqualTo(providerTypes.wallet);
 
-  const onDeployClicked = async () => {
+  useEffect(() => {
+    readMultisigContracts();
+  }, [address]);
+
+  async function onDeployClicked() {
     setShowDeployMultisigModal(true);
-  };
+  }
 
-  const onDeploy = async (name: string) => {
-    deployMultisigContract(name);
-  };
-  const onAddMultisigClicked = async () => {
+  function onAddMultisigClicked() {
     setShowAddMultisigModal(true);
-  };
+  }
 
-  const onAddMultisigFinished = async (newAddress: Address, name = "") => {
-    const newContracts = await addContractToMultisigContractsList({
-      address: newAddress.hex(),
-      name,
-    });
-    setMultisigContracts(newContracts);
-    setShowAddMultisigModal(false);
-  };
-
-  const readMultisigContracts = async () => {
+  async function readMultisigContracts() {
     if (address) {
       const contracts = await getUserMultisigContractsList();
       dispatch(setMultisigContracts(contracts));
     }
-  };
+  }
 
-  React.useEffect(() => {
-    readMultisigContracts();
-  }, [address]);
+  async function updateMultisigContract(
+    newContracts: MultisigContractInfoType[],
+  ) {
+    dispatch(setMultisigContracts(newContracts));
+  }
 
   const deployButton = (
     <button
@@ -213,12 +201,12 @@ const Index = () => {
           handleClose={() => {
             setShowAddMultisigModal(false);
           }}
-          handleAdd={onAddMultisigFinished}
+          setNewContracts={updateMultisigContract}
         />
         <DeployStepsModal
           show={showDeployMultisigModal}
           handleClose={() => setShowDeployMultisigModal(false)}
-          handleDeploy={onDeploy}
+          setNewContracts={updateMultisigContract}
         />
         <p className="info-msg">
           New to Multisig?&nbsp;&nbsp;&nbsp;&nbsp;
@@ -229,4 +217,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Dashboard;

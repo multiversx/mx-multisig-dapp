@@ -1,23 +1,26 @@
-import { getAddress, logout } from "@elrondnetwork/dapp-core";
+import { getAddress } from "@elrondnetwork/dapp-core";
 import { services } from "@elrondnetwork/dapp-core-internal";
 import axios, { AxiosError } from "axios";
+import uniqBy from "lodash/uniqBy";
 import { extrasApi, maiarIdApi, network } from "config";
 import { verifiedContractsHashes } from "helpers/constants";
-import { routeNames } from "routes";
 import { MultisigContractInfoType } from "types/multisigContracts";
-
 const contractsInfoStorageEndpoint = `${extrasApi}/settings/multisig`;
 
 const multisigAxiosInstance = axios.create();
 
 multisigAxiosInstance.interceptors.request.use(
   async function (config) {
-    const address = await getAddress();
-    const token = await services.maiarId.getAccessToken({
-      address,
-      maiarIdApi,
-    });
-    config.headers.Authorization = `Bearer ${token.accessToken}`;
+    try {
+      const address = await getAddress();
+      const token = await services.maiarId.getAccessToken({
+        address,
+        maiarIdApi,
+      });
+      config.headers.Authorization = `Bearer ${token.accessToken}`;
+    } catch (err) {
+      console.error(err);
+    }
     return config;
   },
   function (error: any) {
@@ -30,7 +33,7 @@ multisigAxiosInstance.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response?.status === 403) {
       console.log("Axios request 403. Logging out.");
-      logout(routeNames.unlock);
+      // logout(routeNames.unlock);
     }
     return Promise.reject(error);
   },
@@ -62,7 +65,10 @@ export async function addContractToMultisigContractsList(
   newContract: MultisigContractInfoType,
 ): Promise<MultisigContractInfoType[]> {
   const currentContracts = await getUserMultisigContractsList();
-  const newContracts = [...currentContracts, newContract];
+  const newContracts = uniqBy(
+    [...currentContracts, newContract],
+    (contract) => contract.address,
+  );
   await multisigAxiosInstance.post(contractsInfoStorageEndpoint, newContracts);
   return newContracts;
 }

@@ -1,5 +1,5 @@
-import * as React from "react";
-import { loginServices } from "@elrondnetwork/dapp-core";
+import React, { useEffect, useState } from "react";
+import { DappUI, useGetLoginInfo } from "@elrondnetwork/dapp-core";
 import { services } from "@elrondnetwork/dapp-core-internal";
 import { faArrowRight, faInfoCircle } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -46,9 +46,10 @@ const UnlockTitle = () => (
 );
 
 const Unlock = () => {
-  const [token, setToken] = React.useState("");
+  const [token, setToken] = useState("");
+  const { loginMethod } = useGetLoginInfo();
 
-  React.useEffect(() => {
+  useEffect(() => {
     services.maiarId.init({ maiarIdApi }).then((loginToken) => {
       setToken(loginToken);
     });
@@ -58,16 +59,10 @@ const Unlock = () => {
     callbackRoute: routeNames.dashboard,
     token,
     logoutRoute: routeNames.home,
+    buttonClassName: "btn btn-unlock btn-block",
   };
 
-  const [webWalletLogin, { isLoggedIn }] =
-    loginServices.useWebWalletLogin(loginParams);
-  const [extensionWalletLogin] = loginServices.useExtensionLogin(loginParams);
-  const [ledgerLogin] = loginServices.useLedgerLogin(loginParams);
-  const [walletConnectLogin] = loginServices.useWalletConnectLogin(loginParams);
-
-  console.log("yo");
-  if (isLoggedIn) {
+  if (loginMethod != "") {
     return <Navigate to={routeNames.dashboard} />;
   }
   return (
@@ -91,10 +86,7 @@ const Unlock = () => {
         )}
 
         {window.elrondWallet && (
-          <button
-            onClick={extensionWalletLogin}
-            className="btn btn-unlock btn-block"
-          >
+          <DappUI.ExtensionLoginButton {...loginParams}>
             <div className="d-flex justify-content-between align-items-center">
               <div className="d-flex flex-row method">
                 <IconMaiar />
@@ -103,12 +95,10 @@ const Unlock = () => {
 
               <FontAwesomeIcon icon={faArrowRight} className="arrow" />
             </div>
-          </button>
+          </DappUI.ExtensionLoginButton>
         )}
-        <button
-          onClick={() => walletConnectLogin(true)}
-          className="btn btn-unlock btn-block"
-        >
+
+        <DappUI.WalletConnectLoginButton {...loginParams}>
           <div className="d-flex justify-content-between align-items-center">
             <div className="d-flex flex-row method">
               <IconMaiar />
@@ -117,9 +107,9 @@ const Unlock = () => {
 
             <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
-        </button>
+        </DappUI.WalletConnectLoginButton>
 
-        <button onClick={ledgerLogin} className="btn btn-unlock btn-block">
+        <DappUI.LedgerLoginButton loginButtonText={""} {...loginParams}>
           <div className="d-flex justify-content-between align-items-center">
             <div className="d-flex flex-row method">
               <IconLedger />
@@ -128,9 +118,9 @@ const Unlock = () => {
 
             <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
-        </button>
+        </DappUI.LedgerLoginButton>
 
-        <button onClick={webWalletLogin} className="btn btn-unlock btn-block">
+        <DappUI.WebWalletLoginButton {...loginParams}>
           <div className="d-flex justify-content-between align-items-center">
             <div className="d-flex flex-row method">
               <IconElrond />
@@ -138,7 +128,7 @@ const Unlock = () => {
             </div>
             <FontAwesomeIcon icon={faArrowRight} className="arrow" />
           </div>
-        </button>
+        </DappUI.WebWalletLoginButton>
 
         <div className="mt-spacer">
           <span className="text">New to Elrond?</span>

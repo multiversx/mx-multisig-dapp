@@ -7,7 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as Wallet } from "assets/img/wallet-logo.svg";
 import TrustedBadge from "components/TrustedBadge";
 import { network } from "config";
-import { updateMultisigContract } from "redux/slices/multisigContractsSlice";
+import {
+  setMultisigContracts,
+  updateMultisigContract,
+} from "redux/slices/multisigContractsSlice";
 import { MultisigContractInfoType } from "types/multisigContracts";
 import { removeContractFromMultisigContractsList } from "../../apiCalls/multisigContractsCalls";
 
@@ -31,7 +34,10 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
   const onUnregisterClicked = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    await removeContractFromMultisigContractsList(contract.address);
+    const newContracts = await removeContractFromMultisigContractsList(
+      contract.address,
+    );
+    dispatch(setMultisigContracts(newContracts));
   };
 
   return (

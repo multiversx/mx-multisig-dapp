@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { gasLimit as defaultGasLimit, maxGasLimit } from "config";
-import { useMultisigContract } from "contracts/MultisigContract";
+import { mutatePerformAction } from "contracts/MultisigContract";
 import {
   SelectedActionToPerform,
   setSelectedPerformedAction,
@@ -36,7 +36,6 @@ const PerformActionModal = ({
       : defaultGasLimit;
   const [selectedGasLimit, setSelectedGasLimit] = React.useState(gasLimit);
   const [error, setError] = React.useState<string | null>(null);
-  const { mutatePerformAction } = useMultisigContract();
   const dispatch = useDispatch();
   if (selectedAction == null) {
     return null;

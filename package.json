@@ -6,8 +6,8 @@
   "license": "GPL-3.0-or-later",
   "repository": "@elrondnetwork/multisig",
   "dependencies": {
-    "@elrondnetwork/dapp-core": "^0.1.0",
-    "@elrondnetwork/dapp-core-internal": "0.0.1",
+    "@elrondnetwork/dapp-core": "^0.1.4",
+    "@elrondnetwork/dapp-core-internal": "^0.0.3",
     "@elrondnetwork/dapp-utils": "0.0.14",
     "@elrondnetwork/erdjs": "^8.0.1-alpha.13",
     "@fortawesome/pro-regular-svg-icons": "^5.15.4",

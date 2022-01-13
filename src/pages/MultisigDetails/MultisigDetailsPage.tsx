@@ -28,8 +28,17 @@ import State from "components/State";
 import TrustedBadge from "components/TrustedBadge";
 import { denomination, decimals } from "config";
 import MultisigDetailsContext from "context/MultisigDetailsContext";
-import { useManagerContract } from "contracts/ManagerContract";
-import { useMultisigContract } from "contracts/MultisigContract";
+import {
+  queryBoardMembersCount,
+  queryProposersCount,
+  queryQuorumCount,
+  queryUserRole,
+  queryAllActions,
+  queryActionValidSignerCount,
+  mutateDiscardAction,
+  queryBoardMemberAddresses,
+  queryProposerAddresses,
+} from "contracts/MultisigContract";
 import { hexToNumber, hexToString } from "helpers/converters";
 import { PlainAddress } from "helpers/plainObjects";
 import { tryParseTransactionParameter } from "helpers/urlparameters";
@@ -99,18 +108,7 @@ const MultisigDetailsPage = () => {
   const {
     network: { explorerAddress, apiAddress, egldLabel },
   } = useGetNetworkConfig();
-  const {
-    queryBoardMembersCount,
-    queryProposersCount,
-    queryQuorumCount,
-    queryUserRole,
-    queryAllActions,
-    queryActionValidSignerCount,
-    mutateDiscardAction,
-    queryBoardMemberAddresses,
-    queryProposerAddresses,
-  } = useMultisigContract();
-  const { queryContractName } = useManagerContract();
+
   const dispatch = useDispatch();
   const { multisigAddressParam } = useParams<string>();
   const confirmModal = useConfirmModal();
@@ -139,7 +137,6 @@ const MultisigDetailsPage = () => {
         newQuorumSize,
         newUserRole,
         newAllActions,
-        contractName,
         account,
         boardMembersAddresses,
         proposersAddresses,
@@ -149,7 +146,6 @@ const MultisigDetailsPage = () => {
         queryQuorumCount(),
         queryUserRole(new Address(address).hex()),
         queryAllActions(),
-        queryContractName(currentMultisigAddress!),
         proxy.getAccount(currentMultisigAddress!),
         queryBoardMemberAddresses(),
         queryProposerAddresses(),
@@ -163,9 +159,9 @@ const MultisigDetailsPage = () => {
         deployedAt: moment.unix(accountInfo.deployedAt).format("DD MMM YYYY"),
         allActions: newAllActions,
         multisigBalance: account.balance,
-        multisigName: contractName,
         boardMembersAddresses,
         proposersAddresses,
+        multisigName: "dummy contractname",
       };
 
       setContractInfo(newContractInfo);

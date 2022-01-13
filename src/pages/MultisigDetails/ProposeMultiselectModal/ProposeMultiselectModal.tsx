@@ -8,7 +8,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { useMultisigContract } from "contracts/MultisigContract";
+import {
+  mutateSendEgld,
+  mutateSmartContractCall,
+  mutateDeployContractFromSource,
+  mutateUpgradeContractFromSource,
+  mutateEsdtIssueToken,
+  mutateEsdtSendToken,
+} from "contracts/MultisigContract";
 import { setProposeMultiselectSelectedOption } from "redux/slices/modalsSlice";
 import { MultisigAction } from "types/MultisigAction";
 import { MultisigDeployContractFromSource } from "types/MultisigDeployContractFromSource";
@@ -39,14 +46,6 @@ interface ProposeMultiselectModalPropsType {
 const ProposeMultiselectModal = ({
   selectedOption,
 }: ProposeMultiselectModalPropsType) => {
-  const {
-    mutateSendEgld,
-    mutateSmartContractCall,
-    mutateDeployContractFromSource,
-    mutateUpgradeContractFromSource,
-    mutateEsdtIssueToken,
-    mutateEsdtSendToken,
-  } = useMultisigContract();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [selectedProposal, setSelectedProposal] =

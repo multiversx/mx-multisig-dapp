@@ -1,7 +1,6 @@
 import React from "react";
 import {
   AuthenticatedRoutesWrapper,
-  getIsLoggedIn,
   refreshAccount,
   useGetAccountInfo,
   useGetLoginInfo,
@@ -20,8 +19,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const { loginMethod, tokenLogin } = useGetLoginInfo();
   const { address } = useGetAccountInfo();
   const dispatch = useDispatch();
-  const loggedIn = getIsLoggedIn();
 
+  const loggedIn = loginMethod != "";
   React.useEffect(() => {
     if (loggedIn) {
       refreshAccount();
