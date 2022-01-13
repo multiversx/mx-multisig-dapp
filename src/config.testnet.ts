@@ -20,9 +20,6 @@ export const maiarIdApi = "https://testnet-id.maiar.com/api/v1";
 export const issueTokenContractAddress =
   "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u";
 
-export const multisigManagerContract =
-  "erd1qqqqqqqqqqqqqpgq4wxs8k5060eph7ehdkx4wmm9s4qgdj70ermspyr7pq";
-
 export const network: NetworkType = {
   id: "testnet",
   name: "Testnet",
