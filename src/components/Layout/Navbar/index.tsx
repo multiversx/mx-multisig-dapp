@@ -6,6 +6,7 @@ import { ReactComponent as ElrondLogo } from "assets/img/elrond.svg";
 import { ReactComponent as Union } from "assets/img/Union.svg";
 import { dAppName } from "config";
 import { routeNames } from "routes";
+import { uniqueContractAddress } from "../../../multisigConfig";
 import Account from "./Account";
 
 const Navbar = () => {
@@ -13,7 +14,10 @@ const Navbar = () => {
   const loggedIn = getIsLoggedIn();
 
   const handleRedirectToHome = () => {
-    navigate("/");
+    const route = uniqueContractAddress
+      ? "/multisig/" + uniqueContractAddress
+      : routeNames.home;
+    navigate(route);
   };
 
   return (

@@ -11,6 +11,7 @@ import {
   services,
 } from "@elrondnetwork/dapp-core-internal";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getAccountData } from "apiCalls/accountCalls";
 import { getEconomicsData } from "apiCalls/economicsCalls";
 import { getUserMultisigContractsList } from "apiCalls/multisigContractsCalls";
@@ -26,6 +27,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const { loginMethod, tokenLogin } = useGetLoginInfo();
   const { address } = useGetAccountInfo();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const loggedIn = loginMethod != "";
   React.useEffect(() => {
@@ -51,6 +53,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           { address: uniqueContractAddress, name: uniqueContractName ?? "" },
         ]),
       );
+      navigate("/multisig/" + uniqueContractAddress);
       return;
     }
 

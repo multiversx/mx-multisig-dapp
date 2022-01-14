@@ -19,7 +19,7 @@ declare global {
 
 const UnlockTitle = () => (
   <h5 className="unlock-title mb-spacer">
-    Connect to a wallet{" "}
+    Connect to a wallet
     <OverlayTrigger
       placement="top"
       delay={{ show: 250, hide: 400 }}
