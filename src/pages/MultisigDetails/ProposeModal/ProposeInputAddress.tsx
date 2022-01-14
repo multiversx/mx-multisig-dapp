@@ -5,12 +5,14 @@ import { useTranslation } from "react-i18next";
 interface ProposeInputAddressType {
   handleParamsChange: (params: Address) => void;
   setSubmitDisabled: (value: boolean) => void;
+  invalidAddress?: boolean;
   disabled?: boolean;
 }
 
 const ProposeInputAddress = ({
   handleParamsChange,
   setSubmitDisabled,
+  invalidAddress,
   disabled,
 }: ProposeInputAddressType) => {
   const [address, setAddress] = useState("");
@@ -18,8 +20,8 @@ const ProposeInputAddress = ({
   const { t } = useTranslation();
 
   const handleAddressChanged = (event: any) => {
+    const newAddress = String(event.target.value);
     try {
-      const newAddress = String(event.target.value);
       const parsedValue = new Address(newAddress);
       setError(false);
       setAddress(newAddress);
@@ -27,6 +29,7 @@ const ProposeInputAddress = ({
       setSubmitDisabled(false);
     } catch (err) {
       setSubmitDisabled(true);
+      setAddress(newAddress);
       setError(true);
     }
   };
@@ -43,6 +46,11 @@ const ProposeInputAddress = ({
         onChange={handleAddressChanged}
       />
       {error && <p className="text-danger">{t("Invalid address")}</p>}
+      {invalidAddress && !error && (
+        <p className="text-danger">
+          {t("This is not a valid multisig address")}
+        </p>
+      )}
     </div>
   );
 };

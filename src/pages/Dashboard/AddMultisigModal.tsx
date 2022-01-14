@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Address } from "@elrondnetwork/erdjs";
 import { faTimes } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { addContractToMultisigContractsList } from "../../apiCalls/multisigContractsCalls";
-import { MultisigContractInfoType } from "../../types/multisigContracts";
+import {
+  addContractToMultisigContractsList,
+  validateMultisigAddress,
+} from "apiCalls/multisigContractsCalls";
+import { MultisigContractInfoType } from "types/multisigContracts";
 import ProposeInputAddress from "../MultisigDetails/ProposeModal/ProposeInputAddress";
 
 interface AddMultisigModalType {
@@ -23,11 +26,13 @@ const AddMultisigModal = ({
 }: AddMultisigModalType) => {
   const { t } = useTranslation();
 
-  const [address, setAddress] = React.useState(Address.Zero());
-  const [submitDisabled, setSubmitDisabled] = React.useState(false);
-  const [name, setName] = React.useState("");
+  const [address, setAddress] = useState(Address.Zero());
+  const [submitDisabled, setSubmitDisabled] = useState(false);
+  const [invalidMultisigAddress, setInvalidMultisigAddress] = useState(false);
+  const [name, setName] = useState("");
 
   async function onAddressParamChange(newAddress: Address) {
+    setInvalidMultisigAddress(false);
     setAddress(newAddress);
   }
   async function onContractNameChange(e: any) {
@@ -35,6 +40,10 @@ const AddMultisigModal = ({
   }
   async function onAddClicked() {
     const contractAddress = address.bech32();
+    const isAddressValid = await validateMultisigAddress(contractAddress);
+    if (!isAddressValid) {
+      return setInvalidMultisigAddress(true);
+    }
     const newContracts = await addContractToMultisigContractsList({
       address: contractAddress,
       name,
@@ -59,6 +68,7 @@ const AddMultisigModal = ({
           </p>
           <ProposeInputAddress
             disabled={loading}
+            invalidAddress={invalidMultisigAddress}
             setSubmitDisabled={setSubmitDisabled}
             handleParamsChange={onAddressParamChange}
           />{" "}

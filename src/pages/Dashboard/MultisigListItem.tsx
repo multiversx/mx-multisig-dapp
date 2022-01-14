@@ -73,7 +73,9 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
     navigate("/multisig/" + contract.address);
   };
 
-  const onUnregisterContract = async () => {
+  const onUnregisterContract = async (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
     const newContracts = await removeContractFromMultisigContractsList(
       contract.address,
     );

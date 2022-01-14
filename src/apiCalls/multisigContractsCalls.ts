@@ -39,6 +39,21 @@ multisigAxiosInstance.interceptors.response.use(
   },
 );
 
+export async function validateMultisigAddress(address: string) {
+  try {
+    const response = await axios.get(
+      `${network.apiAddress}/accounts/${address}`,
+    );
+    const { data } = response;
+    if (data != null) {
+      return verifiedContractsHashes.includes(data?.codeHash);
+    }
+  } catch (err) {
+    console.error("error validating multisig address");
+    return false;
+  }
+}
+
 export async function getIsContractTrusted(address?: string) {
   try {
     if (address == null) {

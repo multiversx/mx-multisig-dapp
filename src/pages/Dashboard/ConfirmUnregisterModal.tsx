@@ -9,7 +9,7 @@ import { network } from "../../config";
 interface ConfirmUnregisterModalPropsType {
   show: boolean;
   handleClose: (e: any) => void;
-  onConfirmed: () => void;
+  onConfirmed: (e: any) => void;
   address: string;
 }
 
