@@ -12,11 +12,13 @@ import { MultisigContractInfoType } from "types/multisigContracts";
 import ProposeInputAddress from "../MultisigDetails/ProposeModal/ProposeInputAddress";
 
 interface AddMultisigModalType {
+  show: boolean;
   handleClose: () => void;
   setNewContracts: (contracts: MultisigContractInfoType[]) => void;
 }
 
 const AddMultisigModal = ({
+  show,
   handleClose,
   setNewContracts,
 }: AddMultisigModalType) => {
@@ -51,7 +53,7 @@ const AddMultisigModal = ({
   return (
     <Modal
       size="lg"
-      show
+      show={show}
       onHide={handleClose}
       className="modal-container"
       animation={false}

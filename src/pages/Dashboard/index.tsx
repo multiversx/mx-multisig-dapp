@@ -219,20 +219,18 @@ const Dashboard = () => {
           )}
         </div>
 
-        {showAddMultisigModal && (
-          <AddMultisigModal
-            handleClose={() => {
-              setShowAddMultisigModal(false);
-            }}
-            setNewContracts={updateMultisigContract}
-          />
-        )}
-        {showDeployMultisigModal && (
-          <DeployStepsModal
-            handleClose={() => setShowDeployMultisigModal(false)}
-            setNewContracts={updateMultisigContract}
-          />
-        )}
+        <AddMultisigModal
+          show={showAddMultisigModal}
+          handleClose={() => {
+            setShowAddMultisigModal(false);
+          }}
+          setNewContracts={updateMultisigContract}
+        />
+        <DeployStepsModal
+          show={showDeployMultisigModal}
+          handleClose={() => setShowDeployMultisigModal(false)}
+          setNewContracts={updateMultisigContract}
+        />
         <p className="info-msg">
           New to Multisig?&nbsp;&nbsp;&nbsp;&nbsp;
           <a href="">Learn more</a>

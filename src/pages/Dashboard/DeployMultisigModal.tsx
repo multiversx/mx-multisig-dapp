@@ -9,6 +9,7 @@ import { deployMultisigContract } from "contracts/ManagerContract";
 import { MultisigContractInfoType } from "types/multisigContracts";
 
 interface DeployStepsModalType {
+  show: boolean;
   handleClose: () => void;
   setNewContracts: (contracts: MultisigContractInfoType[]) => void;
 }
@@ -19,6 +20,7 @@ interface PendingDeploymentContractData {
 }
 
 const DeployStepsModal = ({
+  show,
   handleClose,
   setNewContracts,
 }: DeployStepsModalType) => {
@@ -33,7 +35,6 @@ const DeployStepsModal = ({
     transactionId: pendingDeploymentContractData?.transactionId || null,
     onSuccess: onAddMultisigFinished,
   });
-
   async function onAddMultisigFinished() {
     const { multisigAddress } = pendingDeploymentContractData!;
     const newContracts = await addContractToMultisigContractsList({
@@ -55,7 +56,7 @@ const DeployStepsModal = ({
 
   return (
     <Modal
-      show
+      show={show}
       onHide={handleClose}
       className="modal-container"
       animation={false}
