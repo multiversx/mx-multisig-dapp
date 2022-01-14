@@ -21,12 +21,12 @@ const Account = () => {
   const intervalRef = React.useRef<any>();
   const username = useSelector(usernameSelector);
 
-  const logOut = () => {
-    logout(`${window.location.origin}${routeNames.home}`);
+  const logOut = async () => {
     localStorage.clear();
     sessionStorage.clear();
     document.cookie = "";
     dispatch(logoutAction());
+    logout(`${window.location.origin}${routeNames.home}`);
   };
 
   const logoutOnSessionExpire = () => {

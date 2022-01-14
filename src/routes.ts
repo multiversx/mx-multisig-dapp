@@ -1,5 +1,5 @@
 import * as React from "react";
-import { types } from "@elrondnetwork/dapp-core";
+import { RouteType as DappCoreRouteTypes } from "@elrondnetwork/dapp-core";
 import { dAppName } from "config";
 import Unlock from "pages/Unlock";
 import withPageTitle from "./components/PageTitle";
@@ -7,7 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import MultisigDetailsPage from "./pages/MultisigDetails/MultisigDetailsPage";
 
-type RouteType = types.RouteType & { title: string };
+type RouteType = DappCoreRouteTypes & { title: string };
 
 export type ForegroundRoutesType =
   | "unlock"

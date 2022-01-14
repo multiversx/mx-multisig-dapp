@@ -73,6 +73,20 @@ export async function addContractToMultisigContractsList(
   return newContracts;
 }
 
+export async function updateMultisigContractOnServer(
+  newContract: MultisigContractInfoType,
+): Promise<MultisigContractInfoType[]> {
+  const currentContracts = await getUserMultisigContractsList();
+  const newContracts = currentContracts.map((contract) => {
+    if (contract.address === newContract.address) {
+      return { ...contract, ...newContract };
+    }
+    return contract;
+  });
+  await multisigAxiosInstance.post(contractsInfoStorageEndpoint, newContracts);
+  return newContracts;
+}
+
 export async function removeContractFromMultisigContractsList(
   deletedContractAddress: string,
 ): Promise<MultisigContractInfoType[]> {

@@ -1,20 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  MultisigContractInfoType,
-  PlainMultisigAddressType,
-} from "types/multisigContracts";
+import { MultisigContractInfoType } from "types/multisigContracts";
 import { logoutAction } from "../commonActions";
 
 interface StateType {
   fetched: boolean;
   multisigContracts: MultisigContractInfoType[];
-  currentMultisigAddress?: PlainMultisigAddressType;
+  currentMultisigContract: MultisigContractInfoType | null;
+  currentMultisigTransactionId: string | null;
 }
 
 const initialState: StateType = {
   multisigContracts: [],
   fetched: false,
-  currentMultisigAddress: undefined,
+  currentMultisigContract: null,
+  currentMultisigTransactionId: null,
 };
 
 export const multisigContractsSlice = createSlice({
@@ -34,13 +33,24 @@ export const multisigContractsSlice = createSlice({
       state.multisigContracts = action.payload;
       state.fetched = true;
     },
-    setCurrentMultisigAddress: (
+    setCurrentMultisigTransactionId: (
       state: StateType,
-      action: PayloadAction<PlainMultisigAddressType>,
+      action: PayloadAction<string | null>,
     ) => {
-      state.currentMultisigAddress = action.payload;
+      state.currentMultisigTransactionId = action.payload;
     },
-
+    setCurrentMultisigContract: (
+      state: StateType,
+      action: PayloadAction<string>,
+    ) => {
+      const contracts = state.multisigContracts;
+      const currentContract = contracts.find(
+        (contract) => contract.address === action.payload,
+      );
+      if (currentContract != null) {
+        state.currentMultisigContract = currentContract;
+      }
+    },
     updateMultisigContract: (
       state: StateType,
       action: PayloadAction<Partial<MultisigContractInfoType>>,
@@ -69,7 +79,8 @@ export const multisigContractsSlice = createSlice({
 
 export const {
   setMultisigContractsFetched,
-  setCurrentMultisigAddress,
+  setCurrentMultisigContract,
+  setCurrentMultisigTransactionId,
   updateMultisigContract,
   setMultisigContracts,
 } = multisigContractsSlice.actions;

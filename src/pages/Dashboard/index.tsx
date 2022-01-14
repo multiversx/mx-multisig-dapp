@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import {
-  getIsProviderEqualTo,
-  useGetAccountInfo,
-} from "@elrondnetwork/dapp-core";
+import { getIsProviderEqualTo } from "@elrondnetwork/dapp-core";
 import {
   faWallet,
   faPlus,
@@ -18,14 +15,14 @@ import CreateWallet from "assets/img/create-wallet.svg";
 import OpenWallet from "assets/img/open-wallet.svg";
 import wawe from "assets/img/wawe.svg";
 import { providerTypes } from "helpers/constants";
+import { uniqueContractAddress } from "multisigConfig";
 import MultisigListItem from "pages/Dashboard/MultisigListItem";
 import {
   multisigContractsFetchedSelector,
   multisigContractsSelector,
 } from "redux/selectors/multisigContractsSelectors";
 import { setMultisigContracts } from "redux/slices/multisigContractsSlice";
-import { getUserMultisigContractsList } from "../../apiCalls/multisigContractsCalls";
-import { MultisigContractInfoType } from "../../types/multisigContracts";
+import { MultisigContractInfoType } from "types/multisigContracts";
 import AddMultisigModal from "./AddMultisigModal";
 import DeployStepsModal from "./DeployMultisigModal";
 
@@ -39,13 +36,7 @@ const Dashboard = () => {
   const [showAddMultisigModal, setShowAddMultisigModal] = useState(false);
   const [showDeployMultisigModal, setShowDeployMultisigModal] = useState(false);
 
-  const { address } = useGetAccountInfo();
-
   const isWalletProvider = getIsProviderEqualTo(providerTypes.wallet);
-
-  useEffect(() => {
-    readMultisigContracts();
-  }, [address]);
 
   async function onDeployClicked() {
     setShowDeployMultisigModal(true);
@@ -53,13 +44,6 @@ const Dashboard = () => {
 
   function onAddMultisigClicked() {
     setShowAddMultisigModal(true);
-  }
-
-  async function readMultisigContracts() {
-    if (address) {
-      const contracts = await getUserMultisigContractsList();
-      dispatch(setMultisigContracts(contracts));
-    }
   }
 
   async function updateMultisigContract(
@@ -172,17 +156,21 @@ const Dashboard = () => {
           ) : (
             <div className="wallets-section shadow bg-white">
               <div className="top-bar">
-                <h3 className="title">My wallets</h3>
-                <div className="create-btns d-flex">
-                  {deployButtonSecondaryContainer}
-                  <button
-                    className="btn address-btn btn-light d-flex flex-row align-items-center"
-                    onClick={onAddMultisigClicked}
-                  >
-                    <FontAwesomeIcon icon={faWallet} size="lg" />
-                    <div className="navbar-address ml-2 d-lg-block">Open</div>
-                  </button>
-                </div>
+                <h3 className="title">
+                  {uniqueContractAddress ? "My wallet" : "My wallets"}
+                </h3>
+                {!uniqueContractAddress && (
+                  <div className="create-btns d-flex">
+                    {deployButtonSecondaryContainer}
+                    <button
+                      className="btn address-btn btn-light d-flex flex-row align-items-center"
+                      onClick={onAddMultisigClicked}
+                    >
+                      <FontAwesomeIcon icon={faWallet} size="lg" />
+                      <div className="navbar-address ml-2 d-lg-block">Open</div>
+                    </button>
+                  </div>
+                )}
               </div>
               <div className="list-wallets">
                 {multisigContracts.map((contract) => (

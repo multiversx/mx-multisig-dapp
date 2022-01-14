@@ -33,12 +33,13 @@ import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import { multisigContractFunctionNames } from "types/multisigFunctionNames";
 import { MultisigIssueToken } from "types/MultisigIssueToken";
 import { MultisigSendToken } from "types/MultisigSendToken";
+import { setCurrentMultisigTransactionId } from "../redux/slices/multisigContractsSlice";
 import { store } from "../redux/store";
 import { buildTransaction } from "./transactionUtils";
 
 const proposeDeployGasLimit = 256_000_000;
 
-export function sendTransaction(
+export async function sendTransaction(
   functionName: multisigContractFunctionNames,
   transactionGasLimit = gasLimit,
   ...args: TypedValue[]
@@ -59,7 +60,11 @@ export function sendTransaction(
     transactionGasLimit,
     ...args,
   );
-  return transactionServices.sendTransactions({ transactions: transaction });
+  const { sessionId } = await transactionServices.sendTransactions({
+    transactions: transaction,
+  });
+  store.dispatch(setCurrentMultisigTransactionId(sessionId));
+  return sessionId;
 }
 
 export function mutateSign(actionId: number) {

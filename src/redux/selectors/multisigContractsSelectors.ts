@@ -14,13 +14,23 @@ export const multisigContractsSelector = createDeepEqualSelector(
   (state) => state.multisigContracts,
 );
 
-export const currentMultisigAddressSelector = createDeepEqualSelector(
+export const currentMultisigContractSelector = createDeepEqualSelector(
   mainSelector,
-  (state) => {
-    const address = state.currentMultisigAddress;
+  (state) => state?.currentMultisigContract,
+);
+
+export const currentMultisigTransactionIdSelector = createDeepEqualSelector(
+  mainSelector,
+  (state) => state?.currentMultisigTransactionId,
+);
+
+export const currentMultisigAddressSelector = createDeepEqualSelector(
+  currentMultisigContractSelector,
+  (currentMultisigContract) => {
+    const address = currentMultisigContract?.address;
     if (address != null) {
-      return new Address(address.hex);
+      return new Address(address);
     }
-    return undefined;
+    return address;
   },
 );

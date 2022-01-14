@@ -3,6 +3,7 @@
     .modal-content {
       border-radius: 12px !important;
       border: none;
+      pointer-events: all;
       .card {
         border: none;
         background: none;

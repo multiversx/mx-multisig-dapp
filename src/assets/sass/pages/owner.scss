@@ -154,6 +154,13 @@
           .wallet-details {
             .name {
               margin: 12px 0 20px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+                .edit-icon {
+                  margin-left: 0.5rem;
+                  width: 0.8em;
+                }
             }
             .wallet-address {
               font-size: 14px;

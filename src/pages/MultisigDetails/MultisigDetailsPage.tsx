@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   getNetworkProxy,
   useGetAccountInfo,
   useGetNetworkConfig,
+  transactionServices,
 } from "@elrondnetwork/dapp-core";
 import { Ui, operations } from "@elrondnetwork/dapp-utils";
 import { Address, Balance } from "@elrondnetwork/erdjs";
@@ -40,7 +41,6 @@ import {
   queryProposerAddresses,
 } from "contracts/MultisigContract";
 import { hexToNumber, hexToString } from "helpers/converters";
-import { PlainAddress } from "helpers/plainObjects";
 import { tryParseTransactionParameter } from "helpers/urlparameters";
 import MultisigProposalCard from "pages/MultisigDetails/MultisigProposalCard";
 import { priceSelector } from "redux/selectors/economicsSelector";
@@ -49,12 +49,15 @@ import {
   proposeMultiselectModalSelectedOptionSelector,
   selectedPerformedActionSelector,
 } from "redux/selectors/modalsSelector";
-import { currentMultisigAddressSelector } from "redux/selectors/multisigContractsSelectors";
+import {
+  currentMultisigContractSelector,
+  currentMultisigTransactionIdSelector,
+} from "redux/selectors/multisigContractsSelectors";
 import {
   setProposeMultiselectSelectedOption,
   setSelectedPerformedAction,
 } from "redux/slices/modalsSlice";
-import { setCurrentMultisigAddress } from "redux/slices/multisigContractsSlice";
+import { setCurrentMultisigContract } from "redux/slices/multisigContractsSlice";
 import { MultisigActionDetailed } from "types/MultisigActionDetailed";
 import { ProposalsTypes } from "types/Proposals";
 import MultisigDetailsAccordion from "./MultisigDetailsAccordion";
@@ -69,7 +72,7 @@ export interface ContractInfo {
   userRole: number;
   allActions: MultisigActionDetailed[];
   multisigBalance: Balance;
-  multisigName: string;
+  multisigName?: string;
   boardMembersAddresses?: Address[];
   proposersAddresses?: Address[];
 }
@@ -92,6 +95,11 @@ const MultisigDetailsPage = () => {
   const selectedMultiselectOption = useSelector(
     proposeMultiselectModalSelectedOptionSelector,
   );
+  const currentContract = useSelector(currentMultisigContractSelector);
+  const { address } = useGetAccountInfo();
+  const currentMultisigTransactionId = useSelector(
+    currentMultisigTransactionIdSelector,
+  );
 
   const {
     totalBoardMembers,
@@ -103,8 +111,6 @@ const MultisigDetailsPage = () => {
     multisigName,
   } = contractInfo;
 
-  const currentMultisigAddress = useSelector(currentMultisigAddressSelector);
-  const { address } = useGetAccountInfo();
   const {
     network: { explorerAddress, apiAddress, egldLabel },
   } = useGetNetworkConfig();
@@ -117,16 +123,44 @@ const MultisigDetailsPage = () => {
   const isProposer = userRole !== 0;
   const isBoardMember = userRole === 2;
 
-  const parseMultisigAddress = (): Address | undefined => {
+  transactionServices.useTrackTransactionStatus({
+    transactionId: currentMultisigTransactionId,
+    onSuccess: getDashboardInfo,
+  });
+  useEffect(() => {
+    tryParseUrlParams();
+
+    const newMultisigAddressParam = parseMultisigAddress();
+    if (newMultisigAddressParam === null) {
+      return;
+    }
+
+    const isCurrentMultisigAddressNotSet = currentContract == null;
+    const isCurrentMultisigAddressDiferentThanParam =
+      newMultisigAddressParam != null &&
+      currentContract?.address !== newMultisigAddressParam.bech32();
+
+    if (
+      (isCurrentMultisigAddressNotSet ||
+        isCurrentMultisigAddressDiferentThanParam) &&
+      newMultisigAddressParam != null
+    ) {
+      dispatch(setCurrentMultisigContract(newMultisigAddressParam.bech32()));
+    } else if (address != null) {
+      getDashboardInfo();
+    }
+  }, [currentContract?.address, currentMultisigTransactionId, address]);
+
+  const parseMultisigAddress = (): Address | null => {
     try {
       return new Address(multisigAddressParam);
     } catch {
-      return undefined;
+      return null;
     }
   };
 
-  const getDashboardInfo = async () => {
-    if (currentMultisigAddress == null) {
+  async function getDashboardInfo() {
+    if (currentContract == null) {
       return;
     }
     const proxy = getNetworkProxy();
@@ -146,11 +180,11 @@ const MultisigDetailsPage = () => {
         queryQuorumCount(),
         queryUserRole(new Address(address).hex()),
         queryAllActions(),
-        proxy.getAccount(currentMultisigAddress!),
+        proxy.getAccount(new Address(currentContract.address)),
         queryBoardMemberAddresses(),
         queryProposerAddresses(),
       ]);
-      const accountInfo = await getAccountData(currentMultisigAddress.bech32());
+      const accountInfo = await getAccountData(currentContract.address);
       const newContractInfo: ContractInfo = {
         totalBoardMembers: newTotalBoardMembers,
         totalProposers: newTotalProposers,
@@ -161,7 +195,6 @@ const MultisigDetailsPage = () => {
         multisigBalance: account.balance,
         boardMembersAddresses,
         proposersAddresses,
-        multisigName: "dummy contractname",
       };
 
       setContractInfo(newContractInfo);
@@ -170,9 +203,9 @@ const MultisigDetailsPage = () => {
     } finally {
       setDataFetched(true);
     }
-  };
+  }
 
-  const userRoleAsString = () => {
+  const userRoleAsString = useMemo(() => {
     switch (userRole) {
       case 0:
         return "No rights";
@@ -183,7 +216,7 @@ const MultisigDetailsPage = () => {
       default:
         return "Unknown";
     }
-  };
+  }, [userRole]);
 
   const alreadySigned = (action: MultisigActionDetailed) => {
     const typedAddress = new Address(address);
@@ -222,7 +255,7 @@ const MultisigDetailsPage = () => {
       return;
     }
 
-    if (parameters.receiver.bech32() === currentMultisigAddress?.bech32()) {
+    if (parameters.receiver.bech32() === currentContract?.address) {
       if (parameters.functionName.startsWith("propose")) {
         if (
           parameters.outputParameters.length === 2 &&
@@ -295,33 +328,6 @@ const MultisigDetailsPage = () => {
       }),
     );
 
-  React.useEffect(() => {
-    tryParseUrlParams();
-
-    const newMultisigAddressParam = parseMultisigAddress();
-    if (newMultisigAddressParam === null) {
-      return;
-    }
-
-    const isCurrentMultisigAddressNotSet = !currentMultisigAddress;
-    const isCurrentMultisigAddressDiferentThanParam =
-      currentMultisigAddress &&
-      newMultisigAddressParam &&
-      currentMultisigAddress?.bech32() !== newMultisigAddressParam.bech32();
-
-    if (
-      (isCurrentMultisigAddressNotSet ||
-        isCurrentMultisigAddressDiferentThanParam) &&
-      newMultisigAddressParam != null
-    ) {
-      dispatch(
-        setCurrentMultisigAddress(PlainAddress(newMultisigAddressParam)),
-      );
-    } else if (address !== null) {
-      getDashboardInfo();
-    }
-  }, [currentMultisigAddress?.bech32(), address]);
-
   if (!parseMultisigAddress()) {
     return <Navigate to="/multisig" />;
   }
@@ -335,9 +341,6 @@ const MultisigDetailsPage = () => {
       value={{ quorumSize, totalBoardMembers, isProposer, multisigBalance }}
     >
       <div className="dashboard w-100">
-        {/* <Link to="/multisig" className="btn btn-primary btn-sm d-block">
-          <FontAwesomeIcon icon={faArrowCircleLeft} />
-        </Link> */}
         <div className="card shadow-lg border-0">
           <div className="flex-column d-flex align-items-center">
             <WalletLogo className="wallet-logo " />
@@ -346,7 +349,7 @@ const MultisigDetailsPage = () => {
                 <div className="user-role">
                   <p className="icon">
                     <FontAwesomeIcon icon={faUser} />
-                    Role: <span className="text">{t(userRoleAsString())}</span>
+                    Role: <span className="text">{t(userRoleAsString)}</span>
                   </p>
                 </div>
                 <div className="wallet-name position-relative">
@@ -361,20 +364,25 @@ const MultisigDetailsPage = () => {
                   </div>
                 )}
               </div>
-              {currentMultisigAddress && (
-                <div className="address text-center d-flex align-items-center">
-                  <div className="trust-badge">
-                    <TrustedBadge contractAddress={multisigAddressParam} />
+              {currentContract && (
+                <div className={"d-flex flex-column align-items-center"}>
+                  {currentContract.name && (
+                    <p className={"h3 mb-2"}>{currentContract.name}</p>
+                  )}
+                  <div className="address text-center d-flex align-items-center">
+                    <div className="trust-badge">
+                      <TrustedBadge contractAddress={multisigAddressParam} />
+                    </div>
+                    <Ui.Trim text={currentContract.address} />
+                    <a
+                      href={`${explorerAddress}accounts/${currentContract.address}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="link-second-style"
+                    >
+                      <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
+                    </a>
                   </div>
-                  <Ui.Trim text={currentMultisigAddress.bech32()} />
-                  <a
-                    href={`${explorerAddress}accounts/${currentMultisigAddress.bech32()}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="link-second-style"
-                  >
-                    <FontAwesomeIcon icon={faExternalLinkAlt} size="sm" />
-                  </a>
                 </div>
               )}
             </div>
@@ -413,7 +421,7 @@ const MultisigDetailsPage = () => {
                     <span className="name">Propose</span>
                   </button>
                 )}
-                <ReceiveModal address={currentMultisigAddress?.bech32()} />
+                <ReceiveModal address={currentContract?.address} />
               </div>
             </div>
           </div>
