@@ -9,7 +9,6 @@ import { deployMultisigContract } from "contracts/ManagerContract";
 import { MultisigContractInfoType } from "types/multisigContracts";
 
 interface DeployStepsModalType {
-  show: boolean;
   handleClose: () => void;
   setNewContracts: (contracts: MultisigContractInfoType[]) => void;
 }
@@ -20,7 +19,6 @@ interface PendingDeploymentContractData {
 }
 
 const DeployStepsModal = ({
-  show,
   handleClose,
   setNewContracts,
 }: DeployStepsModalType) => {
@@ -57,7 +55,7 @@ const DeployStepsModal = ({
 
   return (
     <Modal
-      show={show}
+      show
       onHide={handleClose}
       className="modal-container"
       animation={false}

@@ -102,10 +102,12 @@ const MultisigCard = ({ contract }: { contract: MultisigContractInfoType }) => {
       <div className="align-items-center justify-content-between mb-2">
         <div className="wallet-details">
           {contract.name && (
-            <h5 onClick={handleOpenEditNameModal} className="name mb-20">
-              {contract.name}
-              <FontAwesomeIcon className={"edit-icon"} icon={faPencilAlt} />
-            </h5>
+            <div className={"d-flex justify-content-center"}>
+              <h5 onClick={handleOpenEditNameModal} className="name mb-20">
+                {contract.name}
+                <FontAwesomeIcon className={"edit-icon"} icon={faPencilAlt} />
+              </h5>
+            </div>
           )}
 
           <div className="d-flex wallet-address">

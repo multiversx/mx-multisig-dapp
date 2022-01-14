@@ -12,15 +12,11 @@ import { MultisigContractInfoType } from "types/multisigContracts";
 import ProposeInputAddress from "../MultisigDetails/ProposeModal/ProposeInputAddress";
 
 interface AddMultisigModalType {
-  show: boolean;
-  loading?: boolean;
   handleClose: () => void;
   setNewContracts: (contracts: MultisigContractInfoType[]) => void;
 }
 
 const AddMultisigModal = ({
-  show,
-  loading,
   handleClose,
   setNewContracts,
 }: AddMultisigModalType) => {
@@ -55,7 +51,7 @@ const AddMultisigModal = ({
   return (
     <Modal
       size="lg"
-      show={show}
+      show
       onHide={handleClose}
       className="modal-container"
       animation={false}
@@ -67,7 +63,6 @@ const AddMultisigModal = ({
             {t("Add Multisig")}
           </p>
           <ProposeInputAddress
-            disabled={loading}
             invalidAddress={invalidMultisigAddress}
             setSubmitDisabled={setSubmitDisabled}
             handleParamsChange={onAddressParamChange}
@@ -76,7 +71,6 @@ const AddMultisigModal = ({
             <label>{t("Name (optional)")} </label>
             <input
               type="text"
-              disabled={loading}
               className="form-control"
               value={name}
               autoComplete="off"
@@ -86,22 +80,16 @@ const AddMultisigModal = ({
           <div className="modal-action-btns">
             <button
               onClick={handleClose}
-              disabled={loading}
               className="btn btn-primary btn-light "
             >
               <FontAwesomeIcon icon={faTimes} />
               {t("Cancel")}
             </button>
             <button
-              disabled={submitDisabled || loading}
+              disabled={submitDisabled}
               onClick={onAddClicked}
               className="btn btn-primary mb-3"
             >
-              {loading && (
-                <div className="spinner-border " role="status">
-                  <span className="sr-only">Loading...</span>
-                </div>
-              )}
               {t("Add")}
             </button>
           </div>

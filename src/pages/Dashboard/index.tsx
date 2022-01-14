@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { getIsProviderEqualTo } from "@elrondnetwork/dapp-core";
 import {
@@ -23,6 +23,7 @@ import {
 } from "redux/selectors/multisigContractsSelectors";
 import { setMultisigContracts } from "redux/slices/multisigContractsSlice";
 import { MultisigContractInfoType } from "types/multisigContracts";
+import { validateMultisigAddress } from "../../apiCalls/multisigContractsCalls";
 import AddMultisigModal from "./AddMultisigModal";
 import DeployStepsModal from "./DeployMultisigModal";
 
@@ -35,8 +36,23 @@ const Dashboard = () => {
   const { t } = useTranslation();
   const [showAddMultisigModal, setShowAddMultisigModal] = useState(false);
   const [showDeployMultisigModal, setShowDeployMultisigModal] = useState(false);
-
+  const [invalidMultisigContract, setInvalidMultisigContract] = useState(false);
   const isWalletProvider = getIsProviderEqualTo(providerTypes.wallet);
+
+  useEffect(() => {
+    checkSingleContractValidity();
+  }, []);
+
+  async function checkSingleContractValidity() {
+    if (uniqueContractAddress) {
+      const isValidMultisigContract = await validateMultisigAddress(
+        uniqueContractAddress,
+      );
+      if (!isValidMultisigContract) {
+        setInvalidMultisigContract(true);
+      }
+    }
+  }
 
   async function onDeployClicked() {
     setShowDeployMultisigModal(true);
@@ -121,6 +137,25 @@ const Dashboard = () => {
     return null;
   }
 
+  if (invalidMultisigContract) {
+    return (
+      <div
+        className={
+          "d-flex flex-fill justify-content-center align-items-center flex-column"
+        }
+      >
+        <p className={"h2"}>
+          {t(
+            "The address you provided does not belong to a valid Multisig contract",
+          )}
+        </p>
+        <p className={"h3 mt-5"}>
+          {t("Please check project configuration and try again")}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="owner w-100 d-flex justify-content-center align-items-center flex-column">
@@ -184,18 +219,20 @@ const Dashboard = () => {
           )}
         </div>
 
-        <AddMultisigModal
-          show={showAddMultisigModal}
-          handleClose={() => {
-            setShowAddMultisigModal(false);
-          }}
-          setNewContracts={updateMultisigContract}
-        />
-        <DeployStepsModal
-          show={showDeployMultisigModal}
-          handleClose={() => setShowDeployMultisigModal(false)}
-          setNewContracts={updateMultisigContract}
-        />
+        {showAddMultisigModal && (
+          <AddMultisigModal
+            handleClose={() => {
+              setShowAddMultisigModal(false);
+            }}
+            setNewContracts={updateMultisigContract}
+          />
+        )}
+        {showDeployMultisigModal && (
+          <DeployStepsModal
+            handleClose={() => setShowDeployMultisigModal(false)}
+            setNewContracts={updateMultisigContract}
+          />
+        )}
         <p className="info-msg">
           New to Multisig?&nbsp;&nbsp;&nbsp;&nbsp;
           <a href="">Learn more</a>

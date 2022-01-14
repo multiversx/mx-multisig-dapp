@@ -6,12 +6,14 @@ interface StateType {
   fetched: boolean;
   multisigContracts: MultisigContractInfoType[];
   currentMultisigContract: MultisigContractInfoType | null;
+  isMultisigContractInvalid: boolean;
   currentMultisigTransactionId: string | null;
 }
 
 const initialState: StateType = {
   multisigContracts: [],
   fetched: false,
+  isMultisigContractInvalid: false,
   currentMultisigContract: null,
   currentMultisigTransactionId: null,
 };
@@ -32,6 +34,12 @@ export const multisigContractsSlice = createSlice({
     ) => {
       state.multisigContracts = action.payload;
       state.fetched = true;
+    },
+    setIsMultisigContractInvalid: (
+      state: StateType,
+      action: PayloadAction<boolean>,
+    ) => {
+      state.isMultisigContractInvalid = action.payload;
     },
     setCurrentMultisigTransactionId: (
       state: StateType,
@@ -80,6 +88,7 @@ export const multisigContractsSlice = createSlice({
 export const {
   setMultisigContractsFetched,
   setCurrentMultisigContract,
+  setIsMultisigContractInvalid,
   setCurrentMultisigTransactionId,
   updateMultisigContract,
   setMultisigContracts,

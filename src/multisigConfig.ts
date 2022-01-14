@@ -2,4 +2,4 @@
 export const uniqueContractAddress = "";
 
 //Optional, if you want to give a name to the visual representation of the contract
-export const uniqueContractName = "test";
+export const uniqueContractName = "My one and only multisig";
