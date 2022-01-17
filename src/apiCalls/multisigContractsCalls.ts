@@ -1,23 +1,31 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getAddress } from "@elrondnetwork/dapp-core";
-import { services } from "@elrondnetwork/dapp-core-internal";
 import axios, { AxiosError } from "axios";
 import uniqBy from "lodash/uniqBy";
-import { extrasApi, maiarIdApi, network } from "config";
+import { network } from "config";
 import { verifiedContractsHashes } from "helpers/constants";
+import {
+  accessTokenServices,
+  maiarIdApi,
+  storageApi,
+} from "services/accessTokenServices";
 import { MultisigContractInfoType } from "types/multisigContracts";
-const contractsInfoStorageEndpoint = `${extrasApi}/settings/multisig`;
+
+const contractsInfoStorageEndpoint = `${storageApi}/settings/multisig`;
 
 const multisigAxiosInstance = axios.create();
 
 multisigAxiosInstance.interceptors.request.use(
   async function (config) {
     try {
-      const address = await getAddress();
-      const token = await services.maiarId.getAccessToken({
-        address,
-        maiarIdApi,
-      });
-      config.headers.Authorization = `Bearer ${token.accessToken}`;
+      if (accessTokenServices?.maiarId != null) {
+        const address = await getAddress();
+        const token = await accessTokenServices.maiarId.getAccessToken({
+          address,
+          maiarIdApi,
+        });
+        config.headers.Authorization = `Bearer ${token.accessToken}`;
+      }
     } catch (err) {
       console.error(err);
     }

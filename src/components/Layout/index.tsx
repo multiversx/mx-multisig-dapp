@@ -6,25 +6,21 @@ import {
   useGetLoginInfo,
   DappUI,
 } from "@elrondnetwork/dapp-core";
-import {
-  AccessTokenManager,
-  services,
-} from "@elrondnetwork/dapp-core-internal";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getAccountData } from "apiCalls/accountCalls";
 import { getEconomicsData } from "apiCalls/economicsCalls";
 import { getUserMultisigContractsList } from "apiCalls/multisigContractsCalls";
-import { maiarIdApi } from "config";
 import { uniqueContractAddress, uniqueContractName } from "multisigConfig";
 import { setAccountData } from "redux/slices/accountSlice";
 import { setEconomics } from "redux/slices/economicsSlice";
 import { setMultisigContracts } from "redux/slices/multisigContractsSlice";
 import routes, { routeNames } from "routes";
+import { accessTokenServices, storageApi } from "services/accessTokenServices";
 import Navbar from "./Navbar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { loginMethod, tokenLogin } = useGetLoginInfo();
+  const { loginMethod } = useGetLoginInfo();
   const { address } = useGetAccountInfo();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,7 +43,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   }, [address]);
 
   async function readMultisigContracts(retries = 0) {
-    if (uniqueContractAddress) {
+    if (uniqueContractAddress || storageApi == null) {
       dispatch(
         setMultisigContracts([
           { address: uniqueContractAddress, name: uniqueContractName ?? "" },
@@ -56,15 +52,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       navigate("/multisig/" + uniqueContractAddress);
       return;
     }
-
     if (address) {
       try {
-        //sometimes, immediately after login, the token is not yet set, so the API will throw
-        //this will make sure that the token is set in localstorage before attempting the call, to avoid a 403
-        await services.maiarId.getAccessToken({
-          address,
-          maiarIdApi,
-        });
+        if (accessTokenServices?.maiarId) {
+          //sometimes, immediately after login, the token is not yet set, so the API will throw
+          //this will make sure that the token is set in localstorage before attempting the call, to avoid a 403
+          await accessTokenServices?.maiarId?.getAccessToken?.({
+            address,
+            storageApi,
+          });
+        }
         const contracts = await getUserMultisigContractsList();
         dispatch(setMultisigContracts(contracts));
       } catch (err) {
@@ -87,6 +84,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     const accountData = await getAccountData(address);
     if (accountData !== null) {
       dispatch(setAccountData(accountData));
+      ("");
     }
   }
 
@@ -101,13 +99,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         >
           {children}
         </AuthenticatedRoutesWrapper>
-        <AccessTokenManager
-          loggedIn={loggedIn}
-          loginMethod={loginMethod}
-          userAddress={address}
-          tokenLogin={tokenLogin}
-          maiarIdApi={maiarIdApi}
-        />
+
         <DappUI.TransactionsToastList />
       </main>
     </div>

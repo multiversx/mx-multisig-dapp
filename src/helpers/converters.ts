@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { Address, Nonce } from "@elrondnetwork/erdjs";
 import { NumericalBinaryCodec } from "@elrondnetwork/erdjs/out/smartcontracts/codec/numerical";
 import {

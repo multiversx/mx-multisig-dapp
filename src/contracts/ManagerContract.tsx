@@ -1,5 +1,5 @@
 import { getAccount, getAddress } from "@elrondnetwork/dapp-core";
-import { transactionServices } from "@elrondnetwork/dapp-core";
+import { sendTransactions } from "@elrondnetwork/dapp-core";
 import {
   Address,
   AddressValue,
@@ -18,8 +18,6 @@ import { Code } from "@elrondnetwork/erdjs/out/smartcontracts/code";
 import { smartContractCode } from "helpers/constants";
 
 export const deployContractGasLimit = 200_000_000;
-
-const { sendTransactions } = transactionServices;
 
 export async function deployMultisigContract() {
   const address = await getAddress();

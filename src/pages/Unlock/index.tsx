@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { DappUI, useGetLoginInfo } from "@elrondnetwork/dapp-core";
-import { services } from "@elrondnetwork/dapp-core-internal";
 import { faArrowRight, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
@@ -8,8 +7,9 @@ import { Link, Navigate } from "react-router-dom";
 import { ReactComponent as IconElrond } from "assets/img/icon-elrond.svg";
 import { ReactComponent as IconLedger } from "assets/img/icon-ledger.svg";
 import { ReactComponent as IconMaiar } from "assets/img/icon-maiar.svg";
-import { maiarIdApi, network } from "config";
+import { network } from "config";
 import { routeNames } from "routes";
+import { accessTokenServices, maiarIdApi } from "services/accessTokenServices";
 
 declare global {
   interface Window {
@@ -50,9 +50,11 @@ const Unlock = () => {
   const { loginMethod } = useGetLoginInfo();
 
   useEffect(() => {
-    services.maiarId.init({ maiarIdApi }).then((loginToken) => {
-      setToken(loginToken);
-    });
+    accessTokenServices?.maiarId
+      ?.init({ maiarIdApi })
+      .then((loginToken: string) => {
+        setToken(loginToken);
+      });
   }, []);
 
   const loginParams = {

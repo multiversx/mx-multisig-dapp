@@ -11,6 +11,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
 import { useDispatch, useSelector } from "react-redux";
+import { validateMultisigAddress } from "apiCalls/multisigContractsCalls";
 import CreateWallet from "assets/img/create-wallet.svg";
 import OpenWallet from "assets/img/open-wallet.svg";
 import wawe from "assets/img/wawe.svg";
@@ -22,8 +23,8 @@ import {
   multisigContractsSelector,
 } from "redux/selectors/multisigContractsSelectors";
 import { setMultisigContracts } from "redux/slices/multisigContractsSlice";
+import { storageApi } from "services/accessTokenServices";
 import { MultisigContractInfoType } from "types/multisigContracts";
-import { validateMultisigAddress } from "../../apiCalls/multisigContractsCalls";
 import AddMultisigModal from "./AddMultisigModal";
 import DeployStepsModal from "./DeployMultisigModal";
 
@@ -44,7 +45,7 @@ const Dashboard = () => {
   }, []);
 
   async function checkSingleContractValidity() {
-    if (uniqueContractAddress) {
+    if (uniqueContractAddress || !storageApi) {
       const isValidMultisigContract = await validateMultisigAddress(
         uniqueContractAddress,
       );
@@ -150,7 +151,9 @@ const Dashboard = () => {
           )}
         </p>
         <p className={"h3 mt-5"}>
-          {t("Please check project configuration and try again")}
+          {t(
+            "Please check project configuration in multisigConfig and try again",
+          )}
         </p>
       </div>
     );
