@@ -36,7 +36,7 @@ const proposeAvailableOptions = [
 const othersAvailableOptions = [
   {
     type: ProposalsTypes.attach_contract,
-    label: "Transfer contract ownership",
+    label: "Attach smart contract",
   },
 ];
 

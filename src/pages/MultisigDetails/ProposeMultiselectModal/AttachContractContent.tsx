@@ -78,7 +78,7 @@ const AttachContractContent = ({ handleClose }: AttachContractContentProps) => {
     <div className="card attach-contract-content">
       <div className="card-body">
         <p className="h3 mb-spacer text-center" data-testid="delegateTitle">
-          {t("Transfer contract ownership")}
+          {t("Attach smart contract")}
         </p>
 
         <div className="modal-control-container">
