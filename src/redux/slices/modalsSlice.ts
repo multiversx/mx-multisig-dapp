@@ -1,4 +1,4 @@
-import { faInfoCircle } from "@fortawesome/pro-solid-svg-icons/faInfoCircle";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { MultisigActionType } from "types/MultisigActionType";
 import { SelectedOptionType } from "types/Proposals";

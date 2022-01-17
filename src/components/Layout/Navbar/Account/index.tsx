@@ -5,7 +5,7 @@ import {
   logout,
   useGetAccountInfo,
 } from "@elrondnetwork/dapp-core";
-import { faUserCircle, faPowerOff } from "@fortawesome/pro-solid-svg-icons";
+import { faUserCircle, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 

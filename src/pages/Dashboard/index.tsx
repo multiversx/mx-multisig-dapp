@@ -5,7 +5,7 @@ import {
   faWallet,
   faPlus,
   faArrowRight,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";

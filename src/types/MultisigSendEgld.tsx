@@ -5,7 +5,7 @@ import {
   BigUIntValue,
   BytesValue,
 } from "@elrondnetwork/erdjs/out/smartcontracts/typesystem";
-import { faExternalLinkAlt } from "@fortawesome/pro-solid-svg-icons";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import i18next from "i18next";
 import ExplorerLink from "components/ExplorerLink";

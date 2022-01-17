@@ -1,6 +1,6 @@
 import * as React from "react";
-import { faCheck } from "@fortawesome/pro-regular-svg-icons/faCheck";
-import { faCopy } from "@fortawesome/pro-regular-svg-icons/faCopy";
+import { faCopy } from "@fortawesome/free-regular-svg-icons/faCopy";
+import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import copyTextToClipboard from "./helpers/copyToClipboard";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { faQrcode } from "@fortawesome/pro-solid-svg-icons";
+import { faQrcode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import QrCode from "qrcode.react";
 import { Modal } from "react-bootstrap";

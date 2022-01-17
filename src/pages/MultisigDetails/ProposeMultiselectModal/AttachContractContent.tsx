@@ -4,7 +4,7 @@ import {
   transactionServices,
 } from "@elrondnetwork/dapp-core";
 import { Address } from "@elrondnetwork/erdjs";
-import { faArrowLeft, faLink } from "@fortawesome/pro-solid-svg-icons";
+import { faArrowLeft, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFormik } from "formik";
 import Form from "react-bootstrap/Form";

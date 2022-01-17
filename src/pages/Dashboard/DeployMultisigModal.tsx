@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { transactionServices } from "@elrondnetwork/dapp-core";
-import { faTimes } from "@fortawesome/pro-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";

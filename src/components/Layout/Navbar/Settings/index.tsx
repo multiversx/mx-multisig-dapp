@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { faCog } from "@fortawesome/pro-solid-svg-icons";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayTrigger, Popover } from "react-bootstrap";
 

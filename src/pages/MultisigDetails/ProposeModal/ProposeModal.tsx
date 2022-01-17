@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Address } from "@elrondnetwork/erdjs/out";
-import { faHandPaper, faTimes } from "@fortawesome/pro-solid-svg-icons";
+import { faHandPaper, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";

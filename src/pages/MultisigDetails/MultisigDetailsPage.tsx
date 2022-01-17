@@ -13,7 +13,7 @@ import {
   faCircleNotch,
   faHandPaper,
   faExternalLinkAlt,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import { useTranslation } from "react-i18next";

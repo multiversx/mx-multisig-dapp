@@ -1,5 +1,5 @@
 import * as React from "react";
-import { faTimes } from "@fortawesome/pro-regular-svg-icons/faTimes";
+import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";

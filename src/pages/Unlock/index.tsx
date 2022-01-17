@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DappUI, useGetLoginInfo } from "@elrondnetwork/dapp-core";
 import { services } from "@elrondnetwork/dapp-core-internal";
-import { faArrowRight, faInfoCircle } from "@fortawesome/pro-solid-svg-icons";
+import { faArrowRight, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";

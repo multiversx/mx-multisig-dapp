@@ -1,5 +1,5 @@
 import React from "react";
-import { faTimes, faCheck } from "@fortawesome/pro-solid-svg-icons";
+import { faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";

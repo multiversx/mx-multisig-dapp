@@ -1,6 +1,6 @@
 import React from "react";
 import { Ui } from "@elrondnetwork/dapp-utils";
-import { faExternalLinkAlt, faTimes } from "@fortawesome/pro-solid-svg-icons";
+import { faExternalLinkAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
