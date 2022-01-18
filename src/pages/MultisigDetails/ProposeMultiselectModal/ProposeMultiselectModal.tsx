@@ -1,50 +1,50 @@
-import React from "react";
+import React from 'react';
 import {
   faArrowLeft,
   faHandPaper,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Modal } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
+  faTimes
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Modal } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import {
   mutateSendEgld,
   mutateSmartContractCall,
   mutateDeployContractFromSource,
   mutateUpgradeContractFromSource,
   mutateEsdtIssueToken,
-  mutateEsdtSendToken,
-} from "contracts/MultisigContract";
-import { setProposeMultiselectSelectedOption } from "redux/slices/modalsSlice";
-import { MultisigAction } from "types/MultisigAction";
-import { MultisigDeployContractFromSource } from "types/MultisigDeployContractFromSource";
-import { MultisigIssueToken } from "types/MultisigIssueToken";
-import { MultisigSendEgld } from "types/MultisigSendEgld";
-import { MultisigSendToken } from "types/MultisigSendToken";
+  mutateEsdtSendToken
+} from 'contracts/MultisigContract';
+import { setProposeMultiselectSelectedOption } from 'redux/slices/modalsSlice';
+import { MultisigAction } from 'types/MultisigAction';
+import { MultisigDeployContractFromSource } from 'types/MultisigDeployContractFromSource';
+import { MultisigIssueToken } from 'types/MultisigIssueToken';
+import { MultisigSendEgld } from 'types/MultisigSendEgld';
+import { MultisigSendToken } from 'types/MultisigSendToken';
 
-import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
-import { MultisigUpgradeContractFromSource } from "types/MultisigUpgradeContractFromSource";
-import { ProposalsTypes, SelectedOptionType } from "types/Proposals";
-import { titles } from "../constants";
-import AttachContractContent from "./AttachContractContent";
-import ProposeDeployContractFromSource from "./ProposeDeployContractFromSource";
-import ProposeIssueToken from "./ProposeIssueToken";
-import ProposeSendEgld from "./ProposeSendEgld";
-import ProposeSendToken from "./ProposeSendToken";
+import { MultisigSmartContractCall } from 'types/MultisigSmartContractCall';
+import { MultisigUpgradeContractFromSource } from 'types/MultisigUpgradeContractFromSource';
+import { ProposalsTypes, SelectedOptionType } from 'types/Proposals';
+import { titles } from '../constants';
+import AttachContractContent from './AttachContractContent';
+import ProposeDeployContractFromSource from './ProposeDeployContractFromSource';
+import ProposeIssueToken from './ProposeIssueToken';
+import ProposeSendEgld from './ProposeSendEgld';
+import ProposeSendToken from './ProposeSendToken';
 
-import ProposeSmartContractCall from "./ProposeSmartContractCall";
-import ProposeUpgradeContractFromSource from "./ProposeUpgradeContractFromSource";
-import SelectOption from "./SelectOption";
+import ProposeSmartContractCall from './ProposeSmartContractCall';
+import ProposeUpgradeContractFromSource from './ProposeUpgradeContractFromSource';
+import SelectOption from './SelectOption';
 
-import "./proposeMultiselectModal.scss";
+import './proposeMultiselectModal.scss';
 
 interface ProposeMultiselectModalPropsType {
   selectedOption: SelectedOptionType;
 }
 
 const ProposeMultiselectModal = ({
-  selectedOption,
+  selectedOption
 }: ProposeMultiselectModalPropsType) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -59,14 +59,14 @@ const ProposeMultiselectModal = ({
           selectedProposal.address,
           selectedProposal.amount,
           selectedProposal.functionName,
-          ...selectedProposal.args,
+          ...selectedProposal.args
         );
       } else if (selectedProposal instanceof MultisigSmartContractCall) {
         mutateSmartContractCall(
           selectedProposal.address,
           selectedProposal.amount,
           selectedProposal.functionName,
-          ...selectedProposal.args,
+          ...selectedProposal.args
         );
       } else if (selectedProposal instanceof MultisigIssueToken) {
         mutateEsdtIssueToken(selectedProposal as MultisigIssueToken);
@@ -79,7 +79,7 @@ const ProposeMultiselectModal = ({
           selectedProposal.upgradeable,
           selectedProposal.payable,
           selectedProposal.readable,
-          ...selectedProposal.args,
+          ...selectedProposal.args
         );
       } else if (
         selectedProposal instanceof MultisigUpgradeContractFromSource
@@ -91,7 +91,7 @@ const ProposeMultiselectModal = ({
           selectedProposal.upgradeable,
           selectedProposal.payable,
           selectedProposal.readable,
-          ...selectedProposal.args,
+          ...selectedProposal.args
         );
       }
       handleClose();
@@ -151,10 +151,10 @@ const ProposeMultiselectModal = ({
     <button
       disabled={submitDisabled}
       onClick={onProposeClicked}
-      className="btn btn-primary "
+      className='btn btn-primary '
     >
       <FontAwesomeIcon icon={faHandPaper} />
-      {t("Propose")}
+      {t('Propose')}
     </button>
   );
 
@@ -163,17 +163,17 @@ const ProposeMultiselectModal = ({
       onClick={() =>
         handleOptionSelected(ProposalsTypes.multiselect_proposal_options)
       }
-      className="btn btn-primary btn-light "
+      className='btn btn-primary btn-light '
     >
       <FontAwesomeIcon icon={faArrowLeft} />
-      {t("Back")}
+      {t('Back')}
     </button>
   );
 
   const closeButton = (
-    <button onClick={handleClose} className="btn btn-primary btn-light ">
+    <button onClick={handleClose} className='btn btn-primary btn-light '>
       <FontAwesomeIcon icon={faTimes} />
-      {t("Cancel")}
+      {t('Cancel')}
     </button>
   );
   const cancelButton =
@@ -182,7 +182,7 @@ const ProposeMultiselectModal = ({
       : closeButton;
 
   const actionTitle =
-    selectedOption?.option != null ? `: ${titles[selectedOption?.option]}` : "";
+    selectedOption?.option != null ? `: ${titles[selectedOption?.option]}` : '';
 
   const isAttachContractAction =
     selectedOption?.option === ProposalsTypes.attach_contract;
@@ -190,14 +190,14 @@ const ProposeMultiselectModal = ({
   const modalContent = isAttachContractAction ? (
     <AttachContractContent handleClose={handleClose} />
   ) : (
-    <div className="card">
-      <div className="card-body">
-        <p className="h3 mb-spacer text-center" data-testid="delegateTitle">
-          {`${t("Make a proposal")}${actionTitle}`}
+    <div className='card'>
+      <div className='card-body'>
+        <p className='h3 mb-spacer text-center' data-testid='delegateTitle'>
+          {`${t('Make a proposal')}${actionTitle}`}
         </p>
 
         {getContent()}
-        <div className="modal-action-btns">
+        <div className='modal-action-btns'>
           {cancelButton}
           {selectedOption?.option !==
             ProposalsTypes.multiselect_proposal_options && proposeButton}
@@ -208,11 +208,11 @@ const ProposeMultiselectModal = ({
 
   return (
     <Modal
-      backdrop={"static"}
+      backdrop={'static'}
       show
-      size="lg"
+      size='lg'
       onHide={handleClose}
-      className="modal-container proposal-modal"
+      className='modal-container proposal-modal'
       animation={false}
       centered
     >

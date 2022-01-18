@@ -1,5 +1,5 @@
-import React from "react";
-import { ProposalsTypes } from "types/Proposals";
+import React from 'react';
+import { ProposalsTypes } from 'types/Proposals';
 
 interface SelectOptionPropsType {
   onSelected: (option: ProposalsTypes) => void;
@@ -8,60 +8,60 @@ interface SelectOptionPropsType {
 const proposeAvailableOptions = [
   {
     type: ProposalsTypes.send_egld,
-    label: "Send EGLD",
+    label: 'Send EGLD'
   },
   {
     type: ProposalsTypes.send_token,
-    label: "Send token",
+    label: 'Send token'
   },
   {
     type: ProposalsTypes.issue_token,
-    label: "Issue token",
+    label: 'Issue token'
   },
   {
     type: ProposalsTypes.smart_contract_call,
-    label: "Smart contract call",
+    label: 'Smart contract call'
   },
   {
     type: ProposalsTypes.deploy_contract_from_source,
-    label: "Deploy Contract from source",
+    label: 'Deploy Contract from source'
   },
 
   {
     type: ProposalsTypes.upgrade_contract_from_source,
-    label: "Upgrade Contract from source",
-  },
+    label: 'Upgrade Contract from source'
+  }
 ];
 
 const othersAvailableOptions = [
   {
     type: ProposalsTypes.attach_contract,
-    label: "Attach smart contract",
-  },
+    label: 'Attach smart contract'
+  }
 ];
 
 export default function SelectOption({ onSelected }: SelectOptionPropsType) {
   return (
     <>
-      <div className="card select-options-list modal-action-btns">
+      <div className='card select-options-list modal-action-btns'>
         {proposeAvailableOptions.map((option) => (
           <button
             key={option.type}
-            className="selectable-option btn btn-primary btn-light"
+            className='selectable-option btn btn-primary btn-light'
             onClick={() => onSelected(option.type)}
           >
             {option.label}
           </button>
         ))}
       </div>
-      <div className="card select-options-list modal-action-btns">
-        <p className="h4 text-center" data-testid="delegateTitle">
+      <div className='card select-options-list modal-action-btns'>
+        <p className='h4 text-center' data-testid='delegateTitle'>
           Other actions
         </p>
         {othersAvailableOptions.map((option) => (
           <button
             key={option.type}
-            className="selectable-option btn btn-primary btn-light"
+            className='selectable-option btn btn-primary btn-light'
             onClick={() => onSelected(option.type)}
           >
             {option.label}

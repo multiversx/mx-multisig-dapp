@@ -6,10 +6,10 @@ import {
   TransactionPayload,
   Balance,
   ChainID,
-  TransactionVersion,
-} from "@elrondnetwork/erdjs";
-import { Nonce, TransactionOptions } from "@elrondnetwork/erdjs/out";
-import { RawTransactionType } from "helpers/types";
+  TransactionVersion
+} from '@elrondnetwork/erdjs';
+import { Nonce, TransactionOptions } from '@elrondnetwork/erdjs/out';
+import { RawTransactionType } from 'helpers/types';
 
 export default function newTransaction(rawTransaction: RawTransactionType) {
   return new Transaction({
@@ -22,6 +22,6 @@ export default function newTransaction(rawTransaction: RawTransactionType) {
     sender: new Address(rawTransaction.sender),
     chainID: new ChainID(rawTransaction.chainID),
     version: new TransactionVersion(rawTransaction.version),
-    options: new TransactionOptions(rawTransaction.options),
+    options: new TransactionOptions(rawTransaction.options)
   });
 }

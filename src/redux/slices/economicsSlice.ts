@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { logoutAction } from "../commonActions";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { logoutAction } from '../commonActions';
 
 export interface StateType {
   totalSupply: number;
@@ -20,22 +20,22 @@ const initialState: StateType = {
   marketCap: 4354194414,
   apr: 0.145685,
   topUpApr: 0.110861,
-  baseApr: 0.166948,
+  baseApr: 0.166948
 };
 
 export const economicsSlice = createSlice({
-  name: "economicsSlice",
+  name: 'economicsSlice',
   initialState,
   reducers: {
     setEconomics(state: StateType, action: PayloadAction<StateType>) {
       return action.payload;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(logoutAction, () => {
       return initialState;
     });
-  },
+  }
 });
 
 export const { setEconomics } = economicsSlice.actions;

@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { Address } from "@elrondnetwork/erdjs";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Modal } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
+import React, { useState } from 'react';
+import { Address } from '@elrondnetwork/erdjs';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Modal } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import {
   addContractToMultisigContractsList,
-  validateMultisigAddress,
-} from "apiCalls/multisigContractsCalls";
-import { MultisigContractInfoType } from "types/multisigContracts";
-import ProposeInputAddress from "../MultisigDetails/ProposeModal/ProposeInputAddress";
+  validateMultisigAddress
+} from 'apiCalls/multisigContractsCalls';
+import { MultisigContractInfoType } from 'types/multisigContracts';
+import ProposeInputAddress from '../MultisigDetails/ProposeModal/ProposeInputAddress';
 
 interface AddMultisigModalType {
   show: boolean;
@@ -20,14 +20,14 @@ interface AddMultisigModalType {
 const AddMultisigModal = ({
   show,
   handleClose,
-  setNewContracts,
+  setNewContracts
 }: AddMultisigModalType) => {
   const { t } = useTranslation();
 
   const [address, setAddress] = useState(Address.Zero());
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const [invalidMultisigAddress, setInvalidMultisigAddress] = useState(false);
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
 
   async function onAddressParamChange(newAddress: Address) {
     setInvalidMultisigAddress(false);
@@ -44,7 +44,7 @@ const AddMultisigModal = ({
     }
     const newContracts = await addContractToMultisigContractsList({
       address: contractAddress,
-      name,
+      name
     });
     setNewContracts(newContracts);
     handleClose();
@@ -52,47 +52,47 @@ const AddMultisigModal = ({
 
   return (
     <Modal
-      size="lg"
+      size='lg'
       show={show}
       onHide={handleClose}
-      className="modal-container"
+      className='modal-container'
       animation={false}
       centered
     >
-      <div className="card">
-        <div className="card-body ">
-          <p className="h3 text-center" data-testid="delegateTitle">
-            {t("Add Multisig")}
+      <div className='card'>
+        <div className='card-body '>
+          <p className='h3 text-center' data-testid='delegateTitle'>
+            {t('Add Multisig')}
           </p>
           <ProposeInputAddress
             invalidAddress={invalidMultisigAddress}
             setSubmitDisabled={setSubmitDisabled}
             handleParamsChange={onAddressParamChange}
-          />{" "}
-          <div className="modal-control-container">
-            <label>{t("Name (optional)")} </label>
+          />{' '}
+          <div className='modal-control-container'>
+            <label>{t('Name (optional)')} </label>
             <input
-              type="text"
-              className="form-control"
+              type='text'
+              className='form-control'
               value={name}
-              autoComplete="off"
+              autoComplete='off'
               onChange={onContractNameChange}
             />
           </div>
-          <div className="modal-action-btns">
+          <div className='modal-action-btns'>
             <button
               onClick={handleClose}
-              className="btn btn-primary btn-light "
+              className='btn btn-primary btn-light '
             >
               <FontAwesomeIcon icon={faTimes} />
-              {t("Cancel")}
+              {t('Cancel')}
             </button>
             <button
               disabled={submitDisabled}
               onClick={onAddClicked}
-              className="btn btn-primary mb-3"
+              className='btn btn-primary mb-3'
             >
-              {t("Add")}
+              {t('Add')}
             </button>
           </div>
         </div>

@@ -1,7 +1,7 @@
-import { Address } from "@elrondnetwork/erdjs/out";
-import i18next from "i18next";
-import { MultisigAction } from "./MultisigAction";
-import { MultisigActionType } from "./MultisigActionType";
+import { Address } from '@elrondnetwork/erdjs/out';
+import i18next from 'i18next';
+import { MultisigAction } from './MultisigAction';
+import { MultisigActionType } from './MultisigActionType';
 
 export class MultisigSendToken extends MultisigAction {
   address: Address;
@@ -16,7 +16,7 @@ export class MultisigSendToken extends MultisigAction {
   }
 
   title() {
-    return i18next.t("Send token");
+    return i18next.t('Send token');
   }
 
   description() {
@@ -24,6 +24,6 @@ export class MultisigSendToken extends MultisigAction {
   }
 
   tooltip() {
-    return "";
+    return '';
   }
 }

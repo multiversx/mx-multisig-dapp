@@ -1,7 +1,7 @@
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 export enum CustomToastDisplayType {
-  TransactionToast,
+  TransactionToast
 }
 export interface PlainTransactionStatus {
   isPending: boolean;

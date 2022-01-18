@@ -1,6 +1,6 @@
-import i18next from "i18next";
-import { MultisigAction } from "./MultisigAction";
-import { MultisigActionType } from "./MultisigActionType";
+import i18next from 'i18next';
+import { MultisigAction } from './MultisigAction';
+import { MultisigActionType } from './MultisigActionType';
 
 export class MultisigIssueToken extends MultisigAction {
   name: string;
@@ -19,7 +19,7 @@ export class MultisigIssueToken extends MultisigAction {
     name: string,
     identifier: string,
     amount: number,
-    decimals: number,
+    decimals: number
   ) {
     super(MultisigActionType.SendTransferExecute);
     this.name = name;
@@ -29,7 +29,7 @@ export class MultisigIssueToken extends MultisigAction {
   }
 
   title() {
-    return i18next.t("Issue Token");
+    return i18next.t('Issue Token');
   }
 
   description() {
@@ -37,6 +37,6 @@ export class MultisigIssueToken extends MultisigAction {
   }
 
   tooltip() {
-    return "";
+    return '';
   }
 }

@@ -1,5 +1,5 @@
-import React from "react";
-import Form from "react-bootstrap/Form";
+import React from 'react';
+import Form from 'react-bootstrap/Form';
 
 interface FormikInputFieldPropsType {
   label: string;
@@ -28,15 +28,15 @@ export const FormikInputField = ({
   handleChange,
   handleBlur,
   footer,
-  as = "input",
+  as = 'input'
 }: FormikInputFieldPropsType) => (
-  <div className="modal-control-container">
-    <div className={"input-wrapper"}>
-      <label className={"form-label"}>{label} </label>
+  <div className='modal-control-container'>
+    <div className={'input-wrapper'}>
+      <label className={'form-label'}>{label} </label>
       <Form.Control
         id={name}
         name={name}
-        type="text"
+        type='text'
         as={as}
         isInvalid={error != null}
         onChange={handleChange}
@@ -44,7 +44,7 @@ export const FormikInputField = ({
         value={value}
       />
       {error && (
-        <Form.Control.Feedback type={"invalid"}>{error}</Form.Control.Feedback>
+        <Form.Control.Feedback type={'invalid'}>{error}</Form.Control.Feedback>
       )}
     </div>
     {footer != null && footer}
@@ -55,19 +55,19 @@ export const FormikCheckbox = ({
   label,
   name,
   checked,
-  handleChange,
+  handleChange
 }: FormikCheckboxPropsType) => (
-  <div className="modal-control-container my-2">
-    <div className="form-check form-check-inline">
+  <div className='modal-control-container my-2'>
+    <div className='form-check form-check-inline'>
       <input
-        className="form-check-input"
-        type="checkbox"
+        className='form-check-input'
+        type='checkbox'
         id={name}
         name={name}
         checked={checked}
         onChange={handleChange}
       />
-      <label className="form-check-label" htmlFor="upgradeableCheckBox">
+      <label className='form-check-label' htmlFor='upgradeableCheckBox'>
         {label}
       </label>
     </div>

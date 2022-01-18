@@ -1,10 +1,10 @@
-import React from "react";
-import { Ui } from "@elrondnetwork/dapp-utils";
-import { Address } from "@elrondnetwork/erdjs/out";
-import i18next from "i18next";
-import ExplorerLink from "components/ExplorerLink";
-import { MultisigAction } from "./MultisigAction";
-import { MultisigActionType } from "./MultisigActionType";
+import React from 'react';
+import { Ui } from '@elrondnetwork/dapp-utils';
+import { Address } from '@elrondnetwork/erdjs/out';
+import i18next from 'i18next';
+import ExplorerLink from 'components/ExplorerLink';
+import { MultisigAction } from './MultisigAction';
+import { MultisigActionType } from './MultisigActionType';
 
 export class MultisigRemoveUser extends MultisigAction {
   address: Address;
@@ -15,7 +15,7 @@ export class MultisigRemoveUser extends MultisigAction {
   }
 
   title() {
-    return i18next.t("Remove User");
+    return i18next.t('Remove User');
   }
 
   description() {
@@ -23,7 +23,7 @@ export class MultisigRemoveUser extends MultisigAction {
       <ExplorerLink
         page={`accounts/${this.address.bech32()}`}
         text={
-          <div className="address">
+          <div className='address'>
             <Ui.Trim text={this.address.bech32()} />
           </div>
         }
@@ -32,6 +32,6 @@ export class MultisigRemoveUser extends MultisigAction {
   }
 
   tooltip() {
-    return "";
+    return '';
   }
 }

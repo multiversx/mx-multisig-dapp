@@ -1,12 +1,12 @@
-import * as React from "react";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { network } from "config";
+import * as React from 'react';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { network } from 'config';
 
 const ExplorerLink = ({
   page,
   text,
-  className,
+  className
 }: {
   page: string;
   text?: any;
@@ -16,14 +16,14 @@ const ExplorerLink = ({
     <a
       href={`${network.explorerAddress}${page}`}
       {...{
-        target: "_blank",
+        target: '_blank'
       }}
       className={`link-style ${className}`}
     >
       {text ? (
         <>{text}</>
       ) : (
-        <FontAwesomeIcon icon={faSearch} className="text-secondary" />
+        <FontAwesomeIcon icon={faSearch} className='text-secondary' />
       )}
     </a>
   );

@@ -20,6 +20,7 @@
 .env.production.local
 .npmrc
 src/multisigExtrasConfig.ts
+.idea
 
 npm-debug.log*
 yarn-debug.log*

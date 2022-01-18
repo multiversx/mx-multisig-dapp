@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Multisig Hosting
 
@@ -13,7 +13,7 @@ Parameters:
       - testnet
 
 Conditions:
-  IsProduction: !Equals [!Ref Stage, "mainnet"]
+  IsProduction: !Equals [!Ref Stage, 'mainnet']
 
 Resources:
   BucketProduction:
@@ -22,8 +22,8 @@ Resources:
       BucketName:
         !If [
           IsProduction,
-          "multisig.elrond.com",
-          !Sub "${Stage}-multisig.elrond.com",
+          'multisig.elrond.com',
+          !Sub '${Stage}-multisig.elrond.com'
         ]
       AccessControl: PublicRead
       WebsiteConfiguration:
@@ -36,17 +36,17 @@ Resources:
       Bucket: !Ref BucketProduction
       PolicyDocument:
         Id: bucket-policy
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Sid: PublicReadForGetBucketObjects
             Effect: Allow
-            Principal: "*"
-            Action: "s3:GetObject"
+            Principal: '*'
+            Action: 's3:GetObject'
             Resource:
               !If [
                 IsProduction,
-                "arn:aws:s3:::multisig.elrond.com/*",
-                !Sub "arn:aws:s3:::${Stage}-multisig.elrond.com/*",
+                'arn:aws:s3:::multisig.elrond.com/*',
+                !Sub 'arn:aws:s3:::${Stage}-multisig.elrond.com/*'
               ]
 
   CloudFrontProduction:
@@ -59,27 +59,27 @@ Resources:
           - ErrorCode: 404
             ErrorCachingMinTTL: 60
             ResponseCode: 200
-            ResponsePagePath: "/index.html"
+            ResponsePagePath: '/index.html'
         Aliases:
           - !If [
               IsProduction,
-              "multisig.elrond.com",
-              !Sub "${Stage}-multisig.elrond.com",
+              'multisig.elrond.com',
+              !Sub '${Stage}-multisig.elrond.com'
             ]
         Origins:
           - Id: s3-static-site
             DomainName:
               !If [
                 IsProduction,
-                "multisig.elrond.com.s3-website.us-east-1.amazonaws.com",
-                !Sub "${Stage}-multisig.elrond.com.s3-website.us-east-1.amazonaws.com",
+                'multisig.elrond.com.s3-website.us-east-1.amazonaws.com',
+                !Sub '${Stage}-multisig.elrond.com.s3-website.us-east-1.amazonaws.com'
               ]
             CustomOriginConfig:
-              HTTPPort: "80"
-              HTTPSPort: "443"
+              HTTPPort: '80'
+              HTTPSPort: '443'
               OriginProtocolPolicy: http-only
         ViewerCertificate:
-          AcmCertificateArn: "arn:aws:acm:us-east-1:777241893292:certificate/4fc48d4f-75c1-4bb9-983f-0c49b1fc44e1"
+          AcmCertificateArn: 'arn:aws:acm:us-east-1:777241893292:certificate/4fc48d4f-75c1-4bb9-983f-0c49b1fc44e1'
           MinimumProtocolVersion: TLSv1
           SslSupportMethod: sni-only
         IPV6Enabled: false
@@ -100,7 +100,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
@@ -109,12 +109,12 @@ Resources:
                 - lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
 
   PrivateEdgeRequest:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub "${Stage}-multisig-private-edge-request"
+      FunctionName: !Sub '${Stage}-multisig-private-edge-request'
       CodeUri: ./private-edge-request
       Handler: index.handler
       Runtime: nodejs14.x

@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { logoutAction } from "../commonActions";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { logoutAction } from '../commonActions';
 
 export interface StateType {
   address: string;
@@ -12,28 +12,28 @@ export interface StateType {
 }
 
 const initialState: StateType = {
-  address: "",
+  address: '',
   nonce: 0,
-  balance: "",
-  rootHash: "",
+  balance: '',
+  rootHash: '',
   txCount: 0,
-  username: "",
-  shard: 0,
+  username: '',
+  shard: 0
 };
 
 export const accountSlice = createSlice({
-  name: "accountSlice",
+  name: 'accountSlice',
   initialState,
   reducers: {
     setAccountData(state: StateType, action: PayloadAction<StateType>) {
       return action.payload;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(logoutAction, () => {
       return initialState;
     });
-  },
+  }
 });
 
 export const { setAccountData } = accountSlice.actions;

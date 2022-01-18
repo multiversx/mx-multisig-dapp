@@ -1,22 +1,22 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { faCog } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { OverlayTrigger, Popover } from "react-bootstrap";
+import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 const Settings = () => {
   return (
     <OverlayTrigger
-      trigger="click"
-      placement="bottom"
+      trigger='click'
+      placement='bottom'
       rootClose
       overlay={
-        <Popover id="settings-popover" className="basic-popover">
+        <Popover id='settings-popover' className='basic-popover'>
           <Popover.Content>
-            <div className="card">
-              <div className="card-body">
-                <div className="theme-toggle d-flex justify-content-between align-items-center pb-3">
-                  <h5 className="mb-0">Settings</h5>
+            <div className='card'>
+              <div className='card-body'>
+                <div className='theme-toggle d-flex justify-content-between align-items-center pb-3'>
+                  <h5 className='mb-0'>Settings</h5>
                 </div>
               </div>
             </div>
@@ -24,8 +24,8 @@ const Settings = () => {
         </Popover>
       }
     >
-      <button className="btn btn-light mr-2">
-        <FontAwesomeIcon icon={faCog} size="lg" />
+      <button className='btn btn-light mr-2'>
+        <FontAwesomeIcon icon={faCog} size='lg' />
       </button>
     </OverlayTrigger>
   );

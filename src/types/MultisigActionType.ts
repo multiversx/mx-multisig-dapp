@@ -7,5 +7,5 @@ export enum MultisigActionType {
   SendTransferExecute = 5,
   SendAsyncCall = 6,
   SCDeployFromSource = 7,
-  SCUpgradeFromSource = 8,
+  SCUpgradeFromSource = 8
 }

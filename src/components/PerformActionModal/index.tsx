@@ -1,15 +1,15 @@
-import React from "react";
-import { faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Modal, Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { gasLimit as defaultGasLimit, maxGasLimit } from "config";
-import { mutatePerformAction } from "contracts/MultisigContract";
+import React from 'react';
+import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Modal, Form } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { gasLimit as defaultGasLimit, maxGasLimit } from 'config';
+import { mutatePerformAction } from 'contracts/MultisigContract';
 import {
   SelectedActionToPerform,
-  setSelectedPerformedAction,
-} from "redux/slices/modalsSlice";
-import { MultisigActionType } from "types/MultisigActionType";
+  setSelectedPerformedAction
+} from 'redux/slices/modalsSlice';
+import { MultisigActionType } from 'types/MultisigActionType';
 
 const gasLimits = {
   [MultisigActionType.Nothing]: 10_000_000,
@@ -20,7 +20,7 @@ const gasLimits = {
   [MultisigActionType.SendTransferExecute]: 60_000_000,
   [MultisigActionType.SendAsyncCall]: 60_000_000,
   [MultisigActionType.SCDeployFromSource]: 80_000_000,
-  [MultisigActionType.SCUpgradeFromSource]: 80_000_000,
+  [MultisigActionType.SCUpgradeFromSource]: 80_000_000
 };
 
 interface PerformActionModalPropsType {
@@ -28,7 +28,7 @@ interface PerformActionModalPropsType {
 }
 
 const PerformActionModal = ({
-  selectedAction,
+  selectedAction
 }: PerformActionModalPropsType) => {
   const gasLimit =
     selectedAction?.actionType != null
@@ -56,7 +56,7 @@ const PerformActionModal = ({
   const handleChangeGasLimit = (e: any) => {
     const newValue = Number(e.target.value);
     if (Number.isNaN(newValue)) {
-      setError("Invalid number");
+      setError('Invalid number');
       return false;
     }
     setError(null);
@@ -85,37 +85,37 @@ const PerformActionModal = ({
   return (
     <Modal
       show
-      size="lg"
+      size='lg'
       onHide={handleClose}
-      className="modal-container"
+      className='modal-container'
       animation={false}
       centered
     >
-      <div className="card">
-        <div className="card-body">
-          <div className="modal-control-container">
-            <p className="h3 mb-spacer text-center">Perform</p>
-            <div className="group-center ">
+      <div className='card'>
+        <div className='card-body'>
+          <div className='modal-control-container'>
+            <p className='h3 mb-spacer text-center'>Perform</p>
+            <div className='group-center '>
               <label>Select gas limit:</label>
               <Form.Control
-                className="form-control"
+                className='form-control'
                 value={selectedGasLimit}
-                autoComplete="off"
+                autoComplete='off'
                 isInvalid={error != null}
                 onChange={handleChangeGasLimit}
               />
               {error != null && (
-                <Form.Control.Feedback type={"invalid"}>
+                <Form.Control.Feedback type={'invalid'}>
                   {error}
                 </Form.Control.Feedback>
               )}
             </div>
           </div>
           <div>
-            <div className="modal-action-btns">
+            <div className='modal-action-btns'>
               <button
                 onClick={handleClose}
-                className="btn btn-primary btn-light "
+                className='btn btn-primary btn-light '
               >
                 <FontAwesomeIcon icon={faTimes} />
                 Cancel
@@ -124,7 +124,7 @@ const PerformActionModal = ({
               <button
                 onClick={onPerformAction}
                 disabled={error != null}
-                className="btn btn-primary"
+                className='btn btn-primary'
               >
                 <FontAwesomeIcon icon={faCheck} />
                 Perform

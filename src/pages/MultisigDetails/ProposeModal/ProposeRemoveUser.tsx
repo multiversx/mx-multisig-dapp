@@ -1,7 +1,7 @@
-import React from "react";
-import { Address } from "@elrondnetwork/erdjs";
-import { useTranslation } from "react-i18next";
-import { SelectedOptionType } from "types/Proposals";
+import React from 'react';
+import { Address } from '@elrondnetwork/erdjs';
+import { useTranslation } from 'react-i18next';
+import { SelectedOptionType } from 'types/Proposals';
 
 interface ProposeRemoveUserType {
   selectedOption: SelectedOptionType;
@@ -10,10 +10,10 @@ interface ProposeRemoveUserType {
 
 const ProposeRemoveUser = ({
   selectedOption,
-  handleSetAddress,
+  handleSetAddress
 }: ProposeRemoveUserType) => {
   const { t } = useTranslation();
-  const address = "address" in selectedOption! ? selectedOption?.address : "";
+  const address = 'address' in selectedOption! ? selectedOption?.address : '';
 
   React.useEffect(() => {
     if (address != null) {
@@ -25,13 +25,13 @@ const ProposeRemoveUser = ({
   }
 
   return (
-    <div className="modal-control-container">
-      <label>{t("Address")} </label>
+    <div className='modal-control-container'>
+      <label>{t('Address')} </label>
       <div
-        className="h6 mb-spacer text-break remove-user"
-        data-testid="delegateSubTitle"
+        className='h6 mb-spacer text-break remove-user'
+        data-testid='delegateSubTitle'
       >
-        <p className="address"> {address} </p>
+        <p className='address'> {address} </p>
       </div>
     </div>
   );

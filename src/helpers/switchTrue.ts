@@ -3,7 +3,7 @@ interface SwitchTrueType {
   [key: string]: any;
 }
 
-type ReturnKeys = "true" | "false";
+type ReturnKeys = 'true' | 'false';
 
 const switchTrue = (object: SwitchTrueType): any => {
   const { default: defaultValue, ...rest } = object;
@@ -11,10 +11,10 @@ const switchTrue = (object: SwitchTrueType): any => {
   const result = Object.keys(obj).reduce((acc, cur) => {
     return {
       ...acc,
-      [cur === "default" ? "true" : cur]: (obj as any)[cur as ReturnKeys],
+      [cur === 'default' ? 'true' : cur]: (obj as any)[cur as ReturnKeys]
     };
   }, {} as Record<ReturnKeys, any>);
-  return result["true"];
+  return result['true'];
 };
 
 export default switchTrue;

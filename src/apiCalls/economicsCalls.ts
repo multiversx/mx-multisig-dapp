@@ -1,5 +1,5 @@
-import axios from "axios";
-import { network } from "../config";
+import axios from 'axios';
+import { network } from '../config';
 
 export const getEconomicsData = async () => {
   try {
@@ -7,7 +7,7 @@ export const getEconomicsData = async () => {
     const { data } = response;
     return data;
   } catch (err) {
-    console.error("could not get economics");
+    console.error('could not get economics');
     return null;
   }
 };

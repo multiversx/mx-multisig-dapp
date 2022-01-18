@@ -1,12 +1,12 @@
-import { Address } from "@elrondnetwork/erdjs/out";
-import TransactionParameter from "types/TransactionParameter";
+import { Address } from '@elrondnetwork/erdjs/out';
+import TransactionParameter from 'types/TransactionParameter';
 
 export async function tryParseTransactionParameter(
-  apiEndpoint: string,
+  apiEndpoint: string
 ): Promise<TransactionParameter | null> {
   const searchParams = new URLSearchParams(window.location.search);
-  const txHash = searchParams.get("txHash");
-  if (!txHash || txHash === "") {
+  const txHash = searchParams.get('txHash');
+  if (!txHash || txHash === '') {
     return null;
   }
   const fetchResult = await fetch(`${apiEndpoint}/transactions/${txHash}`);
@@ -18,7 +18,7 @@ export async function tryParseTransactionParameter(
   }
 
   const inputDecoded = atob(inputData);
-  const inputParameters = inputDecoded.split("@");
+  const inputParameters = inputDecoded.split('@');
   if (inputParameters.length === 0) {
     return null;
   }
@@ -36,13 +36,13 @@ export async function tryParseTransactionParameter(
   const outputData = scResults[0].data;
   const outputDecoded = atob(outputData);
 
-  const outputParameters = outputDecoded.split("@").slice(1);
+  const outputParameters = outputDecoded.split('@').slice(1);
 
   return new TransactionParameter(
     sender,
     receiver,
     functionName,
     inputParameters.slice(1),
-    outputParameters,
+    outputParameters
   );
 }

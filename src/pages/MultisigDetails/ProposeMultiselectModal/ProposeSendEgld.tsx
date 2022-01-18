@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo } from "react";
-import { operations } from "@elrondnetwork/dapp-utils";
-import { Address, Balance, BigUIntValue } from "@elrondnetwork/erdjs/out";
-import { useFormik } from "formik";
-import Form from "react-bootstrap/Form";
-import { useTranslation } from "react-i18next";
-import * as Yup from "yup";
-import { TestContext } from "yup";
-import { denomination } from "config";
-import MultisigDetailsContext from "context/MultisigDetailsContext";
-import { FormikInputField } from "helpers/formikFields";
-import { MultisigSendEgld } from "types/MultisigSendEgld";
+import React, { useEffect, useMemo } from 'react';
+import { operations } from '@elrondnetwork/dapp-utils';
+import { Address, Balance, BigUIntValue } from '@elrondnetwork/erdjs/out';
+import { useFormik } from 'formik';
+import Form from 'react-bootstrap/Form';
+import { useTranslation } from 'react-i18next';
+import * as Yup from 'yup';
+import { TestContext } from 'yup';
+import { denomination } from 'config';
+import MultisigDetailsContext from 'context/MultisigDetailsContext';
+import { FormikInputField } from 'helpers/formikFields';
+import { MultisigSendEgld } from 'types/MultisigSendEgld';
 
 interface ProposeSendEgldType {
   handleChange: (proposal: MultisigSendEgld) => void;
@@ -18,7 +18,7 @@ interface ProposeSendEgldType {
 
 const ProposeSendEgld = ({
   handleChange,
-  setSubmitDisabled,
+  setSubmitDisabled
 }: ProposeSendEgldType) => {
   const { multisigBalance } = React.useContext(MultisigDetailsContext);
 
@@ -34,36 +34,36 @@ const ProposeSendEgld = ({
         input: multisigBalance.toString(),
         denomination: denomination,
         decimals: 4,
-        showLastNonZeroDecimal: true,
+        showLastNonZeroDecimal: true
       }),
-    [multisigBalance],
+    [multisigBalance]
   );
 
   const validationSchema = Yup.object().shape({
     receiver: Yup.string()
-      .min(2, "Too Short!")
-      .max(500, "Too Long!")
-      .required("Required")
+      .min(2, 'Too Short!')
+      .max(500, 'Too Long!')
+      .required('Required')
       .test(validateRecipient),
     amount: Yup.string()
-      .required("Required")
-      .transform((value) => value.replace(",", "."))
+      .required('Required')
+      .transform((value) => value.replace(',', '.'))
       .test(validateAmount),
-    data: Yup.string(),
+    data: Yup.string()
   });
 
   const formik = useFormik({
     initialValues: {
-      receiver: "",
+      receiver: '',
       amount: 0,
-      data: "",
+      data: ''
     },
     onSubmit: () => {
       return;
     },
     validationSchema,
     validateOnChange: true,
-    validateOnMount: true,
+    validateOnMount: true
   });
 
   const { touched, errors, values } = formik;
@@ -88,7 +88,7 @@ const ProposeSendEgld = ({
       }
 
       const amountParam = new BigUIntValue(
-        Balance.egld(amountNumeric).valueOf(),
+        Balance.egld(amountNumeric).valueOf()
       );
 
       return new MultisigSendEgld(addressParam, amountParam, data);
@@ -124,18 +124,18 @@ const ProposeSendEgld = ({
     if (Number.isNaN(newAmount)) {
       return (
         testContext?.createError({
-          message: "Invalid amount",
+          message: 'Invalid amount'
         }) ?? false
       );
     }
     if (newAmount < 0) {
-      formik.setFieldValue("amount", 0);
+      formik.setFieldValue('amount', 0);
     }
     if (newAmount > Number(multisigBalance.toDenominated())) {
       return (
         testContext?.createError({
           message:
-            "There are not enough money in the organization for this transaction",
+            'There are not enough money in the organization for this transaction'
         }) ?? false
       );
     }
@@ -147,19 +147,19 @@ const ProposeSendEgld = ({
   return (
     <div>
       <FormikInputField
-        label={t("Send to")}
-        name={"receiver"}
+        label={t('Send to')}
+        name={'receiver'}
         value={receiver}
         error={receiverError}
         handleChange={formik.handleChange}
         handleBlur={formik.handleBlur}
       />
-      <div className="modal-control-container">
-        <label>{t("Amount")} </label>
-        <div className="input-wrapper">
+      <div className='modal-control-container'>
+        <label>{t('Amount')} </label>
+        <div className='input-wrapper'>
           <Form.Control
-            id="amount"
-            name="amount"
+            id='amount'
+            name='amount'
             isInvalid={amountError != null}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -167,19 +167,19 @@ const ProposeSendEgld = ({
           />
 
           {amountError != null && (
-            <Form.Control.Feedback type={"invalid"}>
+            <Form.Control.Feedback type={'invalid'}>
               {amountError}
             </Form.Control.Feedback>
           )}
         </div>
         <span>{`Balance: ${denominatedValue} EGLD`} </span>
       </div>
-      <div className="modal-control-container">
-        <label>{t("data (optional)")} </label>
+      <div className='modal-control-container'>
+        <label>{t('data (optional)')} </label>
         <Form.Control
-          id="data"
-          name="data"
-          type="data"
+          id='data'
+          name='data'
+          type='data'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={data}

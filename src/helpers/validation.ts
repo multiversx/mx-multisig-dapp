@@ -1,6 +1,6 @@
-import { Address } from "@elrondnetwork/erdjs";
-import * as Yup from "yup";
-import { getAccountData } from "../apiCalls/accountCalls";
+import { Address } from '@elrondnetwork/erdjs';
+import * as Yup from 'yup';
+import { getAccountData } from '../apiCalls/accountCalls';
 
 export const validateContractAddressOwner =
   (ownerAddress?: Address) =>
@@ -14,18 +14,18 @@ export const validateContractAddressOwner =
       if (!isContract) {
         return (
           testContext?.createError({
-            message: "This address does not belong to a smart contract",
+            message: 'This address does not belong to a smart contract'
           }) ?? false
         );
       }
       const contractInfo = await getAccountData(value);
       const isCurrentUserOwner = new Address(contractInfo.ownerAddress).equals(
-        ownerAddress,
+        ownerAddress
       );
       if (!isCurrentUserOwner) {
         return (
           testContext?.createError({
-            message: "This contract does not belong to the current user",
+            message: 'This contract does not belong to the current user'
           }) ?? false
         );
       }
@@ -33,7 +33,7 @@ export const validateContractAddressOwner =
     } catch (err) {
       return (
         testContext?.createError({
-          message: "Invalid address",
+          message: 'Invalid address'
         }) ?? false
       );
     }
@@ -41,7 +41,7 @@ export const validateContractAddressOwner =
 
 export const validateAddressIsContract = (
   value?: string,
-  testContext?: Yup.TestContext,
+  testContext?: Yup.TestContext
 ) => {
   try {
     const contractAddress = new Address(value);
@@ -52,7 +52,7 @@ export const validateAddressIsContract = (
     if (!isContract) {
       return (
         testContext?.createError({
-          message: "This address does not belong to a smart contract",
+          message: 'This address does not belong to a smart contract'
         }) ?? false
       );
     }
@@ -60,7 +60,7 @@ export const validateAddressIsContract = (
   } catch (err) {
     return (
       testContext?.createError({
-        message: "Invalid address",
+        message: 'Invalid address'
       }) ?? false
     );
   }

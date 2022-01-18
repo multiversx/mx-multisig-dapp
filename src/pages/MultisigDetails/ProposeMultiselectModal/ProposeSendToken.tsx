@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Address } from "@elrondnetwork/erdjs/out";
-import { useTranslation } from "react-i18next";
-import { MultisigSendToken } from "types/MultisigSendToken";
+import React, { useState } from 'react';
+import { Address } from '@elrondnetwork/erdjs/out';
+import { useTranslation } from 'react-i18next';
+import { MultisigSendToken } from 'types/MultisigSendToken';
 
 interface ProposeSendTokenType {
   handleChange: (proposal: MultisigSendToken) => void;
@@ -10,9 +10,9 @@ interface ProposeSendTokenType {
 const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
   const { t } = useTranslation();
 
-  const [address, setAddress] = useState("");
-  const [identifier, setIdentifier] = useState("");
-  const [amount, setAmount] = useState("");
+  const [address, setAddress] = useState('');
+  const [identifier, setIdentifier] = useState('');
+  const [amount, setAmount] = useState('');
 
   const getProposal = (): MultisigSendToken | null => {
     try {
@@ -56,33 +56,33 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
 
   return (
     <div>
-      <div className="modal-control-container">
-        <label>{t("Address")}: </label>
+      <div className='modal-control-container'>
+        <label>{t('Address')}: </label>
         <input
-          type="text"
-          className="form-control"
+          type='text'
+          className='form-control'
           value={address}
-          autoComplete="off"
+          autoComplete='off'
           onChange={onAddressChanged}
         />
       </div>
-      <div className="modal-control-container">
-        <label>{t("Identifier")}: </label>
+      <div className='modal-control-container'>
+        <label>{t('Identifier')}: </label>
         <input
-          type="text"
-          className="form-control"
+          type='text'
+          className='form-control'
           value={identifier}
-          autoComplete="off"
+          autoComplete='off'
           onChange={onIdentifierChanged}
         />
       </div>
-      <div className="modal-control-container">
-        <label>{t("Amount")}: </label>
+      <div className='modal-control-container'>
+        <label>{t('Amount')}: </label>
         <input
-          type="number"
-          className="form-control"
+          type='number'
+          className='form-control'
           value={amount}
-          autoComplete="off"
+          autoComplete='off'
           onChange={onAmountChanged}
         />
       </div>

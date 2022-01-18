@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { routeNames } from "routes";
-import { logoutAction } from "../commonActions";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { routeNames } from 'routes';
+import { logoutAction } from '../commonActions';
 
 export interface MultisigOriginType {
   pathname: string;
@@ -15,27 +15,27 @@ function getInitialState(): AppConfigStateType {
   return {
     multisigOrigin: {
       pathname: routeNames.home,
-      search: "",
-    },
+      search: ''
+    }
   };
 }
 
 export const appConfigSlice = createSlice({
-  name: "appConfig",
+  name: 'appConfig',
   initialState: getInitialState(),
   reducers: {
     setMultisigOrigin: (
       state: AppConfigStateType,
-      action: PayloadAction<MultisigOriginType>,
+      action: PayloadAction<MultisigOriginType>
     ) => {
       state.multisigOrigin = action.payload;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(logoutAction, () => {
       return getInitialState();
     });
-  },
+  }
 });
 
 export const { setMultisigOrigin } = appConfigSlice.actions;

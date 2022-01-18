@@ -1,12 +1,12 @@
-import React from "react";
-import ConfirmModal from "./ConfirmModal";
-import { useConfirmModal } from "./ConfirmModalPayload";
+import React from 'react';
+import ConfirmModal from './ConfirmModal';
+import { useConfirmModal } from './ConfirmModalPayload';
 
 const ConfirmModalContainer = () => {
   const useModal = useConfirmModal();
 
-  const [title, setTitle] = React.useState("");
-  const [confirmButtonTitle, setConfirmButtonTitle] = React.useState("");
+  const [title, setTitle] = React.useState('');
+  const [confirmButtonTitle, setConfirmButtonTitle] = React.useState('');
   const [show, setShow] = React.useState(false);
 
   const onConfirmClicked = () => {

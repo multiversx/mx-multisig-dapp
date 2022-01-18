@@ -1,17 +1,17 @@
-import * as React from "react";
-import { IconProp, SizeProp } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as React from 'react';
+import { IconProp, SizeProp } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const PageState = ({
   icon,
   iconClass,
   iconBgClass,
-  iconSize = "5x",
-  containerClass = "",
+  iconSize = '5x',
+  containerClass = '',
   title,
   description,
   action,
-  dataTestId,
+  dataTestId
 }: {
   icon?: IconProp;
   iconClass?: string;
@@ -28,16 +28,16 @@ const PageState = ({
     data-testid={dataTestId}
   >
     {icon && (
-      <span className={`icon-state mx-auto ${iconBgClass ? iconBgClass : ""}`}>
+      <span className={`icon-state mx-auto ${iconBgClass ? iconBgClass : ''}`}>
         <FontAwesomeIcon
           icon={icon}
-          className={iconClass ? iconClass : ""}
+          className={iconClass ? iconClass : ''}
           size={iconSize}
         />
       </span>
     )}
-    {title && <p className="h4 mt-spacer mb-3">{title}</p>}
-    {description && <div className="mb-spacer">{description}</div>}
+    {title && <p className='h4 mt-spacer mb-3'>{title}</p>}
+    {description && <div className='mb-spacer'>{description}</div>}
     {action && <>{action}</>}
   </div>
 );

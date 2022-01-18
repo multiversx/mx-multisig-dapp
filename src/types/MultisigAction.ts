@@ -1,4 +1,4 @@
-import { MultisigActionType } from "./MultisigActionType";
+import { MultisigActionType } from './MultisigActionType';
 
 export abstract class MultisigAction {
   type: MultisigActionType = MultisigActionType.Nothing;

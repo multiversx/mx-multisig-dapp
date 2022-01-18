@@ -1,23 +1,23 @@
-import React, { useEffect, useMemo } from "react";
-import { operations } from "@elrondnetwork/dapp-utils";
+import React, { useEffect, useMemo } from 'react';
+import { operations } from '@elrondnetwork/dapp-utils';
 import {
   Address,
   Balance,
   BigUIntValue,
-  BytesValue,
-} from "@elrondnetwork/erdjs/out";
-import { faMinus } from "@fortawesome/free-solid-svg-icons";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useFormik } from "formik";
-import Form from "react-bootstrap/Form";
-import { useTranslation } from "react-i18next";
-import * as Yup from "yup";
-import { TestContext } from "yup";
-import { denomination } from "config";
-import MultisigDetailsContext from "context/MultisigDetailsContext";
-import { FormikInputField } from "helpers/formikFields";
-import { MultisigSmartContractCall } from "types/MultisigSmartContractCall";
+  BytesValue
+} from '@elrondnetwork/erdjs/out';
+import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useFormik } from 'formik';
+import Form from 'react-bootstrap/Form';
+import { useTranslation } from 'react-i18next';
+import * as Yup from 'yup';
+import { TestContext } from 'yup';
+import { denomination } from 'config';
+import MultisigDetailsContext from 'context/MultisigDetailsContext';
+import { FormikInputField } from 'helpers/formikFields';
+import { MultisigSmartContractCall } from 'types/MultisigSmartContractCall';
 
 interface ProposeSmartContractCallType {
   handleChange: (proposal: MultisigSmartContractCall) => void;
@@ -26,7 +26,7 @@ interface ProposeSmartContractCallType {
 
 const ProposeSmartContractCall = ({
   handleChange,
-  setSubmitDisabled,
+  setSubmitDisabled
 }: ProposeSmartContractCallType) => {
   const { multisigBalance } = React.useContext(MultisigDetailsContext);
 
@@ -42,38 +42,38 @@ const ProposeSmartContractCall = ({
         input: multisigBalance.toString(),
         denomination: denomination,
         decimals: 4,
-        showLastNonZeroDecimal: true,
+        showLastNonZeroDecimal: true
       }),
-    [multisigBalance],
+    [multisigBalance]
   );
 
   const validationSchema = Yup.object().shape({
     receiver: Yup.string()
-      .min(2, "Too Short!")
-      .max(500, "Too Long!")
-      .required("Required")
+      .min(2, 'Too Short!')
+      .max(500, 'Too Long!')
+      .required('Required')
       .test(validateRecipient),
     amount: Yup.string()
-      .required("Required")
-      .transform((value) => value.replace(",", "."))
+      .required('Required')
+      .transform((value) => value.replace(',', '.'))
       .test(validateAmount),
     functionName: Yup.string(),
-    args: Yup.array().test(validateArgument),
+    args: Yup.array().test(validateArgument)
   });
 
   const formik = useFormik({
     initialValues: {
-      receiver: "",
+      receiver: '',
       amount: 0,
-      functionName: "",
-      args: [],
+      functionName: '',
+      args: []
     },
     onSubmit: () => {
       return;
     },
     validationSchema,
     validateOnChange: true,
-    validateOnMount: true,
+    validateOnMount: true
   });
 
   const { touched, errors, values } = formik;
@@ -90,13 +90,13 @@ const ProposeSmartContractCall = ({
 
   const addNewArgsField = () => {
     const nextArgNumber = args.length;
-    formik.setFieldValue(`args[${nextArgNumber}]`, "");
+    formik.setFieldValue(`args[${nextArgNumber}]`, '');
   };
 
   const removeArg = (removeIdx: number) => {
     formik.setFieldValue(
-      "args",
-      args.filter((_, index: number) => index !== removeIdx),
+      'args',
+      args.filter((_, index: number) => index !== removeIdx)
     );
   };
 
@@ -110,7 +110,7 @@ const ProposeSmartContractCall = ({
       }
 
       const amountParam = new BigUIntValue(
-        Balance.egld(amountNumeric).valueOf(),
+        Balance.egld(amountNumeric).valueOf()
       );
 
       const argsParams = args.map((arg) => BytesValue.fromHex(arg));
@@ -119,7 +119,7 @@ const ProposeSmartContractCall = ({
         addressParam,
         amountParam,
         functionName,
-        argsParams,
+        argsParams
       );
     } catch (err) {
       return null;
@@ -155,7 +155,7 @@ const ProposeSmartContractCall = ({
     } catch (err) {
       return (
         testContext?.createError({
-          message: "Invalid arguments",
+          message: 'Invalid arguments'
         }) ?? false
       );
     }
@@ -169,18 +169,18 @@ const ProposeSmartContractCall = ({
     if (Number.isNaN(amount)) {
       return (
         testContext?.createError({
-          message: "Invalid amount",
+          message: 'Invalid amount'
         }) ?? false
       );
     }
     if (amount < 0) {
-      formik.setFieldValue("amount", 0);
+      formik.setFieldValue('amount', 0);
     }
     if (amount > Number(multisigBalance.toDenominated())) {
       return (
         testContext?.createError({
           message:
-            "There are not enough money in the organization for this transaction",
+            'There are not enough money in the organization for this transaction'
         }) ?? false
       );
     }
@@ -197,19 +197,19 @@ const ProposeSmartContractCall = ({
   return (
     <div>
       <FormikInputField
-        label={t("Send to")}
-        name={"receiver"}
+        label={t('Send to')}
+        name={'receiver'}
         value={receiver}
         error={receiverError}
         handleChange={formik.handleChange}
         handleBlur={formik.handleBlur}
       />
-      <div className="modal-control-container">
-        <label>{t("Amount")} </label>
-        <div className="input-wrapper">
+      <div className='modal-control-container'>
+        <label>{t('Amount')} </label>
+        <div className='input-wrapper'>
           <Form.Control
-            id="amount"
-            name="amount"
+            id='amount'
+            name='amount'
             isInvalid={amountError != null}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -217,20 +217,20 @@ const ProposeSmartContractCall = ({
           />
 
           {amountError != null && (
-            <Form.Control.Feedback type={"invalid"}>
+            <Form.Control.Feedback type={'invalid'}>
               {amountError}
             </Form.Control.Feedback>
           )}
         </div>
         <span>{`Balance: ${denominatedValue} EGLD`} </span>
       </div>
-      <div className="modal-control-container">
-        <label>{t("function name (optional)")} </label>
-        <div className="input-wrapper">
+      <div className='modal-control-container'>
+        <label>{t('function name (optional)')} </label>
+        <div className='input-wrapper'>
           <Form.Control
-            id="functionName"
-            name="functionName"
-            type="functionName"
+            id='functionName'
+            name='functionName'
+            type='functionName'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={functionName}
@@ -238,16 +238,16 @@ const ProposeSmartContractCall = ({
         </div>
       </div>
       {functionName?.length > 0 && (
-        <div className={"d-flex flex-column "}>
+        <div className={'d-flex flex-column '}>
           {args.map((arg, idx) => (
-            <div key={idx} className="modal-control-container mb-3">
-              <label>{`${t("argument")} ${idx + 1}`} </label>
-              <div className={"d-flex align-items-stretch my-0"}>
+            <div key={idx} className='modal-control-container mb-3'>
+              <label>{`${t('argument')} ${idx + 1}`} </label>
+              <div className={'d-flex align-items-stretch my-0'}>
                 <Form.Control
                   id={`args[${idx}]`}
                   name={`args[${idx}]`}
-                  className={"my-0 mr-3"}
-                  type="text"
+                  className={'my-0 mr-3'}
+                  type='text'
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={arg}
@@ -255,18 +255,18 @@ const ProposeSmartContractCall = ({
 
                 <button
                   onClick={() => removeArg(idx)}
-                  className={"action-remove action remove"}
+                  className={'action-remove action remove'}
                 >
-                  <FontAwesomeIcon className={"mx-2"} icon={faMinus} />
+                  <FontAwesomeIcon className={'mx-2'} icon={faMinus} />
                 </button>
               </div>
             </div>
           ))}
-          {argsError && <small className="text-danger">{argsError}</small>}
-          <div className={"modal-action-btns"}>
-            <button onClick={addNewArgsField} className={"btn btn-primary "}>
-              <FontAwesomeIcon className={"mx-2"} icon={faPlus} />
-              <span className="name">Add argument</span>
+          {argsError && <small className='text-danger'>{argsError}</small>}
+          <div className={'modal-action-btns'}>
+            <button onClick={addNewArgsField} className={'btn btn-primary '}>
+              <FontAwesomeIcon className={'mx-2'} icon={faPlus} />
+              <span className='name'>Add argument</span>
             </button>
           </div>
         </div>
