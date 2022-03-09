@@ -19,8 +19,8 @@ jobs:
           node-version: '14.x'
       - run: cp ./src/config.testnet.ts ./src/config.ts
       - run: echo ${{ secrets.NPMRC }} >> .npmrc
-      - run: echo "export const storageApi = 'https://devnet-extras-api.elrond.com';" >> src/multisigExtrasConfig.ts
-      - run: echo "export const maiarIdApi = 'https://devnet-id.maiar.com/api/v1';" >> src/multisigExtrasConfig.ts
+      - run: echo "export const storageApi = '${{ secrets.EXTRAS_API_TESTNET }}';" >> src/multisigExtrasConfig.ts
+      - run: echo "export const maiarIdApi = '${{ secrets.MAIAR_ID_API_TESTNET }}';" >> src/multisigExtrasConfig.ts
       - run: npm install
       - run: npm install @elrondnetwork/dapp-core-internal
       - run: npm install
