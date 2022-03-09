@@ -16,6 +16,7 @@ import {
   faExternalLinkAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -29,7 +30,7 @@ import PerformActionModal from 'components/PerformActionModal';
 import ReceiveModal from 'components/ReceiveModal';
 import State from 'components/State';
 import TrustedBadge from 'components/TrustedBadge';
-import { denomination, decimals } from 'config';
+import { denomination, decimals, network } from 'config';
 import MultisigDetailsContext from 'context/MultisigDetailsContext';
 import {
   queryBoardMembersCount,
@@ -73,7 +74,7 @@ export interface ContractInfo {
   quorumSize: number;
   deployedAt?: string;
   userRole: number;
-  allActions: MultisigActionDetailed[];
+  allActions: any[];
   multisigBalance: Balance;
   multisigName?: string;
   boardMembersAddresses?: Address[];
@@ -196,14 +197,35 @@ const MultisigDetailsPage = () => {
         queryBoardMemberAddresses(),
         queryProposerAddresses()
       ]);
+
       const accountInfo = await getAccountData(currentContract.address);
+      const assignTokenData = async (item: MultisigActionDetailed | any) => {
+        const identifier = item.action.getIdentifier();
+
+        if (identifier) {
+          const token = await axios.get(
+            `${network.apiAddress}/tokens/${identifier}`
+          );
+
+          return {
+            action: item,
+            description: item.action.description(token.data.decimals)
+          };
+        } else {
+          return {
+            action: item,
+            description: item.action.description()
+          };
+        }
+      };
+
       const newContractInfo: ContractInfo = {
         totalBoardMembers: newTotalBoardMembers,
         totalProposers: newTotalProposers,
         quorumSize: newQuorumSize,
         userRole: newUserRole,
         deployedAt: moment.unix(accountInfo.deployedAt).format('DD MMM YYYY'),
-        allActions: newAllActions,
+        allActions: await Promise.all(newAllActions.map(assignTokenData)),
         multisigBalance: account.balance,
         boardMembersAddresses,
         proposersAddresses
@@ -460,7 +482,7 @@ const MultisigDetailsPage = () => {
                       </p>
                     </div>
                   ) : (
-                    allActions.map((action) => (
+                    allActions.map(({ description, action }) => (
                       <MultisigProposalCard
                         boardMembers={contractInfo.boardMembersAddresses}
                         key={action.actionId}
@@ -468,7 +490,7 @@ const MultisigDetailsPage = () => {
                         actionId={action.actionId}
                         title={action.title()}
                         tooltip={action.tooltip()}
-                        value={action.description()}
+                        value={description}
                         data={action.getData()}
                         canSign={canSign(action)}
                         canUnsign={canUnsign(action)}

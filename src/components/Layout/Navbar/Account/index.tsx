@@ -31,7 +31,7 @@ const Account = () => {
     accessTokenServices?.services?.maiarId?.removeToken?.();
     localStorage.clear();
     sessionStorage.clear();
-    logout(routeNames.home, (route) => navigate(route!));
+    logout(location.origin + routeNames.home, (route) => navigate(route!));
   };
 
   const logoutOnSessionExpire = () => {

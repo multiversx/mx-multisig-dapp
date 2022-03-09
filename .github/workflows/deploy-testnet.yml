@@ -16,11 +16,11 @@ jobs:
           ref: master
       - uses: actions/setup-node@v1
         with:
-          node-version: "14.x"
+          node-version: '14.x'
       - run: cp ./src/config.testnet.ts ./src/config.ts
       - run: echo ${{ secrets.NPMRC }} >> .npmrc
-      - run: echo "export const storageApi = '${{ secrets.EXTRAS_API_TESTNET }}';" >> src/multisigExtrasConfig.ts
-      - run: echo "export const maiarIdApi = '${{ secrets.MAIAR_ID_API_TESTNET }}';" >> src/multisigExtrasConfig.ts
+      - run: echo "export const storageApi = 'https://devnet-extras-api.elrond.com';" >> src/multisigExtrasConfig.ts
+      - run: echo "export const maiarIdApi = 'https://devnet-id.maiar.com/api/v1';" >> src/multisigExtrasConfig.ts
       - run: npm install
       - run: npm install @elrondnetwork/dapp-core-internal
       - run: npm install
@@ -35,9 +35,9 @@ jobs:
       - run: aws s3 sync ./build/ s3://${{ secrets.AWS_S3_BUCKET_TESTNET }} --delete
       - uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_ICON_EMOJI: ":lock:"
+          SLACK_ICON_EMOJI: ':lock:'
           SLACK_USERNAME: ${{ secrets.AWS_S3_BUCKET_TESTNET }}
           SLACK_MESSAGE: ${{ secrets.AWS_S3_BUCKET_TESTNET }}
-          SLACK_FOOTER: ""
+          SLACK_FOOTER: ''
           MSG_MINIMAL: true
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

@@ -42,6 +42,13 @@
       .method {
         align-items: center;
         gap: 15px;
+
+        span {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          width: 24px;
+        }
       }
       .arrow {
         width: 13.01px;

@@ -7,6 +7,7 @@ import { Navigate } from 'react-router-dom';
 import { ReactComponent as IconElrond } from 'assets/img/icon-elrond.svg';
 import { ReactComponent as IconLedger } from 'assets/img/icon-ledger.svg';
 import { ReactComponent as IconMaiar } from 'assets/img/icon-maiar.svg';
+import { ReactComponent as IconWallet } from 'assets/img/icon-wallet.svg';
 import { network } from 'config';
 import { routeNames } from 'routes';
 import { accessTokenServices, maiarIdApi } from 'services/accessTokenServices';
@@ -89,7 +90,9 @@ const Unlock = () => {
           <DappUI.ExtensionLoginButton {...loginParams}>
             <div className='d-flex justify-content-between align-items-center'>
               <div className='d-flex flex-row method'>
-                <IconMaiar />
+                <span>
+                  <IconWallet />
+                </span>
                 <div className='title'>Maiar DeFi Wallet</div>
               </div>
 
@@ -101,7 +104,9 @@ const Unlock = () => {
         <DappUI.WalletConnectLoginButton {...loginParams}>
           <div className='d-flex justify-content-between align-items-center'>
             <div className='d-flex flex-row method'>
-              <IconMaiar />
+              <span>
+                <IconMaiar />
+              </span>
               <div className='title'>Maiar App</div>
             </div>
 
@@ -112,7 +117,9 @@ const Unlock = () => {
         <DappUI.LedgerLoginButton loginButtonText={''} {...loginParams}>
           <div className='d-flex justify-content-between align-items-center'>
             <div className='d-flex flex-row method'>
-              <IconLedger />
+              <span>
+                <IconLedger />
+              </span>
               <div className='title'>Ledger</div>
             </div>
 
@@ -123,7 +130,9 @@ const Unlock = () => {
         <DappUI.WebWalletLoginButton {...loginParams}>
           <div className='d-flex justify-content-between align-items-center'>
             <div className='d-flex flex-row method'>
-              <IconElrond />
+              <span>
+                <IconElrond />
+              </span>
               <div className='title'>Elrond Web Wallet</div>
             </div>
             <FontAwesomeIcon icon={faArrowRight} className='arrow' />

@@ -12,6 +12,10 @@ export abstract class MultisigAction {
     return null;
   }
 
+  getIdentifier(): any {
+    return null;
+  }
+
   abstract title(): any;
   abstract description(): any;
   abstract tooltip(): any;
