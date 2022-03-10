@@ -16,12 +16,12 @@ import {
   faExternalLinkAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getAccountData } from 'apiCalls/accountCalls';
+import { getTokenData } from 'apiCalls/tokenCalls';
 import { ReactComponent as WalletLogo } from 'assets/img/elrond-wallet-icon.svg';
 import { ReactComponent as NoPoposalsIcon } from 'assets/img/no-proposals-icon.svg';
 import { useConfirmModal } from 'components/ConfirmModal/ConfirmModalPayload';
@@ -30,7 +30,7 @@ import PerformActionModal from 'components/PerformActionModal';
 import ReceiveModal from 'components/ReceiveModal';
 import State from 'components/State';
 import TrustedBadge from 'components/TrustedBadge';
-import { denomination, decimals, network } from 'config';
+import { denomination, decimals } from 'config';
 import MultisigDetailsContext from 'context/MultisigDetailsContext';
 import {
   queryBoardMembersCount,
@@ -68,13 +68,18 @@ import MultisigDetailsAccordion from './MultisigDetailsAccordion';
 import ProposeModal from './ProposeModal/ProposeModal';
 import ProposeMultiselectModal from './ProposeMultiselectModal/ProposeMultiselectModal';
 
+interface Action {
+  description: string;
+  action: MultisigActionDetailed;
+}
+
 export interface ContractInfo {
   totalBoardMembers: number;
   totalProposers: number;
   quorumSize: number;
   deployedAt?: string;
   userRole: number;
-  allActions: any[];
+  allActions: Action[];
   multisigBalance: Balance;
   multisigName?: string;
   boardMembersAddresses?: Address[];
@@ -203,13 +208,11 @@ const MultisigDetailsPage = () => {
         const identifier = item.action.getIdentifier();
 
         if (identifier) {
-          const token = await axios.get(
-            `${network.apiAddress}/tokens/${identifier}`
-          );
+          const token = await getTokenData(identifier);
 
           return {
             action: item,
-            description: item.action.description(token.data.decimals)
+            description: item.action.description(token.decimals)
           };
         } else {
           return {
@@ -219,13 +222,17 @@ const MultisigDetailsPage = () => {
         }
       };
 
+      const assignedTokenDataActions = await Promise.all(
+        newAllActions.map(assignTokenData)
+      );
+
       const newContractInfo: ContractInfo = {
         totalBoardMembers: newTotalBoardMembers,
         totalProposers: newTotalProposers,
         quorumSize: newQuorumSize,
         userRole: newUserRole,
         deployedAt: moment.unix(accountInfo.deployedAt).format('DD MMM YYYY'),
-        allActions: await Promise.all(newAllActions.map(assignTokenData)),
+        allActions: assignedTokenDataActions,
         multisigBalance: account.balance,
         boardMembersAddresses,
         proposersAddresses

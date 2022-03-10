@@ -90,7 +90,7 @@ const Unlock = () => {
           <DappUI.ExtensionLoginButton {...loginParams}>
             <div className='d-flex justify-content-between align-items-center'>
               <div className='d-flex flex-row method'>
-                <span>
+                <span className='d-flex flex-column align-items-center'>
                   <IconWallet />
                 </span>
                 <div className='title'>Maiar DeFi Wallet</div>
@@ -104,7 +104,7 @@ const Unlock = () => {
         <DappUI.WalletConnectLoginButton {...loginParams}>
           <div className='d-flex justify-content-between align-items-center'>
             <div className='d-flex flex-row method'>
-              <span>
+              <span className='d-flex flex-column align-items-center'>
                 <IconMaiar />
               </span>
               <div className='title'>Maiar App</div>
@@ -117,7 +117,7 @@ const Unlock = () => {
         <DappUI.LedgerLoginButton loginButtonText={''} {...loginParams}>
           <div className='d-flex justify-content-between align-items-center'>
             <div className='d-flex flex-row method'>
-              <span>
+              <span className='d-flex flex-column align-items-center'>
                 <IconLedger />
               </span>
               <div className='title'>Ledger</div>
@@ -130,7 +130,7 @@ const Unlock = () => {
         <DappUI.WebWalletLoginButton {...loginParams}>
           <div className='d-flex justify-content-between align-items-center'>
             <div className='d-flex flex-row method'>
-              <span>
+              <span className='d-flex flex-column align-items-center'>
                 <IconElrond />
               </span>
               <div className='title'>Elrond Web Wallet</div>

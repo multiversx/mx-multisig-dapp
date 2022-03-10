@@ -73,7 +73,7 @@ export class MultisigSmartContractCall extends MultisigAction {
       case multisigContractFunctionNames.issue:
         return this.getIssueTokenDescription();
       case multisigContractFunctionNames.ESDTTransfer:
-        return this.getSendTokenDescription(decimals || 0);
+        return this.getSendTokenDescription(decimals);
     }
     return (
       <>
@@ -100,7 +100,7 @@ export class MultisigSmartContractCall extends MultisigAction {
   }
 
   getIdentifier() {
-    return this.args[0].valueOf().toString();
+    return this.args[0]?.valueOf()?.toString();
   }
 
   getIssueTokenToolTip(): string {
@@ -118,7 +118,7 @@ export class MultisigSmartContractCall extends MultisigAction {
       .join('\n');
   }
 
-  getSendTokenDescription(decimals: number): string {
+  getSendTokenDescription(decimals = 0): string {
     const codec = new BinaryCodec();
     const input = codec
       .decodeTopLevel<BigUIntValue>(this.args[1].valueOf(), new BigUIntType())

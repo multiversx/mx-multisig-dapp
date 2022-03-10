@@ -12,7 +12,7 @@ export abstract class MultisigAction {
     return null;
   }
 
-  getIdentifier(): any {
+  getIdentifier(): string | null {
     return null;
   }
 

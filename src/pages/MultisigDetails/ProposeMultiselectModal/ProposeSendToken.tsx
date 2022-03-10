@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 import { nominate } from '@elrondnetwork/dapp-core';
 import { Address } from '@elrondnetwork/erdjs/out';
-import axios from 'axios';
+import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { network } from 'config';
+import { getTokenData } from 'apiCalls/tokenCalls';
 import { MultisigSendToken } from 'types/MultisigSendToken';
 
 interface ProposeSendTokenType {
@@ -22,8 +22,9 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
   const getProposal = async (): Promise<MultisigSendToken | null> => {
     try {
       const values = [amount, address, identifier];
+      const allInput = values.every(Boolean);
 
-      if (values.every((value) => value !== '')) {
+      if (allInput) {
         const amountNumeric = Number(amount);
         const parsedAddress = new Address(address);
 
@@ -31,13 +32,13 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
           return null;
         }
 
-        const token = await axios.get(
-          `${network.apiAddress}/tokens/${identifier}`
-        );
+        const token = await getTokenData(identifier);
 
-        setDecimals(token.data.decimals);
+        if (token) {
+          setDecimals(token.decimals);
+        }
 
-        const tokens = nominate(amount, token.data.decimals);
+        const tokens = token ? nominate(amount, token.decimals) : amount;
 
         return new MultisigSendToken(
           parsedAddress,
@@ -45,6 +46,10 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
           parseInt(tokens)
         );
       } else {
+        if (!Boolean(identifier)) {
+          setDecimals('');
+        }
+
         return null;
       }
     } catch (err) {
@@ -94,13 +99,15 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
         <label>{t('Identifier')}: </label>
         <input
           type='text'
-          className={`form-control ${decimals !== '' && 'mb-0'}`}
+          className={classNames('form-control', {
+            'mb-0': Boolean(decimals)
+          })}
           value={identifier}
           autoComplete='off'
           onChange={onIdentifierChanged}
         />
 
-        {decimals !== '' && <span className='mt-2'>{decimals} decimals</span>}
+        {Boolean(decimals) && <span className='mt-2'>{decimals} decimals</span>}
       </div>
       <div className='modal-control-container'>
         <label>{t('Amount')}: </label>
