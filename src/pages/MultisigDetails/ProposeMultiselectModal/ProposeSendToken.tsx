@@ -22,9 +22,9 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
   const getProposal = async (): Promise<MultisigSendToken | null> => {
     try {
       const values = [amount, address, identifier];
-      const allInput = values.every(Boolean);
+      const areFilledIn = values.every(Boolean);
 
-      if (allInput) {
+      if (areFilledIn) {
         const amountNumeric = Number(amount);
         const parsedAddress = new Address(address);
 
@@ -61,7 +61,7 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
     setTimeout(async () => {
       const proposal = await getProposal();
 
-      if (proposal !== null) {
+      if (proposal != null) {
         handleChange(proposal);
       }
     }, 100);
