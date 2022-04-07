@@ -65,7 +65,7 @@ export async function validateMultisigAddress(address: string) {
 
 export async function getIsContractTrusted(address?: string) {
   try {
-    if (address == null) {
+    if (!address) {
       return false;
     }
     const response = await axios.get(
