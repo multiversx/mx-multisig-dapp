@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+
+import { nominate } from '@elrondnetwork/dapp-core';
 import { Address } from '@elrondnetwork/erdjs/out';
+import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { getTokenData } from 'apiCalls/tokenCalls';
 import { MultisigSendToken } from 'types/MultisigSendToken';
 
 interface ProposeSendTokenType {
@@ -13,26 +17,51 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
   const [address, setAddress] = useState('');
   const [identifier, setIdentifier] = useState('');
   const [amount, setAmount] = useState('');
+  const [decimals, setDecimals] = useState('');
 
-  const getProposal = (): MultisigSendToken | null => {
+  const getProposal = async (): Promise<MultisigSendToken | null> => {
     try {
-      const amountNumeric = Number(amount);
-      if (isNaN(amountNumeric)) {
+      const values = [amount, address, identifier];
+      const areFilledIn = values.every(Boolean);
+
+      if (areFilledIn) {
+        const amountNumeric = Number(amount);
+        const parsedAddress = new Address(address);
+
+        if (isNaN(amountNumeric)) {
+          return null;
+        }
+
+        const token = await getTokenData(identifier);
+
+        if (token) {
+          setDecimals(token.decimals);
+        }
+
+        const tokens = token ? nominate(amount, token.decimals) : amount;
+
+        return new MultisigSendToken(
+          parsedAddress,
+          identifier,
+          parseInt(tokens)
+        );
+      } else {
+        if (!Boolean(identifier)) {
+          setDecimals('');
+        }
+
         return null;
       }
-      const parsedAddress = new Address(address);
-
-      return new MultisigSendToken(parsedAddress, identifier, amountNumeric);
     } catch (err) {
       return null;
     }
   };
 
   const refreshProposal = () => {
-    setTimeout(() => {
-      const proposal = getProposal();
+    setTimeout(async () => {
+      const proposal = await getProposal();
 
-      if (proposal !== null) {
+      if (proposal != null) {
         handleChange(proposal);
       }
     }, 100);
@@ -70,11 +99,15 @@ const ProposeSendToken = ({ handleChange }: ProposeSendTokenType) => {
         <label>{t('Identifier')}: </label>
         <input
           type='text'
-          className='form-control'
+          className={classNames('form-control', {
+            'mb-0': Boolean(decimals)
+          })}
           value={identifier}
           autoComplete='off'
           onChange={onIdentifierChanged}
         />
+
+        {Boolean(decimals) && <span className='mt-2'>{decimals} decimals</span>}
       </div>
       <div className='modal-control-container'>
         <label>{t('Amount')}: </label>

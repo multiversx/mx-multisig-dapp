@@ -1,4 +1,5 @@
 import React from 'react';
+import { denominate } from '@elrondnetwork/dapp-core';
 import { Ui } from '@elrondnetwork/dapp-utils';
 import { Address, BinaryCodec } from '@elrondnetwork/erdjs/out';
 import {
@@ -67,12 +68,12 @@ export class MultisigSmartContractCall extends MultisigAction {
     return i18next.t('Smart contract call');
   }
 
-  description() {
+  description(decimals?: number) {
     switch (this.functionName) {
       case multisigContractFunctionNames.issue:
         return this.getIssueTokenDescription();
       case multisigContractFunctionNames.ESDTTransfer:
-        return this.getSendTokenDescription();
+        return this.getSendTokenDescription(decimals);
     }
     return (
       <>
@@ -98,6 +99,10 @@ export class MultisigSmartContractCall extends MultisigAction {
     );
   }
 
+  getIdentifier() {
+    return this.args[0]?.valueOf()?.toString();
+  }
+
   getIssueTokenToolTip(): string {
     const extraProperties = [];
     let index = 4;
@@ -113,14 +118,20 @@ export class MultisigSmartContractCall extends MultisigAction {
       .join('\n');
   }
 
-  getSendTokenDescription(): string {
-    const identifier = this.args[0].valueOf().toString();
+  getSendTokenDescription(decimals = 0): string {
     const codec = new BinaryCodec();
-    const amount = codec
+    const input = codec
       .decodeTopLevel<BigUIntValue>(this.args[1].valueOf(), new BigUIntType())
       .valueOf();
 
-    return `${i18next.t('Identifier')}: ${identifier}, ${i18next.t(
+    const amount = denominate({
+      input: String(input),
+      decimals,
+      showLastNonZeroDecimal: false,
+      denomination: decimals
+    });
+
+    return `${i18next.t('Identifier')}: ${this.getIdentifier()}, ${i18next.t(
       'Amount'
     )}: ${amount}`;
   }

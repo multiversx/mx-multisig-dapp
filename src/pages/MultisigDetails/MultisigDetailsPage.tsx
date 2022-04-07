@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getAccountData } from 'apiCalls/accountCalls';
+import { getTokenData } from 'apiCalls/tokenCalls';
 import { ReactComponent as WalletLogo } from 'assets/img/elrond-wallet-icon.svg';
 import { ReactComponent as NoPoposalsIcon } from 'assets/img/no-proposals-icon.svg';
 import { useConfirmModal } from 'components/ConfirmModal/ConfirmModalPayload';
@@ -67,13 +68,18 @@ import MultisigDetailsAccordion from './MultisigDetailsAccordion';
 import ProposeModal from './ProposeModal/ProposeModal';
 import ProposeMultiselectModal from './ProposeMultiselectModal/ProposeMultiselectModal';
 
+interface Action {
+  description: string;
+  action: MultisigActionDetailed;
+}
+
 export interface ContractInfo {
   totalBoardMembers: number;
   totalProposers: number;
   quorumSize: number;
   deployedAt?: string;
   userRole: number;
-  allActions: MultisigActionDetailed[];
+  allActions: Action[];
   multisigBalance: Balance;
   multisigName?: string;
   boardMembersAddresses?: Address[];
@@ -196,14 +202,37 @@ const MultisigDetailsPage = () => {
         queryBoardMemberAddresses(),
         queryProposerAddresses()
       ]);
+
       const accountInfo = await getAccountData(currentContract.address);
+      const assignTokenData = async (item: MultisigActionDetailed | any) => {
+        const identifier = item.action.getIdentifier();
+
+        if (identifier) {
+          const token = await getTokenData(identifier);
+
+          return {
+            action: item,
+            description: item.action.description(token.decimals)
+          };
+        } else {
+          return {
+            action: item,
+            description: item.action.description()
+          };
+        }
+      };
+
+      const assignedTokenDataActions = await Promise.all(
+        newAllActions.map(assignTokenData)
+      );
+
       const newContractInfo: ContractInfo = {
         totalBoardMembers: newTotalBoardMembers,
         totalProposers: newTotalProposers,
         quorumSize: newQuorumSize,
         userRole: newUserRole,
         deployedAt: moment.unix(accountInfo.deployedAt).format('DD MMM YYYY'),
-        allActions: newAllActions,
+        allActions: assignedTokenDataActions,
         multisigBalance: account.balance,
         boardMembersAddresses,
         proposersAddresses
@@ -460,7 +489,7 @@ const MultisigDetailsPage = () => {
                       </p>
                     </div>
                   ) : (
-                    allActions.map((action) => (
+                    allActions.map(({ description, action }) => (
                       <MultisigProposalCard
                         boardMembers={contractInfo.boardMembersAddresses}
                         key={action.actionId}
@@ -468,7 +497,7 @@ const MultisigDetailsPage = () => {
                         actionId={action.actionId}
                         title={action.title()}
                         tooltip={action.tooltip()}
-                        value={action.description()}
+                        value={description}
                         data={action.getData()}
                         canSign={canSign(action)}
                         canUnsign={canUnsign(action)}

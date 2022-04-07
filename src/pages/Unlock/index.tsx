@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, ReactNode, useState } from 'react';
 import { DappUI, useGetLoginInfo } from '@elrondnetwork/dapp-core';
 import { faArrowRight, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +7,7 @@ import { Navigate } from 'react-router-dom';
 import { ReactComponent as IconElrond } from 'assets/img/icon-elrond.svg';
 import { ReactComponent as IconLedger } from 'assets/img/icon-ledger.svg';
 import { ReactComponent as IconMaiar } from 'assets/img/icon-maiar.svg';
+import { ReactComponent as IconWallet } from 'assets/img/icon-wallet.svg';
 import { network } from 'config';
 import { routeNames } from 'routes';
 import { accessTokenServices, maiarIdApi } from 'services/accessTokenServices';
@@ -67,6 +68,20 @@ const Unlock = () => {
   if (loginMethod != '') {
     return <Navigate to={routeNames.dashboard} />;
   }
+
+  const getContentButton = (title: string, icon: ReactNode) => (
+    <div className='d-flex justify-content-between align-items-center'>
+      <div className='d-flex flex-row method'>
+        <span className='icon d-flex flex-column align-items-center'>
+          {icon}
+        </span>
+        <div className='title'>{title}</div>
+      </div>
+
+      <FontAwesomeIcon icon={faArrowRight} className='arrow' />
+    </div>
+  );
+
   return (
     <div className='unlock-page m-auto'>
       <div className='card unlock text-center'>
@@ -87,47 +102,20 @@ const Unlock = () => {
 
         {window.elrondWallet && (
           <DappUI.ExtensionLoginButton {...loginParams}>
-            <div className='d-flex justify-content-between align-items-center'>
-              <div className='d-flex flex-row method'>
-                <IconMaiar />
-                <div className='title'>Maiar DeFi Wallet</div>
-              </div>
-
-              <FontAwesomeIcon icon={faArrowRight} className='arrow' />
-            </div>
+            {getContentButton('Maiar DeFi Wallet', <IconWallet />)}
           </DappUI.ExtensionLoginButton>
         )}
 
         <DappUI.WalletConnectLoginButton {...loginParams}>
-          <div className='d-flex justify-content-between align-items-center'>
-            <div className='d-flex flex-row method'>
-              <IconMaiar />
-              <div className='title'>Maiar App</div>
-            </div>
-
-            <FontAwesomeIcon icon={faArrowRight} className='arrow' />
-          </div>
+          {getContentButton('Maiar App', <IconMaiar />)}
         </DappUI.WalletConnectLoginButton>
 
         <DappUI.LedgerLoginButton loginButtonText={''} {...loginParams}>
-          <div className='d-flex justify-content-between align-items-center'>
-            <div className='d-flex flex-row method'>
-              <IconLedger />
-              <div className='title'>Ledger</div>
-            </div>
-
-            <FontAwesomeIcon icon={faArrowRight} className='arrow' />
-          </div>
+          {getContentButton('Ledger', <IconLedger />)}
         </DappUI.LedgerLoginButton>
 
         <DappUI.WebWalletLoginButton {...loginParams}>
-          <div className='d-flex justify-content-between align-items-center'>
-            <div className='d-flex flex-row method'>
-              <IconElrond />
-              <div className='title'>Elrond Web Wallet</div>
-            </div>
-            <FontAwesomeIcon icon={faArrowRight} className='arrow' />
-          </div>
+          {getContentButton('Elrond Web Wallet', <IconElrond />)}
         </DappUI.WebWalletLoginButton>
 
         <div className='mt-spacer'>
