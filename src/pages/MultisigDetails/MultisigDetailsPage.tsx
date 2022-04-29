@@ -212,7 +212,7 @@ const MultisigDetailsPage = () => {
 
           return {
             action: item,
-            description: item.action.description(token.decimals)
+            description: item.action.description(token ? token.decimals : 0)
           };
         } else {
           return {
