@@ -12,6 +12,7 @@ import { store, persistor } from 'redux/store';
 import Layout from './components/Layout';
 import PageNotFound from './components/PageNotFound';
 
+import { network } from './config';
 import routes from './routes';
 
 import '@elrondnetwork/dapp-core/build/index.css';
@@ -36,7 +37,7 @@ i18n.use(initReactI18next).init({
 export default function App() {
   return (
     <ReduxProvider store={store}>
-      <DappProvider environment={'devnet'}>
+      <DappProvider environment={network.id || 'devnet'}>
         <>
           <DappUI.SignTransactionsModals />
           <DappUI.TransactionsToastList />
